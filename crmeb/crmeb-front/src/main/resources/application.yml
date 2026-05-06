@@ -48,13 +48,13 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/single_open?characterEncoding=utf-8&useSSL=false&serverTimeZone=GMT+8
-    username: single_open
-    password: gesoft9919
+    url: jdbc:mysql://101.126.90.255:63306/single_open?characterEncoding=utf-8&useSSL=false&serverTimeZone=GMT+8
+    username: root
+    password: Gesoft9919.
   redis:
-    host: 127.0.0.1 #地址
+    host: 101.126.90.255 #地址
     port: 6379 #端口
-    password: gesoft9919
+    password: Gesoft9919.
     timeout: 30000 # 连接超时时间（毫秒）
     database: 6  #默认数据库
     jedis:
