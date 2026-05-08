@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Resources Download - 辽缆</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f1f3ff",
+                        "surface-container": "#ebedf9",
+                        "background": "#f9f9ff",
+                        "on-primary": "#ffffff",
+                        "outline": "#737686",
+                        "on-secondary-fixed": "#191c1e",
+                        "surface-bright": "#f9f9ff",
+                        "secondary-container": "#dee0e2",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb86f",
+                        "surface-tint": "#0353da",
+                        "primary-fixed": "#dbe1ff",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#5c5f60",
+                        "secondary-fixed-dim": "#c5c6c8",
+                        "tertiary": "#683b00",
+                        "surface-container-high": "#e5e8f3",
+                        "on-secondary-container": "#606365",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d7dae5",
+                        "surface-variant": "#dfe2ed",
+                        "tertiary-fixed": "#ffdcbd",
+                        "on-surface-variant": "#434654",
+                        "surface-container-highest": "#dfe2ed",
+                        "on-surface": "#181c23",
+                        "surface": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#00174b",
+                        "on-secondary-fixed-variant": "#444749",
+                        "primary": "#003da6",
+                        "on-tertiary-container": "#ffcea0",
+                        "on-background": "#181c23",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#e1e2e4",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-tertiary-fixed-variant": "#693c00",
+                        "outline-variant": "#c3c6d7",
+                        "inverse-surface": "#2c3039",
+                        "inverse-on-surface": "#eef0fc",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "primary-container": "#0052d9",
+                        "on-primary-container": "#cbd6ff",
+                        "tertiary-container": "#895000"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "inline-gap": "8px",
+                        "container-margin": "16px",
+                        "section-padding": "24px",
+                        "stack-gap": "12px",
+                        "grid-gutter": "12px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter, PingFang SC"],
+                        "label-sm": ["Inter, PingFang SC"],
+                        "h3": ["Inter, PingFang SC"],
+                        "body-lg": ["Inter, PingFang SC"],
+                        "label-md": ["Inter, PingFang SC"],
+                        "h1": ["Inter, PingFang SC"],
+                        "h2": ["Inter, PingFang SC"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", {"lineHeight": "22px", "fontWeight": "400"}],
+                        "label-sm": ["10px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500"}],
+                        "h3": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "h1": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', 'PingFang SC', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col pb-safe">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-on-background docked full-width top-0 border-b border-outline-variant dark:border-outline flat no shadows transition-colors duration-200 active:opacity-80 flex justify-between items-center w-full px-container-margin h-12 z-40 sticky top-0">
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-highest p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-h2 text-h2 font-bold text-primary dark:text-inverse-primary">
+            辽缆
+        </div>
+<button class="text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-highest p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-container-margin py-section-padding flex flex-col gap-section-padding pb-[80px] md:pb-section-padding">
+<!-- Header Section -->
+<section class="flex flex-col gap-stack-gap">
+<div class="flex items-center gap-inline-gap">
+<div class="w-1 h-6 bg-primary rounded-full"></div>
+<h1 class="font-h1 text-h1 text-on-surface">资源下载中心</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                获取最新的产品选型手册、技术说明书及认证证书。所有文件均为PDF或Word格式，方便查阅与打印。
+            </p>
+</section>
+<!-- Search Bar -->
+<section class="w-full">
+<div class="relative w-full max-w-xl">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline">search</span>
+</div>
+<input class="w-full pl-10 pr-4 py-3 bg-surface-container-lowest border border-outline-variant rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary-fixed transition-all font-body-md text-body-md text-on-surface placeholder-outline-variant" placeholder="搜索文件名称、型号或关键字..." type="text"/>
+</div>
+</section>
+<!-- Tabs -->
+<section class="border-b border-outline-variant w-full overflow-x-auto hide-scrollbar">
+<div class="flex gap-8 min-w-max">
+<button class="pb-3 border-b-2 border-primary font-h3 text-h3 text-primary px-2 transition-colors">产品样本 (12)</button>
+<button class="pb-3 border-b-2 border-transparent font-h3 text-h3 text-on-surface-variant hover:text-on-surface px-2 transition-colors">认证证书 (8)</button>
+<button class="pb-3 border-b-2 border-transparent font-h3 text-h3 text-on-surface-variant hover:text-on-surface px-2 transition-colors">技术说明书 (24)</button>
+</div>
+</section>
+<!-- Download List -->
+<section class="flex flex-col gap-stack-gap">
+<!-- Item 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 bg-error-container text-error rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">2023 辽缆工业电缆综合选型手册.pdf</h3>
+<div class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span>15.2 MB</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>2023-10-15</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="bg-primary-fixed text-primary px-2 py-0.5 rounded-full text-[10px]">综合样本</span>
+</div>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary hover:bg-primary-fixed-variant transition-colors h-11 px-6 rounded flex items-center justify-center gap-2 font-body-md text-body-md font-medium shrink-0">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    下载文件
+                </button>
+</div>
+<!-- Item 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 bg-surface-tint/10 text-surface-tint rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">description</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">KVV 系列控制电缆技术参数及施工指南.docx</h3>
+<div class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span>2.4 MB</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>2023-09-22</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="bg-primary-fixed text-primary px-2 py-0.5 rounded-full text-[10px]">技术文档</span>
+</div>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary hover:bg-primary-fixed-variant transition-colors h-11 px-6 rounded flex items-center justify-center gap-2 font-body-md text-body-md font-medium shrink-0">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    下载文件
+                </button>
+</div>
+<!-- Item 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 bg-error-container text-error rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">阻燃耐火类特种电缆选型指南 V2.0.pdf</h3>
+<div class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span>8.7 MB</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>2023-08-05</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="bg-primary-fixed text-primary px-2 py-0.5 rounded-full text-[10px]">特种电缆</span>
+</div>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary hover:bg-primary-fixed-variant transition-colors h-11 px-6 rounded flex items-center justify-center gap-2 font-body-md text-body-md font-medium shrink-0">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    下载文件
+                </button>
+</div>
+<!-- Item 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 bg-error-container text-error rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">picture_as_pdf</span>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-h3 text-h3 text-on-surface">YJV 交联聚乙烯绝缘电力电缆参数表.pdf</h3>
+<div class="flex flex-wrap items-center gap-2 font-label-md text-label-md text-on-surface-variant">
+<span>4.1 MB</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span>2023-07-11</span>
+<span class="w-1 h-1 bg-outline-variant rounded-full"></span>
+<span class="bg-primary-fixed text-primary px-2 py-0.5 rounded-full text-[10px]">电力电缆</span>
+</div>
+</div>
+</div>
+<button class="w-full sm:w-auto bg-primary text-on-primary hover:bg-primary-fixed-variant transition-colors h-11 px-6 rounded flex items-center justify-center gap-2 font-body-md text-body-md font-medium shrink-0">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    下载文件
+                </button>
+</div>
+</section>
+<!-- Pagination (simplified) -->
+<div class="flex justify-center mt-4">
+<button class="px-4 py-2 border border-outline-variant rounded text-on-surface-variant hover:bg-surface-container-low font-body-md text-body-md">加载更多</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest dark:bg-on-background border-t border-outline-variant dark:border-outline flat no shadows">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+<span class="font-label-md text-label-md mt-1 font-bold">案例</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md mt-1">商城</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md mt-1">我的</span>
+</a>
+</nav>
+</body></html>

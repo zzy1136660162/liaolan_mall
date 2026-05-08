@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>联系我们 - 辽缆</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#693c00",
+                      "primary-container": "#0052d9",
+                      "outline": "#737686",
+                      "surface-container": "#ebedf9",
+                      "surface-tint": "#0353da",
+                      "secondary-container": "#dee0e2",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "error-container": "#ffdad6",
+                      "surface-bright": "#f9f9ff",
+                      "on-surface": "#181c23",
+                      "error": "#ba1a1a",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#dbe1ff",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "outline-variant": "#c3c6d7",
+                      "surface-dim": "#d7dae5",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#c5c6c8",
+                      "secondary-fixed": "#e1e2e4",
+                      "on-error-container": "#93000a",
+                      "on-secondary-container": "#606365",
+                      "tertiary-fixed": "#ffdcbd",
+                      "on-tertiary-container": "#ffcea0",
+                      "secondary": "#5c5f60",
+                      "tertiary-fixed-dim": "#ffb86f",
+                      "on-secondary-fixed-variant": "#444749",
+                      "surface-container-high": "#e5e8f3",
+                      "on-surface-variant": "#434654",
+                      "surface-container-low": "#f1f3ff",
+                      "on-background": "#181c23",
+                      "primary": "#003da6",
+                      "on-secondary-fixed": "#191c1e",
+                      "inverse-primary": "#b4c5ff",
+                      "tertiary": "#683b00",
+                      "surface": "#f9f9ff",
+                      "on-tertiary-fixed": "#2c1600",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#00174b",
+                      "background": "#f9f9ff",
+                      "on-primary-container": "#cbd6ff",
+                      "inverse-on-surface": "#eef0fc",
+                      "surface-container-highest": "#dfe2ed",
+                      "inverse-surface": "#2c3039",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#dfe2ed",
+                      "tertiary-container": "#895000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "stack-gap": "12px",
+                      "section-padding": "24px",
+                      "grid-gutter": "12px",
+                      "container-margin": "16px",
+                      "inline-gap": "8px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h3": [
+                              "Inter, PingFang SC"
+                      ],
+                      "body-lg": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h2": [
+                              "Inter, PingFang SC"
+                      ],
+                      "label-md": [
+                              "Inter, PingFang SC"
+                      ],
+                      "body-md": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h1": [
+                              "Inter, PingFang SC"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.04em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h3": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h2": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "22px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "h1": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-surface border-b border-outline-variant flat no shadows flex justify-between items-center w-full px-container-margin h-12 sticky z-50 transition-colors duration-200">
+<button class="text-primary hover:bg-surface-container active:opacity-80 p-2 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<div class="font-h2 text-h2 font-bold text-primary flex-1 text-center">
+            联系我们
+        </div>
+<div class="w-10"></div> <!-- Placeholder to balance header -->
+</header>
+<main class="flex-1 px-container-margin py-section-padding pb-24 md:max-w-3xl md:mx-auto w-full space-y-6">
+<!-- Contact Information Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-grid-gutter">
+<!-- Phone & Email -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-inline-gap border-l-4 border-primary pl-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">phone_in_talk</span>
+<h3 class="font-h3 text-h3 text-on-surface">联系方式</h3>
+</div>
+<div class="space-y-3">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">全国服务热线</span>
+<a class="font-h2 text-h2 text-primary mt-1" href="tel:400-888-8888">400-888-8888</a>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">企业邮箱</span>
+<a class="font-body-md text-body-md text-on-surface mt-1" href="mailto:contact@liaolan.com">contact@liaolan.com</a>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-secondary">工作时间</span>
+<span class="font-body-md text-body-md text-on-surface mt-1">周一至周日 08:30 - 18:00</span>
+</div>
+</div>
+</div>
+<!-- WeChat QR Code -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col items-center justify-center gap-4 shadow-sm">
+<div class="flex items-center gap-inline-gap self-start border-l-4 border-primary pl-2 w-full">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+<h3 class="font-h3 text-h3 text-on-surface">企业微信客服</h3>
+</div>
+<div class="bg-surface-container p-2 rounded-lg">
+<img alt="企业微信二维码" class="w-32 h-32 object-cover rounded" data-alt="A clean, minimalist QR code graphic displayed on a crisp white background, representing a corporate WeChat contact. The image should have a professional, modern aesthetic suitable for a high-end industrial company. The lighting is bright and even, highlighting the geometric precision of the QR pattern. The overall mood is reliable and efficient, adhering to a light-mode corporate UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0leacu-WE3NBqlFsBjYt7BlmW_o04WOOYN1grzkA_QDBcnIw61fZa83KKSjsAsn67Yf8YO1_yQSX-OxzyTOl0KarsfSsQiJqT-cYmf7R-qr-OgPwFQ1xeeh-V_ZJgXoqNAcOGuTDK91paN2YSD_ARj3F0AF9L21J7t7bqI9QU2WW-O4CWJbOyBluBuqs07yZWvxj0bV3F6mlrbdnmVq1xlqAKL7jnNXPGs9_pWO7FYolgp3kcZHAyev27Cyb0xGbtYcCDNk61hw8"/>
+</div>
+<span class="font-label-md text-label-md text-secondary">扫码添加专属客服，获取详细报价与技术支持</span>
+</div>
+</section>
+<!-- Location & Map -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-inline-gap border-l-4 border-primary pl-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<h3 class="font-h3 text-h3 text-on-surface">公司地址</h3>
+</div>
+<div class="font-body-md text-body-md text-on-surface">
+                辽宁省沈阳市铁西区建设大路100号，辽缆工业园区A座
+            </div>
+<!-- Map Placeholder -->
+<div class="w-full h-48 bg-surface-container rounded-lg overflow-hidden relative">
+<img alt="公司地图位置" class="w-full h-full object-cover" data-alt="A stylized, modern digital map interface centered on an industrial district in a major city. The map features a clean, light-mode color palette with subtle grays, soft blues for water bodies, and a distinct primary blue pin marker denoting the company location. The design is sleek and professional, devoid of unnecessary clutter, emphasizing precise corporate navigation in a high-tech UI environment." data-location="Shenyang" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzwM7t0gA2B1-gZ_nFotzJbZcDiNy3-BWMO_f-8qxSQz9bb-rAoW2ldnTGBExDJnDJf-S0PX4NFtO2I_x81ar3IepYGIoSLzLombXaGtAAXxCb5qMNPMIsP4PuTiiHVZe6DCZBtN4kE4OscAoK2M1JfB-rPNeGTbnfYjaPRjLC18dFCUbr273UljeazLu4Dyqi-yWreqJDVFsPSGVHhM1ZIb75XHs1uGo3WIpwpJdVQeTuws9B-2c2uaBlDdL6QYnTZn2VBVQ1UqQ"/>
+<button class="absolute bottom-4 right-4 bg-primary text-on-primary font-label-md text-label-md px-4 py-2 rounded-full shadow-md flex items-center gap-2 hover:bg-surface-tint transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">navigation</span>
+                    一键导航
+                </button>
+</div>
+</section>
+<!-- Online Message Form -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl p-4 flex flex-col gap-4 shadow-sm">
+<div class="flex items-center gap-inline-gap border-l-4 border-primary pl-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">mail</span>
+<h3 class="font-h3 text-h3 text-on-surface">在线留言</h3>
+</div>
+<p class="font-label-md text-label-md text-secondary">请留下您的需求，我们的技术人员将尽快与您联系。</p>
+<form class="flex flex-col gap-stack-gap">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1" for="name">姓名 / 企业名称 <span class="text-error">*</span></label>
+<input class="w-full h-11 px-3 border border-outline-variant rounded-DEFAULT bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors font-body-md text-body-md" id="name" name="name" required="" type="text"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1" for="phone">联系电话 <span class="text-error">*</span></label>
+<input class="w-full h-11 px-3 border border-outline-variant rounded-DEFAULT bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors font-body-md text-body-md" id="phone" name="phone" required="" type="tel"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1" for="product">意向产品 / 需求</label>
+<div class="relative">
+<select class="w-full h-11 px-3 border border-outline-variant rounded-DEFAULT bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors font-body-md text-body-md appearance-none" id="product" name="product">
+<option value="">请选择意向产品类别</option>
+<option value="power">电力电缆</option>
+<option value="control">控制电缆</option>
+<option value="special">特种电缆</option>
+<option value="other">其他需求</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-outline">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-1" for="message">留言内容</label>
+<textarea class="w-full p-3 border border-outline-variant rounded-DEFAULT bg-surface-bright focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-colors font-body-md text-body-md resize-none" id="message" name="message" placeholder="请简述您的项目需求、规格要求或其他技术疑问..." rows="4"></textarea>
+</div>
+<button class="w-full h-12 mt-2 bg-primary text-on-primary font-h3 text-h3 rounded-lg flex items-center justify-center gap-2 hover:bg-surface-tint active:scale-[0.98] transition-all" type="submit">
+                    提交留言
+                    <span class="material-symbols-outlined text-[18px]">send</span>
+</button>
+</form>
+</section>
+</main>
+<!-- BottomNavBar (Hidden on web, shown on mobile, suppressed for specific non-destination pages, but keeping for structural completeness based on instructions, though a pure "Contact Us" might be considered a sub-page. Assuming it's accessible from global nav) -->
+<!-- Suppressed BottomNavBar based on "The Destination Rule" - Contact Us is typically a task-focused sub-page or footer link, not a primary app ecosystem destination. -->
+</body></html>

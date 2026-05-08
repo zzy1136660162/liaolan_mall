@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>辽缆商城 - 商品列表</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-low": "#f1f3ff",
+                      "surface-container": "#ebedf9",
+                      "background": "#f9f9ff",
+                      "on-primary": "#ffffff",
+                      "outline": "#737686",
+                      "on-secondary-fixed": "#191c1e",
+                      "surface-bright": "#f9f9ff",
+                      "secondary-container": "#dee0e2",
+                      "on-error-container": "#93000a",
+                      "tertiary-fixed-dim": "#ffb86f",
+                      "surface-tint": "#0353da",
+                      "primary-fixed": "#dbe1ff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary": "#5c5f60",
+                      "secondary-fixed-dim": "#c5c6c8",
+                      "tertiary": "#683b00",
+                      "surface-container-high": "#e5e8f3",
+                      "on-secondary-container": "#606365",
+                      "on-tertiary": "#ffffff",
+                      "surface-dim": "#d7dae5",
+                      "surface-variant": "#dfe2ed",
+                      "tertiary-fixed": "#ffdcbd",
+                      "on-surface-variant": "#434654",
+                      "surface-container-highest": "#dfe2ed",
+                      "on-surface": "#181c23",
+                      "surface": "#f9f9ff",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#00174b",
+                      "on-secondary-fixed-variant": "#444749",
+                      "primary": "#003da6",
+                      "on-tertiary-container": "#ffcea0",
+                      "on-background": "#181c23",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "secondary-fixed": "#e1e2e4",
+                      "on-secondary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-fixed": "#2c1600",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-tertiary-fixed-variant": "#693c00",
+                      "outline-variant": "#c3c6d7",
+                      "inverse-surface": "#2c3039",
+                      "inverse-on-surface": "#eef0fc",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b4c5ff",
+                      "primary-container": "#0052d9",
+                      "on-primary-container": "#cbd6ff",
+                      "tertiary-container": "#895000"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "inline-gap": "8px",
+                      "container-margin": "16px",
+                      "section-padding": "24px",
+                      "stack-gap": "12px",
+                      "grid-gutter": "12px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter, PingFang SC"
+                      ],
+                      "label-sm": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h3": [
+                              "Inter, PingFang SC"
+                      ],
+                      "body-lg": [
+                              "Inter, PingFang SC"
+                      ],
+                      "label-md": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h1": [
+                              "Inter, PingFang SC"
+                      ],
+                      "h2": [
+                              "Inter, PingFang SC"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "22px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "10px",
+                              {
+                                      "lineHeight": "14px",
+                                      "letterSpacing": "0.04em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h3": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "18px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "h1": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "h2": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', 'PingFang SC', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Scrollbar for side nav */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background pb-safe pb-20 md:pb-0 pt-12">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-container-margin h-12 bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline">
+<div class="flex items-center text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors duration-200 active:opacity-80 p-2 rounded-full cursor-pointer">
+<span class="material-symbols-outlined">menu</span>
+</div>
+<div class="font-h2 text-h2 font-bold text-primary dark:text-inverse-primary">
+            辽缆
+        </div>
+<div class="flex items-center text-primary dark:text-inverse-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors duration-200 active:opacity-80 p-2 rounded-full cursor-pointer">
+<span class="material-symbols-outlined">search</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex h-[calc(100vh-3rem)] overflow-hidden">
+<!-- Left Sidebar Navigation -->
+<aside class="w-24 md:w-48 bg-surface-container-low border-r border-outline-variant overflow-y-auto no-scrollbar flex-shrink-0">
+<nav class="flex flex-col py-4">
+<div class="px-4 py-3 bg-surface-container text-primary font-h3 text-h3 cursor-pointer border-l-4 border-primary">
+                    电力电缆
+                </div>
+<div class="px-4 py-3 text-secondary hover:bg-surface-container-high transition-colors font-body-md text-body-md cursor-pointer border-l-4 border-transparent">
+                    控制电缆
+                </div>
+<div class="px-4 py-3 text-secondary hover:bg-surface-container-high transition-colors font-body-md text-body-md cursor-pointer border-l-4 border-transparent">
+                    特种电缆
+                </div>
+<div class="px-4 py-3 text-secondary hover:bg-surface-container-high transition-colors font-body-md text-body-md cursor-pointer border-l-4 border-transparent">
+                    通信光缆
+                </div>
+<div class="px-4 py-3 text-secondary hover:bg-surface-container-high transition-colors font-body-md text-body-md cursor-pointer border-l-4 border-transparent">
+                    裸导线
+                </div>
+<div class="px-4 py-3 text-secondary hover:bg-surface-container-high transition-colors font-body-md text-body-md cursor-pointer border-l-4 border-transparent">
+                    电气装备用电缆
+                </div>
+</nav>
+</aside>
+<!-- Right Content Area -->
+<section class="flex-1 flex flex-col bg-background overflow-hidden relative">
+<!-- Filters & Secondary Nav -->
+<div class="bg-surface border-b border-outline-variant p-container-margin sticky top-0 z-10">
+<div class="flex justify-between items-center mb-stack-gap">
+<h1 class="font-h2 text-h2 text-on-surface flex items-center">
+<span class="w-1 h-5 bg-primary mr-2 rounded-full inline-block"></span>
+                        电力电缆
+                    </h1>
+<button class="flex items-center text-secondary font-label-md text-label-md bg-surface-container px-3 py-1.5 rounded border border-outline-variant hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-[16px] mr-1">tune</span>
+                        筛选
+                    </button>
+</div>
+<!-- Filter Chips -->
+<div class="flex flex-wrap gap-inline-gap">
+<span class="bg-primary-container text-on-primary-container font-label-md text-label-md px-3 py-1 rounded-full cursor-pointer">
+                        全部型号
+                    </span>
+<span class="bg-surface-container text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full cursor-pointer hover:bg-surface-container-high">
+                        YJV
+                    </span>
+<span class="bg-surface-container text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full cursor-pointer hover:bg-surface-container-high">
+                        VV
+                    </span>
+<span class="bg-surface-container text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full cursor-pointer hover:bg-surface-container-high">
+                        阻燃(ZR)
+                    </span>
+<span class="bg-surface-container text-on-surface-variant font-label-md text-label-md px-3 py-1 rounded-full cursor-pointer hover:bg-surface-container-high">
+                        耐火(NH)
+                    </span>
+</div>
+</div>
+<!-- Product Grid -->
+<div class="flex-1 overflow-y-auto p-container-margin pb-24 md:pb-container-margin">
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-grid-gutter">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded flex flex-col hover:border-primary transition-colors">
+<div class="aspect-[4/3] bg-surface-container-high relative overflow-hidden rounded-t">
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="Close up high quality studio shot of a thick industrial copper power cable cross-section showing multiple insulated inner cores. Clean white background with bright, even corporate lighting emphasizing the metallic texture and high manufacturing standards. Professional B2B catalog style imagery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUCu7BNLLe1_SN3ylwcX20cbE7PAv5P9otoyQSxmowxAvlw94QP1R1CkuCQMZv949H_3cEnBn0cxmDuL4eAIx-CTBGHgY_Vblj2swdrCqJ6skFA1L0-xyzYV8rXsutcratR_6svymInrFWNNbpWm2RYcgoLgGShv2wy5QzTLYoUH3-DxkeBkHHBCgGuacXGfyZyv_6N2ofZPprGwdSUlMW237dRuRCnokB_jx4LUVmPor9c8wlRGqoVHUWwWXu4siEHmE8vIFhZ68"/>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-[#eef0fc] text-primary font-label-sm text-label-sm px-2 py-0.5 rounded border border-primary-fixed-dim">现货供应</span>
+</div>
+</div>
+<div class="p-3 flex flex-col flex-1">
+<h3 class="font-h3 text-h3 text-on-surface line-clamp-2 mb-1">YJV-0.6/1kV 铜芯交联聚乙烯绝缘电力电缆</h3>
+<div class="font-label-md text-label-md text-secondary mb-3 flex flex-col gap-1">
+<span>规格: 3x50+1x25 mm²</span>
+<span>认证: 国标CCC认证</span>
+</div>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<span class="font-label-sm text-label-sm text-error">¥</span>
+<span class="font-h2 text-h2 text-error">125.00</span>
+<span class="font-label-sm text-label-sm text-secondary">/米起</span>
+</div>
+<button class="bg-primary text-on-primary w-8 h-8 rounded flex items-center justify-center hover:bg-on-primary-fixed transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded flex flex-col hover:border-primary transition-colors">
+<div class="aspect-[4/3] bg-surface-container-high relative overflow-hidden rounded-t">
+<img class="w-full h-full object-cover mix-blend-multiply" data-alt="Macro photography of heavy duty industrial control cables bundled together. The focus is on the intricate wiring and durable outer sheath. Lit with professional studio lighting on a pure white background to convey premium quality and engineering precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxtTU10UArMlWPXpiH6idlScrvMV92axOSmfSfUgJh7syflEBmZ3rwfcZMpjvclXelKsP25KC0InmsAze_Lu6SfzCEN4ETsYXkNcvtfrhmqx8N2UPOACBlC3SuPnv9LGJkdOPYsbo35vJg_1X3GT0XCLPpP_2qgaelaeWFOOKMS5bZAcsEu1F_poK5O7iFVhss99Kr1UTjsBMC4bbGD9_Tb9nx_j-s-5ze48sv724JIO0JfuTjbsI7AxPJlqVK6Pze76VLiVWeWbg"/>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-[#eef0fc] text-primary font-label-sm text-label-sm px-2 py-0.5 rounded border border-primary-fixed-dim">阻燃A类</span>
+</div>
+</div>
+<div class="p-3 flex flex-col flex-1">
+<h3 class="font-h3 text-h3 text-on-surface line-clamp-2 mb-1">ZA-YJV-0.6/1kV 阻燃铜芯交联聚乙烯绝缘电缆</h3>
+<div class="font-label-md text-label-md text-secondary mb-3 flex flex-col gap-1">
+<span>规格: 4x240 mm²</span>
+<span>特性: 高阻燃性</span>
+</div>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<span class="font-label-sm text-label-sm text-error">¥</span>
+<span class="font-h2 text-h2 text-error">458.00</span>
+<span class="font-label-sm text-label-sm text-secondary">/米起</span>
+</div>
+<button class="bg-primary text-on-primary w-8 h-8 rounded flex items-center justify-center hover:bg-on-primary-fixed transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded flex flex-col hover:border-primary transition-colors">
+<div class="aspect-[4/3] bg-surface-container-high relative overflow-hidden rounded-t">
+<div class="w-full h-full flex items-center justify-center bg-surface-variant">
+<span class="material-symbols-outlined text-outline text-4xl">inventory_2</span>
+</div>
+<div class="absolute top-2 left-2 flex gap-1">
+<span class="bg-[#eef0fc] text-primary font-label-sm text-label-sm px-2 py-0.5 rounded border border-primary-fixed-dim">定制</span>
+</div>
+</div>
+<div class="p-3 flex flex-col flex-1">
+<h3 class="font-h3 text-h3 text-on-surface line-clamp-2 mb-1">VV-0.6/1kV 聚氯乙烯绝缘聚氯乙烯护套电力电缆</h3>
+<div class="font-label-md text-label-md text-secondary mb-3 flex flex-col gap-1">
+<span>规格: 多芯定制</span>
+<span>适用: 室内外直埋</span>
+</div>
+<div class="mt-auto flex justify-between items-end">
+<div>
+<span class="font-label-sm text-label-sm text-error">¥</span>
+<span class="font-h2 text-h2 text-error">85.50</span>
+<span class="font-label-sm text-label-sm text-secondary">/米起</span>
+</div>
+<button class="bg-primary text-on-primary w-8 h-8 rounded flex items-center justify-center hover:bg-on-primary-fixed transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest dark:bg-on-background md:hidden border-t border-outline-variant dark:border-outline">
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-md text-label-md">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span class="font-label-md text-label-md">商城</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1">inventory_2</span>
+<span class="font-label-md text-label-md">案例</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary dark:text-secondary-fixed-dim px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all duration-300 active:scale-95" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-md text-label-md">我的</span>
+</a>
+</nav>
+</body></html>
