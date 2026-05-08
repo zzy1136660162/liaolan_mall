@@ -4,6 +4,9 @@ crmeb:
   imagePath: /JAVA_PROJECT/OPEN/dev/admin/ # 服务器图片路径配置 斜杠结尾
   asyncConfig: false #是否同步config表数据到redis
 
+  sms:
+    mock-login-code-enabled: true
+
 server:
   port: 20510
 

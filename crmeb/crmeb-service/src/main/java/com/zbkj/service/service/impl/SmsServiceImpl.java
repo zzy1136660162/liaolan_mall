@@ -1,10 +1,12 @@
 package com.zbkj.service.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zbkj.common.model.sms.SmsRecord;
 import com.zbkj.common.request.SmsApplyTempRequest;
 import com.zbkj.common.request.SmsModifySignRequest;
 import com.zbkj.common.utils.CrmebUtil;
@@ -24,11 +26,14 @@ import com.zbkj.service.util.OnePassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +76,16 @@ public class SmsServiceImpl implements SmsService {
     @Autowired
     private OnePassService onePassService;
 
+    @Autowired
+    private Environment environment;
+
+    @Value("${crmeb.sms.mock-login-code-enabled:false}")
+    private Boolean mockLoginCodeEnabled;
+
     private static final Logger logger = LoggerFactory.getLogger(SmsServiceImpl.class);
+    private static final String LOGIN_SMS_SCENE = "front_login";
+    private static final String LOGIN_SMS_MOCK_UID = "LOCAL_MOCK";
+    private static final Integer LOGIN_SMS_MOCK_RESULT_CODE = 199;
 
     /**
      * 发送短信
@@ -331,6 +345,9 @@ public class SmsServiceImpl implements SmsService {
      */
     @Override
     public Boolean sendCommonCode(String phone) {
+        if (useOptimizedLoginCodeFlow()) {
+            return optimizedSendCommonCode(phone);
+        }
         ValidateFormUtil.isPhone(phone,"手机号码错误");
         Boolean checkAccount = onePassService.checkAccount();
         if (!checkAccount) {
@@ -596,5 +613,147 @@ public class SmsServiceImpl implements SmsService {
             return false;
         }
         return true;
+    }
+
+    private boolean useOptimizedLoginCodeFlow() {
+        return true;
+    }
+
+    /*
+    private Boolean optimizedSendCommonCode(String phone) {
+        ValidateFormUtil.isPhone(phone, "手机号错误");
+        if (redisUtil.exists(SmsConstants.SMS_VALIDATE_PHONE_NUM + phone)) {
+            throw new CrmebException("您的短信发送过于频繁，请稍后再试");
+        }
+        String codeExpireStr = getVerificationCodeExpireMinutes();
+        Integer code = CrmebUtil.randomCount(111111, 999999);
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("code", code);
+        content.put("time", codeExpireStr);
+
+        try {
+            checkOnePassVerificationSendAvailable();
+            SendSmsVo sendSmsVo = new SendSmsVo();
+            sendSmsVo.setMobile(phone);
+            sendSmsVo.setTemplate(SmsConstants.SMS_CONFIG_VERIFICATION_CODE_TEMP_ID);
+            sendSmsVo.setContent(JSONObject.toJSONString(content));
+            Boolean sent = commonSendSms(sendSmsVo);
+            if (!sent) {
+                throw new CrmebException("发送短信失败，请联系后台管理员");
+            }
+            saveLoginVerificationCode(phone, code, codeExpireStr);
+            saveLoginSmsRecord(phone, code, codeExpireStr, false, "REAL_SEND");
+            return true;
+        } catch (Exception e) {
+            if (!allowMockLoginCode()) {
+                if (e instanceof CrmebException) {
+                    throw (CrmebException) e;
+                }
+                throw new CrmebException("发送短信失败，请联系后台管理员");
+            }
+            saveLoginVerificationCode(phone, code, codeExpireStr);
+            logger.info("MOCK_LOGIN_SMS phone={}, code={}, expireMinutes={}, scene={}, reason={}",
+                    phone, code, codeExpireStr, LOGIN_SMS_SCENE, e.getMessage());
+            saveLoginSmsRecord(phone, code, codeExpireStr, true, e.getMessage());
+            return true;
+        }
+    }
+
+    */
+
+    private Boolean optimizedSendCommonCode(String phone) {
+        ValidateFormUtil.isPhone(phone, "\u624b\u673a\u53f7\u7801\u9519\u8bef");
+        if (redisUtil.exists(SmsConstants.SMS_VALIDATE_PHONE_NUM + phone)) {
+            throw new CrmebException("\u60a8\u7684\u77ed\u4fe1\u53d1\u9001\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5");
+        }
+        String codeExpireStr = getVerificationCodeExpireMinutes();
+        Integer code = CrmebUtil.randomCount(111111, 999999);
+        HashMap<String, Object> content = new HashMap<>();
+        content.put("code", code);
+        content.put("time", codeExpireStr);
+
+        try {
+            checkOnePassVerificationSendAvailable();
+            SendSmsVo sendSmsVo = new SendSmsVo();
+            sendSmsVo.setMobile(phone);
+            sendSmsVo.setTemplate(SmsConstants.SMS_CONFIG_VERIFICATION_CODE_TEMP_ID);
+            sendSmsVo.setContent(JSONObject.toJSONString(content));
+            Boolean sent = commonSendSms(sendSmsVo);
+            if (!sent) {
+                throw new CrmebException("\u53d1\u9001\u77ed\u4fe1\u5931\u8d25\uff0c\u8bf7\u8054\u7cfb\u540e\u53f0\u7ba1\u7406\u5458");
+            }
+            saveLoginVerificationCode(phone, code, codeExpireStr);
+            saveLoginSmsRecord(phone, code, codeExpireStr, false, "REAL_SEND");
+            return true;
+        } catch (Exception e) {
+            if (!allowMockLoginCode()) {
+                if (e instanceof CrmebException) {
+                    throw (CrmebException) e;
+                }
+                throw new CrmebException("\u53d1\u9001\u77ed\u4fe1\u5931\u8d25\uff0c\u8bf7\u8054\u7cfb\u540e\u53f0\u7ba1\u7406\u5458");
+            }
+            saveLoginVerificationCode(phone, code, codeExpireStr);
+            logger.info("MOCK_LOGIN_SMS phone={}, code={}, expireMinutes={}, scene={}, reason={}",
+                    phone, code, codeExpireStr, LOGIN_SMS_SCENE, e.getMessage());
+            saveLoginSmsRecord(phone, code, codeExpireStr, true, e.getMessage());
+            return true;
+        }
+    }
+
+    private void checkOnePassVerificationSendAvailable() {
+        Boolean checkAccount = onePassService.checkAccount();
+        if (!checkAccount) {
+            throw new CrmebException("发送短信请先登录一号通账号");
+        }
+        JSONObject info = onePassService.info();
+        JSONObject smsObject = info.getJSONObject("sms");
+        Integer open = smsObject.getInteger("open");
+        if (!open.equals(1)) {
+            throw new CrmebException("发送短信请先开通一号通账号服务");
+        }
+        if (smsObject.getInteger("num") <= 0) {
+            throw new CrmebException("一号通账号服务余量不足");
+        }
+    }
+
+    private String getVerificationCodeExpireMinutes() {
+        String codeExpireStr = systemConfigService.getValueByKey(Constants.CONFIG_KEY_SMS_CODE_EXPIRE);
+        if (StrUtil.isBlank(codeExpireStr) || Integer.parseInt(codeExpireStr) == 0) {
+            return Constants.NUM_FIVE + "";
+        }
+        return codeExpireStr;
+    }
+
+    private void saveLoginVerificationCode(String phone, Integer code, String codeExpireStr) {
+        redisUtil.set(userService.getValidateCodeRedisKey(phone), code, Long.valueOf(codeExpireStr), TimeUnit.MINUTES);
+        redisUtil.set(SmsConstants.SMS_VALIDATE_PHONE_NUM + phone, 1, 60L);
+    }
+
+    private boolean allowMockLoginCode() {
+        if (!Boolean.TRUE.equals(mockLoginCodeEnabled)) {
+            return false;
+        }
+        return Arrays.stream(environment.getActiveProfiles())
+                .map(String::toLowerCase)
+                .anyMatch(profile -> profile.equals("dev") || profile.equals("local") || profile.equals("test"));
+    }
+
+    private void saveLoginSmsRecord(String phone, Integer code, String codeExpireStr, boolean mock, String memo) {
+        SmsRecord smsRecord = new SmsRecord();
+        HashMap<String, Object> recordContent = new HashMap<>();
+        recordContent.put("scene", LOGIN_SMS_SCENE);
+        recordContent.put("code", code);
+        recordContent.put("time", codeExpireStr);
+        recordContent.put("mock", mock);
+        smsRecord.setUid(mock ? LOGIN_SMS_MOCK_UID : onePassUtil.getLoginVo().getAccessKey());
+        smsRecord.setPhone(phone);
+        smsRecord.setContent(JSONObject.toJSONString(recordContent));
+        smsRecord.setAddIp(mock ? "local-mock" : "one-pass");
+        smsRecord.setTemplate(String.valueOf(SmsConstants.SMS_CONFIG_VERIFICATION_CODE_TEMP_ID));
+        smsRecord.setResultcode(mock ? LOGIN_SMS_MOCK_RESULT_CODE : 100);
+        smsRecord.setRecordId(0);
+        smsRecord.setCreateTime(DateUtil.date());
+        smsRecord.setMemo(mock ? "MOCK_LOGIN_SMS:" + memo : memo);
+        smsRecordService.save(smsRecord);
     }
 }
