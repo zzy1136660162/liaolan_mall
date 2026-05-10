@@ -19,6 +19,28 @@
             <el-input v-model="listPram.keywords" placeholder="请输入关键词" class="selWidth" size="small" clearable>
             </el-input>
           </el-form-item>
+          <el-form-item label="行业分类：">
+            <el-select
+              v-model="listPram.industryCategory"
+              clearable
+              class="selWidth"
+              placeholder="请选择行业分类"
+              @change="handerSearch"
+            >
+              <el-option v-for="item in industryOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="区域分类：">
+            <el-select
+              v-model="listPram.regionCategory"
+              clearable
+              class="selWidth"
+              placeholder="请选择区域分类"
+              @change="handerSearch"
+            >
+              <el-option v-for="item in regionOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="handerSearch" size="small">搜索</el-button>
             <el-button size="small" @click="handleReset">重置</el-button>
@@ -57,7 +79,22 @@
           </template>
         </el-table-column>
         <el-table-column prop="author" label="作者" min-width="180" />
-        <el-table-column prop="synopsis" label="文章简介" show-overflow-tooltip min-width="250" />
+        <el-table-column prop="synopsis" label="文章简介" show-overflow-tooltip min-width="180" />
+        <el-table-column prop="projectName" label="项目名称" min-width="140">
+          <template slot-scope="scope">
+            <span>{{ scope.row.projectName | filterEmpty }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="industryCategory" label="行业分类" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.industryCategory | filterEmpty }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="regionCategory" label="区域分类" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.regionCategory | filterEmpty }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="updateTime" label="更新时间" min-width="180" />
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="scope">
@@ -115,7 +152,11 @@ export default {
         cid: null,
         page: 1,
         limit: this.$constants.page.limit[0],
+        industryCategory: null,
+        regionCategory: null,
       },
+      industryOptions: ['能源领域', '建筑行业', '轨道交通', '电信通讯', '石油化工', '矿冶钢铁', '工业制造', '其他'],
+      regionOptions: ['华东地区', '华南地区', '华北地区', '华中地区', '西南地区', '西北地区', '东北地区', '海外'],
       listData: { list: [], total: 0 },
       editDialogConfig: {
         visible: false,
@@ -143,6 +184,8 @@ export default {
     handleReset() {
       this.listPram.cid = null;
       this.listPram.keywords = null;
+      this.listPram.industryCategory = null;
+      this.listPram.regionCategory = null;
       this.handlerGetListData(this.listPram);
     },
     handlerGetTreeList() {

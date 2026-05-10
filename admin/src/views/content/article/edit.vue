@@ -58,6 +58,44 @@
               class="selWidth"
             />
           </el-form-item>
+          <el-divider content-position="left">案例扩展信息</el-divider>
+          <el-form-item label="项目名称：">
+            <el-input v-model="pram.caseInfo.projectName" class="selWidth" placeholder="请输入项目名称" maxlength="255" />
+          </el-form-item>
+          <el-form-item label="行业分类：">
+            <el-select class="selWidth" v-model="pram.caseInfo.industryCategory" clearable placeholder="请选择行业分类">
+              <el-option v-for="item in industryOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="区域分类：">
+            <el-select class="selWidth" v-model="pram.caseInfo.regionCategory" clearable placeholder="请选择区域分类">
+              <el-option v-for="item in regionOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="项目类型：">
+            <el-input v-model="pram.caseInfo.projectType" class="selWidth" placeholder="请输入项目类型" maxlength="128" />
+          </el-form-item>
+          <el-form-item label="项目地点：">
+            <el-input v-model="pram.caseInfo.projectAddress" class="selWidth" placeholder="请输入项目地点" maxlength="255" />
+          </el-form-item>
+          <el-form-item label="项目周期：">
+            <el-input v-model="pram.caseInfo.projectPeriod" class="selWidth" placeholder="如：18个月、2025Q1" maxlength="128" />
+          </el-form-item>
+          <el-form-item label="项目背景：">
+            <el-input v-model="pram.caseInfo.projectBackground" class="selWidth" type="textarea" :rows="3" placeholder="请输入项目背景" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="供货产品：">
+            <el-input v-model="pram.caseInfo.supplyProducts" class="selWidth" type="textarea" :rows="3" placeholder="请输入供货产品说明" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="实施效果：">
+            <el-input v-model="pram.caseInfo.implementationResult" class="selWidth" type="textarea" :rows="3" placeholder="请输入实施效果" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="关联商品：">
+            <el-input v-model="pram.caseInfo.productIds" class="selWidth" placeholder="商品ID，多个以逗号分隔，如：1,32,10" />
+          </el-form-item>
+          <el-form-item label="案例图片：">
+            <el-input v-model="pram.caseInfo.coverImages" class="selWidth" type="textarea" :rows="2" placeholder="图片地址JSON数组，如：[&quot;https://a.jpg&quot;,&quot;https://b.jpg&quot;]" />
+          </el-form-item>
           <el-form-item
             label="文章内容："
             prop="content"
@@ -90,6 +128,7 @@
 import Tinymce from '@/components/Tinymce/index';
 import * as categoryApi from '@/api/categoryApi.js';
 import * as articleApi from '@/api/article.js';
+import { InfoArticleCase } from '@/api/article.js';
 import * as selfUtil from '@/utils/ZBKJIutil.js';
 import { fileImageApi } from '@/api/systemSetting';
 import { getToken } from '@/utils/auth';
@@ -113,7 +152,7 @@ export default {
       pram: {
         author: null,
         cid: null,
-        content: '', //<span>My Document\'s Title</span>
+        content: '',
         imageInput: '',
         isBanner: false,
         isHot: null,
@@ -124,12 +163,25 @@ export default {
         title: null,
         url: null,
         id: null,
-        // mediaId: null
+        caseInfo: {
+          projectName: '',
+          industryCategory: '',
+          regionCategory: '',
+          projectType: '',
+          projectAddress: '',
+          projectPeriod: '',
+          projectBackground: '',
+          supplyProducts: '',
+          implementationResult: '',
+          productIds: '',
+          coverImages: '',
+        },
       },
+      industryOptions: ['能源领域', '建筑行业', '轨道交通', '电信通讯', '石油化工', '矿冶钢铁', '工业制造', '其他'],
+      regionOptions: ['华东地区', '华南地区', '华北地区', '华中地区', '西南地区', '西北地区', '东北地区', '海外'],
       editData: {},
       myHeaders: { 'X-Token': getToken() },
-      editorContentLaebl: '',
-      // basicForm:{editorContent:""}
+      editorContentLaebl: ''
     };
   },
   created() {
@@ -144,8 +196,23 @@ export default {
   },
   methods: {
     getInfo() {
-      categoryApi.articleInfoApi({ id: this.$route.params.id }).then((data) => {
-        this.editData = data;
+      InfoArticleCase(this.$route.params.id).then((data) => {
+        this.editData = data.article || {};
+        if (data.caseInfo) {
+          this.pram.caseInfo = {
+            projectName: data.caseInfo.projectName || '',
+            industryCategory: data.caseInfo.industryCategory || '',
+            regionCategory: data.caseInfo.regionCategory || '',
+            projectType: data.caseInfo.projectType || '',
+            projectAddress: data.caseInfo.projectAddress || '',
+            projectPeriod: data.caseInfo.projectPeriod || '',
+            projectBackground: data.caseInfo.projectBackground || '',
+            supplyProducts: data.caseInfo.supplyProducts || '',
+            implementationResult: data.caseInfo.implementationResult || '',
+            productIds: data.caseInfo.productIds || '',
+            coverImages: data.caseInfo.coverImages || '',
+          };
+        }
         this.hadlerInitEditData();
       });
     },

@@ -606,6 +606,40 @@
 			]
 		},
 		{
+			"root": "pages/case",
+			"name": "case",
+			"pages": [
+				{
+					"path": "case_list/index",
+					"style": {
+						"navigationBarTitleText": "客户案例",
+						"navigationStyle": "custom",
+						"app-plus": {
+							// #ifdef APP-PLUS
+							"titleNView": {
+								"type": "default"
+							}
+							// #endif
+						}
+					}
+				},
+				{
+					"path": "case_details/index",
+					"style": {
+						"navigationBarTitleText": "案例详情",
+						"navigationStyle": "custom",
+						"app-plus": {
+							// #ifdef APP-PLUS
+							"titleNView": {
+								"type": "default"
+							}
+							// #endif
+						}
+					}
+				}
+			]
+		},
+		{
 			"root": "pages/order",
 			"name":"order",
 			"pages": [

@@ -54,4 +54,13 @@ public class ArticleVo implements Serializable {
     @ApiModelProperty(value = "更新时间")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone="GMT+8")
     private Date updateTime;
+
+    @ApiModelProperty(value = "项目名称")
+    private String projectName;
+
+    @ApiModelProperty(value = "行业分类")
+    private String industryCategory;
+
+    @ApiModelProperty(value = "区域分类")
+    private String regionCategory;
 }

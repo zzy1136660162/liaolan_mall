@@ -35,4 +35,10 @@ public class ArticleSearchRequest implements Serializable {
     @ApiModelProperty(value = "搜索关键字")
     private String keywords;
 
+    @ApiModelProperty(value = "行业分类")
+    private String industryCategory;
+
+    @ApiModelProperty(value = "区域分类")
+    private String regionCategory;
+
 }

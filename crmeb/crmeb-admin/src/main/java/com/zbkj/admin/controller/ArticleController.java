@@ -1,12 +1,15 @@
 package com.zbkj.admin.controller;
 
 import com.zbkj.common.model.article.Article;
+import com.zbkj.common.model.article.ArticleCaseExtend;
 import com.zbkj.common.page.CommonPage;
-import com.zbkj.common.request.ArticleRequest;
+import com.zbkj.common.request.ArticleRequestCaseExtend;
+import com.zbkj.common.request.ArticleRequestCaseExtendUpdate;
 import com.zbkj.common.request.ArticleSearchRequest;
 import com.zbkj.common.request.PageParamRequest;
 import com.zbkj.common.result.CommonResult;
 import com.zbkj.common.vo.ArticleVo;
+import com.zbkj.service.service.ArticleCaseExtendService;
 import com.zbkj.service.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -16,6 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -39,6 +45,9 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private ArticleCaseExtendService articleCaseExtendService;
+
     /**
      * 分页显示文章管理表
      * @param request ArticleSearchRequest 搜索条件
@@ -55,13 +64,13 @@ public class ArticleController {
 
     /**
      * 新增文章管理表
-     * @param articleRequest 新增参数
+     * @param articleRequestCaseExtend 新增参数（含案例扩展）
      */
     @PreAuthorize("hasAuthority('admin:article:save')")
     @ApiOperation(value = "新增")
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public CommonResult<String> save(@RequestBody @Validated ArticleRequest articleRequest) {
-        if (articleService.create(articleRequest)) {
+    public CommonResult<String> save(@RequestBody @Validated ArticleRequestCaseExtend articleRequestCaseExtend) {
+        if (articleService.createWithCase(articleRequestCaseExtend)) {
             return CommonResult.success();
         } else {
             return CommonResult.failed();
@@ -87,14 +96,14 @@ public class ArticleController {
     /**
      * 修改文章管理表
      * @param id integer id
-     * @param articleRequest 修改参数
+     * @param articleRequestCaseExtend 修改参数（含案例扩展）
      */
     @PreAuthorize("hasAuthority('admin:article:update')")
     @ApiOperation(value = "修改")
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiImplicitParam(name="id", value="文章ID")
-    public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated ArticleRequest articleRequest) {
-        if (articleService.updateArticle(id, articleRequest)) {
+    public CommonResult<String> update(@RequestParam Integer id, @RequestBody @Validated ArticleRequestCaseExtendUpdate articleRequestCaseExtendUpdate) {
+        if (articleService.updateArticleWithCase(id, articleRequestCaseExtendUpdate)) {
             return CommonResult.success();
         } else {
             return CommonResult.failed();
@@ -111,7 +120,41 @@ public class ArticleController {
     @ApiImplicitParam(name="id", value="文章ID")
     public CommonResult<Article> info(@RequestParam(value = "id") Integer id) {
         return CommonResult.success(articleService.getDetail(id));
-   }
+    }
+
+    /**
+     * 查询文章详情（含案例扩展信息）
+     * @param id Integer
+     */
+    @PreAuthorize("hasAuthority('admin:article:info')")
+    @ApiOperation(value = "详情（含案例扩展）")
+    @RequestMapping(value = "/info/case", method = RequestMethod.GET)
+    @ApiImplicitParam(name="id", value="文章ID")
+    public CommonResult<Map<String, Object>> infoWithCase(@RequestParam(value = "id") Integer id) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("article", articleService.getDetail(id));
+        ArticleCaseExtend caseExtend = articleCaseExtendService.getByArticleId(Long.valueOf(id));
+        result.put("caseInfo", caseExtend);
+        return CommonResult.success(result);
+    }
+
+    /**
+     * 文章绑定商品
+     * @param id 文章ID
+     * @param productId 商品ID
+     */
+    @PreAuthorize("hasAuthority('admin:article:update')")
+    @ApiOperation(value = "文章绑定商品")
+    @RequestMapping(value = "/bind/product", method = RequestMethod.POST)
+    @ApiImplicitParam(name="id", value="文章ID")
+    public CommonResult<String> bindProduct(@RequestParam(value = "id") Integer id,
+                                             @RequestParam(value = "productId") Integer productId) {
+        if (articleService.bindProduct(id, productId)) {
+            return CommonResult.success();
+        } else {
+            return CommonResult.failed();
+        }
+    }
 }
 
 

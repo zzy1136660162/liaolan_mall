@@ -1520,5 +1520,34 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         lqw.eq(StoreProduct::getIsRecycle, false);
         lqw.eq(StoreProduct::getIsShow, true);
     }
+
+    /**
+     * 根据ID列表获取商品简单信息
+     * @param ids ID列表
+     * @return 商品简单信息列表
+     */
+    @Override
+    public List<ProductSimpleResponse> getSimpleListByIds(List<Integer> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return CollUtil.newArrayList();
+        }
+        LambdaQueryWrapper<StoreProduct> lqw = Wrappers.lambdaQuery();
+        lqw.in(StoreProduct::getId, ids);
+        lqw.eq(StoreProduct::getIsDel, false);
+        lqw.eq(StoreProduct::getIsRecycle, false);
+        lqw.eq(StoreProduct::getIsShow, true);
+        List<StoreProduct> products = dao.selectList(lqw);
+        if (CollUtil.isEmpty(products)) {
+            return CollUtil.newArrayList();
+        }
+        return products.stream().map(p -> {
+            ProductSimpleResponse response = new ProductSimpleResponse();
+            response.setId(p.getId());
+            response.setStoreName(p.getStoreName());
+            response.setImage(p.getImage());
+            response.setPrice(p.getPrice());
+            return response;
+        }).collect(Collectors.toList());
+    }
 }
 
