@@ -1,4 +1,4 @@
-origin/feature/mall-dev1
+origin/feature/contact-dev6
 # Git分支使用与IDEA操作指南
 
 生成日期：2026-05-08  
