@@ -9,15 +9,54 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * 案例文章扩展 Request
+ * 案例请求参数（扁平化，合并文章+扩展字段）
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value = "ArticleCaseExtendRequest对象", description = "案例文章扩展表")
-public class ArticleCaseExtendRequest implements Serializable {
+@ApiModel(value = "CaseRequest对象", description = "案例请求参数")
+public class CaseRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "案例标题")
+    private String title;
+
+    @ApiModelProperty(value = "作者")
+    private String author;
+
+    @ApiModelProperty(value = "封面图")
+    private String imageInput;
+
+    @ApiModelProperty(value = "简介")
+    private String synopsis;
+
+    @ApiModelProperty(value = "分享标题")
+    private String shareTitle;
+
+    @ApiModelProperty(value = "分享简介")
+    private String shareSynopsis;
+
+    @ApiModelProperty(value = "排序")
+    private Integer sort;
+
+    @ApiModelProperty(value = "原文链接")
+    private String url;
+
+    @ApiModelProperty(value = "状态")
+    private Boolean status;
+
+    @ApiModelProperty(value = "是否隐藏")
+    private Boolean hide;
+
+    @ApiModelProperty(value = "是否热门")
+    private Boolean isHot;
+
+    @ApiModelProperty(value = "是否轮播图")
+    private Boolean isBanner;
+
+    @ApiModelProperty(value = "文章内容")
+    private String content;
 
     @ApiModelProperty(value = "项目名称")
     private String projectName;
@@ -40,7 +79,7 @@ public class ArticleCaseExtendRequest implements Serializable {
     @ApiModelProperty(value = "项目背景")
     private String projectBackground;
 
-    @ApiModelProperty(value = "供货产品")
+    @ApiModelProperty(value = "供货产品说明")
     private String supplyProducts;
 
     @ApiModelProperty(value = "实施效果")
@@ -51,7 +90,4 @@ public class ArticleCaseExtendRequest implements Serializable {
 
     @ApiModelProperty(value = "案例图片集合(JSON数组)")
     private String coverImages;
-
-    @ApiModelProperty(value = "排序值")
-    private Integer sort;
 }

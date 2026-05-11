@@ -2,8 +2,8 @@
   <div class="divBox">
     <pages-header
       ref="pageHeader"
-      :title="$route.params.id ? '编辑文章' : '添加文章'"
-      backUrl="/content/articleManager"
+      :title="$route.params.id ? '编辑案例' : '添加案例'"
+      backUrl="/content/caseManager"
     ></pages-header>
     <el-card class="box-card mt14">
       <div class="components-container">
@@ -21,15 +21,6 @@
             :rules="[{ required: true, message: '请填作者', trigger: ['blur', 'change'] }]"
           >
             <el-input class="selWidth" v-model="pram.author" placeholder="作者" maxlength="20" />
-          </el-form-item>
-          <el-form-item
-            label="文章分类："
-            :rules="[{ required: true, message: '请选择分类', trigger: ['blur', 'change'] }]"
-          >
-            <el-select class="selWidth" v-model="pram.cid" placeholder="请选择">
-              <el-option v-for="item in categoryTreeData" :key="item.id" :label="item.name" :value="item.id">
-              </el-option>
-            </el-select>
           </el-form-item>
           <el-form-item
             label="图文封面："
@@ -58,6 +49,44 @@
               class="selWidth"
             />
           </el-form-item>
+          <el-divider content-position="left">案例扩展信息</el-divider>
+          <el-form-item label="项目名称：">
+            <el-input v-model="pram.projectName" class="selWidth" placeholder="请输入项目名称" maxlength="255" />
+          </el-form-item>
+          <el-form-item label="行业分类：">
+            <el-select class="selWidth" v-model="pram.industryCategory" clearable placeholder="请选择行业分类">
+              <el-option v-for="item in industryOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="区域分类：">
+            <el-select class="selWidth" v-model="pram.regionCategory" clearable placeholder="请选择区域分类">
+              <el-option v-for="item in regionOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="项目类型：">
+            <el-input v-model="pram.projectType" class="selWidth" placeholder="请输入项目类型" maxlength="128" />
+          </el-form-item>
+          <el-form-item label="项目地点：">
+            <el-input v-model="pram.projectAddress" class="selWidth" placeholder="请输入项目地点" maxlength="255" />
+          </el-form-item>
+          <el-form-item label="项目周期：">
+            <el-input v-model="pram.projectPeriod" class="selWidth" placeholder="如：18个月、2025Q1" maxlength="128" />
+          </el-form-item>
+          <el-form-item label="项目背景：">
+            <el-input v-model="pram.projectBackground" class="selWidth" type="textarea" :rows="3" placeholder="请输入项目背景" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="供货产品：">
+            <el-input v-model="pram.supplyProducts" class="selWidth" type="textarea" :rows="3" placeholder="请输入供货产品说明" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="实施效果：">
+            <el-input v-model="pram.implementationResult" class="selWidth" type="textarea" :rows="3" placeholder="请输入实施效果" maxlength="500" />
+          </el-form-item>
+          <el-form-item label="关联商品：">
+            <el-input v-model="pram.productIds" class="selWidth" placeholder="商品ID，多个以逗号分隔，如：1,32,10" />
+          </el-form-item>
+          <el-form-item label="案例图片：">
+            <el-input v-model="pram.coverImages" class="selWidth" type="textarea" :rows="2" placeholder="图片地址JSON数组，如：[&quot;https://a.jpg&quot;,&quot;https://b.jpg&quot;]" />
+          </el-form-item>
           <el-form-item
             label="文章内容："
             prop="content"
@@ -76,7 +105,7 @@
               type="primary"
               :loading="loading"
               @click="handerSubmit('pram')"
-              v-hasPermi="['admin:article:update']"
+              v-hasPermi="['admin:case:update']"
               >保存</el-button
             >
           </el-form-item>
@@ -88,32 +117,20 @@
 
 <script>
 import Tinymce from '@/components/Tinymce/index';
-import * as categoryApi from '@/api/categoryApi.js';
-import * as articleApi from '@/api/article.js';
+import * as caseApi from '@/api/case.js';
 import * as selfUtil from '@/utils/ZBKJIutil.js';
 import { fileImageApi } from '@/api/systemSetting';
 import { getToken } from '@/utils/auth';
 import { Debounce } from '@/utils/validate';
 export default {
-  // name: "edit",
   components: { Tinymce },
   data() {
     return {
       loading: false,
       constants: this.$constants,
-      categoryTreeData: [],
-      categoryProps: {
-        value: 'id',
-        label: 'name',
-        children: 'child',
-        expandTrigger: 'hover',
-        checkStrictly: true,
-        emitPath: false,
-      },
       pram: {
         author: null,
-        cid: null,
-        content: '', //<span>My Document\'s Title</span>
+        content: '',
         imageInput: '',
         isBanner: false,
         isHot: null,
@@ -124,12 +141,23 @@ export default {
         title: null,
         url: null,
         id: null,
-        // mediaId: null
+        projectName: '',
+        industryCategory: '',
+        regionCategory: '',
+        projectType: '',
+        projectAddress: '',
+        projectPeriod: '',
+        projectBackground: '',
+        supplyProducts: '',
+        implementationResult: '',
+        productIds: '',
+        coverImages: '',
       },
+      industryOptions: ['能源领域', '建筑行业', '轨道交通', '电信通讯', '石油化工', '矿冶钢铁', '工业制造', '其他'],
+      regionOptions: ['华东地区', '华南地区', '华北地区', '华中地区', '西南地区', '西北地区', '东北地区', '海外'],
       editData: {},
       myHeaders: { 'X-Token': getToken() },
-      editorContentLaebl: '',
-      // basicForm:{editorContent:""}
+      editorContentLaebl: ''
     };
   },
   created() {
@@ -140,12 +168,11 @@ export default {
       this.getInfo();
       this.setTagsViewTitle();
     }
-    this.handlerGetCategoryTreeData();
   },
   methods: {
     getInfo() {
-      categoryApi.articleInfoApi({ id: this.$route.params.id }).then((data) => {
-        this.editData = data;
+      caseApi.getCaseDetail(this.$route.params.id).then((data) => {
+        this.editData = data || {};
         this.hadlerInitEditData();
       });
     },
@@ -163,7 +190,6 @@ export default {
       if (!this.$route.params.id) return;
       const {
         author,
-        cid,
         content,
         imageInput,
         isBanner,
@@ -175,9 +201,19 @@ export default {
         title,
         url,
         id,
+        projectName,
+        industryCategory,
+        regionCategory,
+        projectType,
+        projectAddress,
+        projectPeriod,
+        projectBackground,
+        supplyProducts,
+        implementationResult,
+        productIds,
+        coverImages,
       } = this.editData;
       this.pram.author = author;
-      this.pram.cid = Number.parseInt(cid);
       this.pram.content = content;
       this.pram.imageInput = imageInput;
       this.pram.isBanner = isBanner;
@@ -189,13 +225,17 @@ export default {
       this.pram.title = title;
       this.pram.url = url;
       this.pram.id = id;
-      // this.pram.mediaId = mediaId
-    },
-    handlerGetCategoryTreeData() {
-      categoryApi.listCategroy({ type: 3, status: '' }).then((data) => {
-        this.categoryTreeData = data;
-        localStorage.setItem('adminArticleClassify', JSON.stringify(data));
-      });
+      this.pram.projectName = projectName || '';
+      this.pram.industryCategory = industryCategory || '';
+      this.pram.regionCategory = regionCategory || '';
+      this.pram.projectType = projectType || '';
+      this.pram.projectAddress = projectAddress || '';
+      this.pram.projectPeriod = projectPeriod || '';
+      this.pram.projectBackground = projectBackground || '';
+      this.pram.supplyProducts = supplyProducts || '';
+      this.pram.implementationResult = implementationResult || '';
+      this.pram.productIds = productIds || '';
+      this.pram.coverImages = coverImages || '';
     },
     handerSubmit: Debounce(function (form) {
       this.$refs[form].validate((valid) => {
@@ -209,15 +249,14 @@ export default {
     }),
     handlerUpdate() {
       this.loading = true;
-      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0] : this.pram.cid;
       this.pram.shareTitle = this.pram.title;
       this.pram.shareSynopsis = this.pram.synopsis;
-      articleApi
-        .UpdateArticle(this.pram)
+      caseApi
+        .updateCase(this.pram)
         .then((data) => {
-          this.$message.success('编辑文章成功');
+          this.$message.success('编辑案例成功');
           this.loading = false;
-          this.$router.push({ path: '/content/articleManager' });
+          this.$router.push({ path: '/content/caseManager' });
         })
         .catch(() => {
           this.loading = false;
@@ -225,22 +264,21 @@ export default {
     },
     handlerSave() {
       this.loading = true;
-      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0] : this.pram.cid;
       this.pram.shareTitle = this.pram.title;
       this.pram.shareSynopsis = this.pram.synopsis;
-      articleApi
-        .AddArticle(this.pram)
+      caseApi
+        .saveCase(this.pram)
         .then((data) => {
-          this.$message.success('新增文章成功');
+          this.$message.success('新增案例成功');
           this.loading = false;
-          this.$router.push({ path: '/content/articleManager' });
+          this.$router.push({ path: '/content/caseManager' });
         })
         .catch(() => {
           this.loading = false;
         });
     },
     setTagsViewTitle() {
-      const title = '编辑文章';
+      const title = '编辑案例';
       const route = Object.assign({}, this.tempRoute, { title: `${title}-${this.$route.params.id}` });
       this.$store.dispatch('tagsView/updateVisitedView', route);
     },

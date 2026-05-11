@@ -41,31 +41,29 @@
           @click="goToDetail(item.id)"
         >
           <view class="case-image">
-            <image :src="item.imageInput || (item.caseInfo && getFirstImage(item.caseInfo.coverImages))" mode="aspectFill" />
-            <view class="case-tags" v-if="item.caseInfo">
-              <text class="tag-primary" v-if="item.caseInfo.industryCategory">
-                {{ item.caseInfo.industryCategory }}
-              </text>
+            <image :src="item.imageInput" mode="aspectFill" />
+            <view class="case-tags" v-if="item.industryCategory">
+              <text class="tag-primary">{{ item.industryCategory }}</text>
             </view>
           </view>
           
           <view class="case-content">
-            <view class="case-title">{{ item.caseInfo && item.caseInfo.projectName || item.title }}</view>
+            <view class="case-title">{{ item.projectName || item.title }}</view>
             
-            <view class="case-tags-row" v-if="item.caseInfo">
-              <text class="tag-item" v-if="item.caseInfo.industryCategory">
-                {{ item.caseInfo.industryCategory }}
+            <view class="case-tags-row" v-if="item.industryCategory || item.regionCategory || item.projectType">
+              <text class="tag-item" v-if="item.industryCategory">
+                {{ item.industryCategory }}
               </text>
-              <text class="tag-item" v-if="item.caseInfo.regionCategory">
-                {{ item.caseInfo.regionCategory }}
+              <text class="tag-item" v-if="item.regionCategory">
+                {{ item.regionCategory }}
               </text>
-              <text class="tag-item" v-if="item.caseInfo.projectType">
-                {{ item.caseInfo.projectType }}
+              <text class="tag-item" v-if="item.projectType">
+                {{ item.projectType }}
               </text>
             </view>
             
-            <view class="case-desc" v-if="item.caseInfo && item.caseInfo.supplyProducts">
-              {{ item.caseInfo.supplyProducts }}
+            <view class="case-desc" v-if="item.supplyProducts">
+              {{ item.supplyProducts }}
             </view>
             
             <view class="case-action">
@@ -94,27 +92,14 @@ export default {
       page: 1,
       limit: 10,
       loading: false,
-      noMore: false,
-      caseCategoryId: 811
+      noMore: false
     };
   },
-  onLoad(options) {
-    if (options.cid) {
-      this.caseCategoryId = options.cid;
-    }
+  onLoad() {
     this.loadIndustryCategories();
     this.getCaseList();
   },
   methods: {
-    getFirstImage(coverImagesStr) {
-      if (!coverImagesStr) return '';
-      try {
-        const arr = JSON.parse(coverImagesStr);
-        return (Array.isArray(arr) && arr.length > 0) ? arr[0] : '';
-      } catch (e) {
-        return '';
-      }
-    },
     loadIndustryCategories() {
       getCaseIndustryCategories().then(res => {
         const list = [{ value: '', label: '全部分类' }];
@@ -150,7 +135,7 @@ export default {
         data.industryCategory = this.selectedIndustry;
       }
       
-      getCaseList(this.caseCategoryId, data).then(res => {
+      getCaseList(data).then(res => {
         this.loading = false;
         if (res.data.list.length > 0) {
           this.caseList = this.caseList.concat(res.data.list);

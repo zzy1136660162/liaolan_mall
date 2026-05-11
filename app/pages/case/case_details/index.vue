@@ -25,47 +25,47 @@
       
       <view class="project-header">
         <view class="project-name">
-          {{ caseData.caseInfo.projectName || caseData.title }}
+          {{ caseData.projectName || caseData.title }}
         </view>
         <view class="project-tags">
-          <text class="tag-item" v-if="caseData.caseInfo.industryCategory">
-            {{ caseData.caseInfo.industryCategory }}
+          <text class="tag-item" v-if="caseData.industryCategory">
+            {{ caseData.industryCategory }}
           </text>
-          <text class="tag-item" v-if="caseData.caseInfo.regionCategory">
-            {{ caseData.caseInfo.regionCategory }}
+          <text class="tag-item" v-if="caseData.regionCategory">
+            {{ caseData.regionCategory }}
           </text>
-          <text class="tag-item" v-if="caseData.caseInfo.projectType">
-            {{ caseData.caseInfo.projectType }}
+          <text class="tag-item" v-if="caseData.projectType">
+            {{ caseData.projectType }}
           </text>
         </view>
       </view>
       
-      <view class="info-card" v-if="caseData.caseInfo">
-        <view class="info-item" v-if="caseData.caseInfo.projectAddress">
+      <view class="info-card" v-if="caseData.projectAddress || caseData.projectPeriod || caseData.supplyProducts || caseData.implementationResult">
+        <view class="info-item" v-if="caseData.projectAddress">
           <view class="info-label">项目地点</view>
-          <view class="info-value">{{ caseData.caseInfo.projectAddress }}</view>
+          <view class="info-value">{{ caseData.projectAddress }}</view>
         </view>
-        <view class="info-item" v-if="caseData.caseInfo.projectPeriod">
+        <view class="info-item" v-if="caseData.projectPeriod">
           <view class="info-label">项目周期</view>
-          <view class="info-value">{{ caseData.caseInfo.projectPeriod }}</view>
+          <view class="info-value">{{ caseData.projectPeriod }}</view>
         </view>
-        <view class="info-item" v-if="caseData.caseInfo.supplyProducts">
+        <view class="info-item" v-if="caseData.supplyProducts">
           <view class="info-label">供货产品</view>
-          <view class="info-value">{{ caseData.caseInfo.supplyProducts }}</view>
+          <view class="info-value">{{ caseData.supplyProducts }}</view>
         </view>
-        <view class="info-item" v-if="caseData.caseInfo.implementationResult">
+        <view class="info-item" v-if="caseData.implementationResult">
           <view class="info-label">实施效果</view>
-          <view class="info-value">{{ caseData.caseInfo.implementationResult }}</view>
+          <view class="info-value">{{ caseData.implementationResult }}</view>
         </view>
       </view>
       
-      <view class="content-section" v-if="caseData.caseInfo.projectBackground">
+      <view class="content-section" v-if="caseData.projectBackground">
         <view class="section-title">
           <view class="title-bar"></view>
           <text>项目背景</text>
         </view>
         <view class="section-content">
-          <jyf-parser :html="caseData.caseInfo.projectBackground" />
+          <jyf-parser :html="caseData.projectBackground" />
         </view>
       </view>
       
@@ -128,17 +128,15 @@ export default {
         imageInput: '',
         title: '',
         content: '',
-        caseInfo: {
-          projectName: '',
-          industryCategory: '',
-          regionCategory: '',
-          projectType: '',
-          projectAddress: '',
-          projectPeriod: '',
-          supplyProducts: '',
-          implementationResult: '',
-          projectBackground: ''
-        },
+        projectName: '',
+        industryCategory: '',
+        regionCategory: '',
+        projectType: '',
+        projectAddress: '',
+        projectPeriod: '',
+        supplyProducts: '',
+        implementationResult: '',
+        projectBackground: '',
         productList: []
       },
       tagStyle: {
@@ -165,19 +163,14 @@ export default {
         const data = res.data;
         let projectImages = [];
         try {
-          const coverStr = data.caseInfo && data.caseInfo.coverImages;
-          projectImages = coverStr ? JSON.parse(coverStr) : [];
+          projectImages = data.coverImages ? JSON.parse(data.coverImages) : [];
         } catch (e) {
           projectImages = [];
         }
         this.caseData = {
           ...data,
           projectImages: projectImages,
-          productList: data.productList || [],
-          caseInfo: {
-            ...this.caseData.caseInfo,
-            ...(data.caseInfo || {})
-          }
+          productList: data.productList || []
         };
       }).catch(() => {
         uni.hideLoading();

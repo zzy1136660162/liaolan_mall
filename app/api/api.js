@@ -109,11 +109,10 @@ export function getArticleDetails(id){
 
 /**
  * 案例列表（支持行业/区域/类型筛选）
- * @param int cid 分类ID
  * @param object data 筛选参数
  */
-export function getCaseList(cid, data){
-  return request.get('article/case/list/' + cid, data, {noAuth:true});
+export function getCaseList(data){
+  return request.get('case/list', data, {noAuth:true});
 }
 
 /**
@@ -121,14 +120,14 @@ export function getCaseList(cid, data){
  * @param int id 文章ID
  */
 export function getCaseDetails(id){
-  return request.get('article/case/info', {id: id}, {noAuth:true});
+  return request.get('case/info', {id: id}, {noAuth:true});
 }
 
 /**
  * 案例行业分类列表（去重）
  */
 export function getCaseIndustryCategories(){
-  return request.get('article/case/industry/categories', {}, {noAuth:true});
+  return request.get('case/industry/categories', {}, {noAuth:true});
 }
 
 /**
