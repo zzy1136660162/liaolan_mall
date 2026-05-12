@@ -107,6 +107,26 @@ export function getArticleDetails(id){
   return request.get('article/info',id,{noAuth:true});
 }
 
+export function getDownloadCategoryList() {
+  return request.get('download/material/category/list', {}, { noAuth: true });
+}
+
+export function getDownloadMaterialList(data) {
+  return request.get('download/material/list', data, { noAuth: true });
+}
+
+export function getDownloadMaterialInfo(id) {
+  return request.get(`download/material/info/${id}`, {}, { noAuth: true });
+}
+
+export function saveDownloadMaterialRecord(data) {
+  return request.post('download/material/record', data, { noAuth: true });
+}
+
+export function getDownloadMaterialFile(id, data) {
+  return request.get(`download/material/file/${id}`, data, { noAuth: true });
+}
+
 /**
  * 案例列表（支持行业/区域/类型筛选）
  * @param object data 筛选参数
