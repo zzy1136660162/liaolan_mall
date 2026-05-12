@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import com.zbkj.common.model.product.StoreProduct;
 import com.zbkj.common.request.*;
+import com.zbkj.common.response.ProductSimpleResponse;
 import com.zbkj.common.response.StoreProductInfoResponse;
 import com.zbkj.common.response.StoreProductResponse;
 import com.zbkj.common.response.StoreProductTabsHeader;
@@ -247,4 +248,11 @@ public interface StoreProductService extends IService<StoreProduct> {
      * @return Boolean
      */
     Boolean quickAddStock(ProductAddStockRequest request);
+
+    /**
+     * 根据ID列表获取商品简单信息
+     * @param ids ID列表
+     * @return 商品简单信息列表
+     */
+    List<ProductSimpleResponse> getSimpleListByIds(List<Integer> ids);
 }

@@ -111,7 +111,25 @@ public class ArticleController {
     @ApiImplicitParam(name="id", value="文章ID")
     public CommonResult<Article> info(@RequestParam(value = "id") Integer id) {
         return CommonResult.success(articleService.getDetail(id));
-   }
+    }
+
+    /**
+     * 文章绑定商品
+     * @param id 文章ID
+     * @param productId 商品ID
+     */
+    @PreAuthorize("hasAuthority('admin:article:update')")
+    @ApiOperation(value = "文章绑定商品")
+    @RequestMapping(value = "/bind/product", method = RequestMethod.POST)
+    @ApiImplicitParam(name="id", value="文章ID")
+    public CommonResult<String> bindProduct(@RequestParam(value = "id") Integer id,
+                                             @RequestParam(value = "productId") Integer productId) {
+        if (articleService.bindProduct(id, productId)) {
+            return CommonResult.success();
+        } else {
+            return CommonResult.failed();
+        }
+    }
 }
 
 

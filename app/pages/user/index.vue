@@ -125,12 +125,11 @@
 				</scroll-view>
 			</view>
 		</view>
-		<pageFooter></pageFooter>
+		<tab-bar></tab-bar>
 	</view>
 </template>
 <script>
 	let sysHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
-	import pageFooter from '@/components/pageFooter/index.vue'
 	import Cache from '@/utils/cache';
 	import {goPage} from '@/libs/iframe.js'
 	import {BACK_URL} from '@/config/cache';
@@ -148,10 +147,11 @@
 	import {getShare} from '@/api/public.js';
 	import {setThemeColor} from '@/utils/setTheme.js'
 	import animationType from '@/utils/animationType.js'
+	import tabBar from '@/components/tab-bar/index.vue';
 	const app = getApp();
 	export default {
 		components:{
-					pageFooter
+			tabBar
 		},
 		computed: mapGetters(['isLogin', 'chatUrl', 'uid','bottomNavigationIsCustom']),
 		data() {
@@ -247,7 +247,6 @@
 			this.theme = this.$Cache.get('theme')
 			app.globalData.theme = this.$Cache.get('theme')
 			if (!this.$Cache.getItem('cityList')) getCityList();
-			!this.$store.state.app.bottomNavigationIsCustom&&uni.showTabBar();
 			// #ifdef H5
 			let that = this;
 			uni.getSystemInfo({

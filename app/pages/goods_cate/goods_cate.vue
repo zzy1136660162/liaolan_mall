@@ -1,16 +1,20 @@
 <template>
 	<view class="page" :data-theme="theme" :style="{height:winHeight + 'px'}">
 		<cate v-show="currentPage == 'one'"></cate>
-		<pageFooter v-if="footerShow"></pageFooter>
+		<tab-bar></tab-bar>
 	</view>
 </template>
 <script>
-	import pageFooter from '@/components/pageFooter/index.vue'
 	import cate from './components/default_cate';
 	import {getShare} from '@/api/public.js';
 	import {mapGetters} from 'vuex';
+	import tabBar from '@/components/tab-bar/index.vue';
 	const app = getApp();
 	export default {
+		components: {
+			cate,
+			tabBar
+		},
 		data() {
 			return {
 				footerShow:true,
@@ -35,13 +39,9 @@
 					break;
 				case '3':
 					that.$set(that,'currentPage','three');
-					uni.hideTabBar()
-					this.footerShow=false
 					break;
 				case '4':
 					that.$set(that,'currentPage','four');
-					uni.hideTabBar()
-					this.footerShow=false
 					break;
 			}
 			uni.getSystemInfo({
@@ -60,19 +60,14 @@
 				case 'two':
 					break;
 				case 'three':
-					uni.hideTabBar()
-					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
-							//登录的情况下获取模板3,4的购物车商品数量和列表
 							this.$refs.classThree.getCartNum();
 							this.$refs.classThree.getCartLists(1);
 						}
 					},500)
 					break;
 				case 'four':
-					uni.hideTabBar()
-					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classFour.getCartNum();
@@ -83,7 +78,7 @@
 			}
 		},
 		components:{
-			cate,pageFooter
+			cate
 		},
 		methods:{
 			shareApi: function() {

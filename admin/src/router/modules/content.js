@@ -40,6 +40,25 @@ const contentRouter = {
       },
     },
     {
+      path: 'caseManager',
+      name: 'caseManager',
+      component: () => import('@/views/content/case/list'),
+      meta: {
+        title: '案例管理',
+        icon: 'clipboard',
+      },
+    },
+    {
+      path: 'caseCreat/:id?',
+      name: 'caseCreat',
+      component: () => import('@/views/content/case/edit'),
+      meta: {
+        title: '添加案例',
+        noCache: true,
+        activeMenu: `/content/caseManager`,
+      },
+    },
+    {
       path: 'classifManager',
       name: 'classifManager',
       component: () => import('@/views/content/articleclass/list'),
