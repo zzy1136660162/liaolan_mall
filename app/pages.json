@@ -66,6 +66,19 @@
 			"name": "users",
 			"pages": [
 				{
+					"path": "about_us/index",
+					"style": {
+						"navigationStyle": "custom",
+						"app-plus": {
+							// #ifdef APP-PLUS
+							"titleNView": {
+								"type": "default"
+							}
+							// #endif
+						}
+					}
+				},
+				{
 					"path": "web_page/index",
 					"style": {
 						//"navigationBarTitleText": "客服",

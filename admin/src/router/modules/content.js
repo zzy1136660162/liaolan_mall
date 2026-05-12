@@ -48,6 +48,15 @@ const contentRouter = {
         icon: 'clipboard',
       },
     },
+    {
+      path: 'aboutManager',
+      name: 'aboutManager',
+      component: () => import('@/views/content/about/index'),
+      meta: {
+        title: '关于辽缆',
+        icon: 'clipboard',
+      },
+    },
   ],
 };
 

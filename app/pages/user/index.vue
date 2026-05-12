@@ -95,6 +95,10 @@
 										<text>{{item.name}}</text>
 									</view>
 								</block>
+								<view class="item" @click="goAboutPage">
+									<image :src="urlDomain+'crmebimage/perset/staticImg/about.png'" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23003da6%22><path d=%22M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z%22/></svg>'"></image>
+									<text>关于辽缆</text>
+								</view>
 								<!-- #ifndef MP -->
 								<view class="item" @click="onClickService">
 									<image :src="servicePic"></image>
@@ -449,6 +453,9 @@
 				} else {
 					this.openAuto()
 				}
+			},
+			goAboutPage() {
+				uni.navigateTo({ url: '/pages/users/about_us/index' });
 			},
 			appUpdate(){
 				uni.navigateTo({
