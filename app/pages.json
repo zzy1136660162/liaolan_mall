@@ -59,6 +59,17 @@
 					// #endif
 				}
 			}
+		},
+		{
+			"path": "pages/downloads/index",
+			"style": {
+				"navigationBarTitleText": "资料下载",
+				"app-plus": {
+					"titleNView": {
+						"type": "default"
+					}
+				}
+			}
 		}
     ],
 	"subPackages": [{
