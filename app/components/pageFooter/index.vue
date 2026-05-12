@@ -51,11 +51,6 @@
 				getBottomNavigationApi().then((res) => {
 					this.obj = res.data
 					this.$store.commit('BottomNavigationIsCustom', this.obj.isCustom == 1 ? true : false);
-					if (this.obj.isCustom == 1) {
-						uni.hideTabBar()
-					} else {
-						uni.showTabBar()
-					}
 				})
 			},
 			goRouter(item) {

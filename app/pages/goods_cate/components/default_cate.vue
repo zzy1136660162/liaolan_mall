@@ -148,7 +148,8 @@
 			searchSubmitValue: function(e) {
 				if (this.$util.trim(e.detail.value).length > 0)
 					uni.navigateTo({
-						animationType: animationType.type,						animationDuration: animationType.duration,
+						animationType: animationType.type,
+						animationDuration: animationType.duration,
 						url: '/pages/goods/goods_list/index?searchValue=' + e.detail.value
 					})
 				else

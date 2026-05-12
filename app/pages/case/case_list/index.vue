@@ -76,13 +76,18 @@
       <view v-if="loading" class="loading-tip">加载中...</view>
       <view v-if="noMore" class="loading-tip">没有更多了</view>
     </scroll-view>
+    <tab-bar></tab-bar>
   </view>
 </template>
 
 <script>
 import { getCaseList, getCaseIndustryCategories } from '@/api/api.js';
+import tabBar from '@/components/tab-bar/index.vue';
 
 export default {
+  components: {
+    tabBar
+  },
   data() {
     return {
       urlDomain: this.$Cache.get("imgHost"),

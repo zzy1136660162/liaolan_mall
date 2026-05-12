@@ -35,9 +35,9 @@
             </div>
           </el-form-item>
           <el-form-item
-            label="文章简介："
+            label="案例简介："
             prop="synopsis"
-            :rules="[{ required: true, message: '请填写文章简介', trigger: ['blur', 'change'] }]"
+            :rules="[{ required: true, message: '请填写案例简介', trigger: ['blur', 'change'] }]"
           >
             <el-input
               v-model="pram.synopsis"
@@ -45,7 +45,7 @@
               type="textarea"
               :rows="2"
               resize="none"
-              placeholder="文章简介"
+              placeholder="案例简介"
               class="selWidth"
             />
           </el-form-item>

@@ -169,12 +169,10 @@
 			id='product-window'></productWindow>
 		<view class="uni-p-b-96"></view>
 		<view class="uni-p-b-98"></view>
-		<pageFooter></pageFooter>
 	</view>
 </template>
 
 <script>
-	import pageFooter from '@/components/pageFooter/index.vue'
 	// #ifdef APP-PLUS
 	let sysHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 	// #endif
@@ -207,8 +205,7 @@
 	export default {
 		components: {
 			recommend,
-			productWindow,
-			pageFooter
+			productWindow
 		},
 		data() {
 			return {

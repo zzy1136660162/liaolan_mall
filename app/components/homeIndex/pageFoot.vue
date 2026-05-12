@@ -102,13 +102,10 @@
 			navigationInfo() {
 				getBottomNavigationApi().then(res => {
 					let data = res.data;
-					this.isCustom = data.isCustom; //是否使用自定义导航，1使用，0不使用
+					this.isCustom = data.isCustom;
 					this.$store.commit('BottomNavigationIsCustom', this.isCustom == 1 ? true : false);
 					if (data.isCustom == 1) {
-						uni.hideTabBar()
 						this.bottomNavigationList = data.bottomNavigationList;
-					} else {
-						uni.showTabBar();
 					}
 				})
 			},
