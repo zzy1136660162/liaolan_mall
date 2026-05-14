@@ -1,0 +1,278 @@
+﻿{
+    "source":  "https://github.com/google/material-design-icons",
+    "style":  "Material Symbols Outlined",
+    "size":  "24px",
+    "weight":  400,
+    "icons":  [
+                  {
+                      "name":  "add",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/add.svg"
+                  },
+                  {
+                      "name":  "add_shopping_cart",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/add_shopping_cart.svg"
+                  },
+                  {
+                      "name":  "arrow_back",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/arrow_back.svg"
+                  },
+                  {
+                      "name":  "article",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/article.svg"
+                  },
+                  {
+                      "name":  "bolt",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/bolt.svg"
+                  },
+                  {
+                      "name":  "cable",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/cable.svg"
+                  },
+                  {
+                      "name":  "call",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/call.svg"
+                  },
+                  {
+                      "name":  "campaign",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/campaign.svg"
+                  },
+                  {
+                      "name":  "category",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/category.svg"
+                  },
+                  {
+                      "name":  "chat",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/chat.svg"
+                  },
+                  {
+                      "name":  "chevron_right",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/chevron_right.svg"
+                  },
+                  {
+                      "name":  "close",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/close.svg"
+                  },
+                  {
+                      "name":  "contact_support",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/contact_support.svg"
+                  },
+                  {
+                      "name":  "description",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/description.svg"
+                  },
+                  {
+                      "name":  "download",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/download.svg"
+                  },
+                  {
+                      "name":  "electrical_services",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/electrical_services.svg"
+                  },
+                  {
+                      "name":  "engineering",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/engineering.svg"
+                  },
+                  {
+                      "name":  "expand_more",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/expand_more.svg"
+                  },
+                  {
+                      "name":  "factory",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/factory.svg"
+                  },
+                  {
+                      "name":  "format_quote",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/format_quote.svg"
+                  },
+                  {
+                      "name":  "handshake",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/handshake.svg"
+                  },
+                  {
+                      "name":  "home",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/home.svg"
+                  },
+                  {
+                      "name":  "home",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/home.svg"
+                  },
+                  {
+                      "name":  "info",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/info.svg"
+                  },
+                  {
+                      "name":  "inventory_2",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/inventory_2.svg"
+                  },
+                  {
+                      "name":  "inventory_2",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/inventory_2.svg"
+                  },
+                  {
+                      "name":  "local_fire_department",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/local_fire_department.svg"
+                  },
+                  {
+                      "name":  "local_shipping",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/local_shipping.svg"
+                  },
+                  {
+                      "name":  "location_on",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/location_on.svg"
+                  },
+                  {
+                      "name":  "location_on",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/location_on.svg"
+                  },
+                  {
+                      "name":  "mail",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/mail.svg"
+                  },
+                  {
+                      "name":  "menu",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/menu.svg"
+                  },
+                  {
+                      "name":  "more_horiz",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/more_horiz.svg"
+                  },
+                  {
+                      "name":  "navigation",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/navigation.svg"
+                  },
+                  {
+                      "name":  "payments",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/payments.svg"
+                  },
+                  {
+                      "name":  "person",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/person.svg"
+                  },
+                  {
+                      "name":  "person",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/person.svg"
+                  },
+                  {
+                      "name":  "phone_in_talk",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/phone_in_talk.svg"
+                  },
+                  {
+                      "name":  "picture_as_pdf",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/picture_as_pdf.svg"
+                  },
+                  {
+                      "name":  "power",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/power.svg"
+                  },
+                  {
+                      "name":  "precision_manufacturing",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/precision_manufacturing.svg"
+                  },
+                  {
+                      "name":  "receipt_long",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/receipt_long.svg"
+                  },
+                  {
+                      "name":  "remove",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/remove.svg"
+                  },
+                  {
+                      "name":  "science",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/science.svg"
+                  },
+                  {
+                      "name":  "search",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/search.svg"
+                  },
+                  {
+                      "name":  "send",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/send.svg"
+                  },
+                  {
+                      "name":  "settings",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/settings.svg"
+                  },
+                  {
+                      "name":  "shopping_cart",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/shopping_cart.svg"
+                  },
+                  {
+                      "name":  "shopping_cart",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/shopping_cart.svg"
+                  },
+                  {
+                      "name":  "support_agent",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/support_agent.svg"
+                  },
+                  {
+                      "name":  "support_agent",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/support_agent.svg"
+                  },
+                  {
+                      "name":  "tune",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/tune.svg"
+                  },
+                  {
+                      "name":  "verified",
+                      "variant":  "outline",
+                      "path":  "/static/icons/stitch/material-symbols/outline/verified.svg"
+                  },
+                  {
+                      "name":  "workspace_premium",
+                      "variant":  "filled",
+                      "path":  "/static/icons/stitch/material-symbols/filled/workspace_premium.svg"
+                  }
+              ]
+}

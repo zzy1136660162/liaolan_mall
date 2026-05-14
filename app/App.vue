@@ -87,13 +87,11 @@
 			});
 
 			updateManager.onUpdateFailed(function(res) {
-				// 新的版本下载失败
 				uni.showModal({
 					title: '提示',
 					content: '检查到有新版本，但下载失败，请检查网络设置',
 					success(res) {
 						if (res.confirm) {
-							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
 							updateManager.applyUpdate();
 						}
 					}
@@ -299,5 +297,11 @@
 		width: 0;
 		height: 0;
 		color: transparent;
+	}
+
+	/* 隐藏原生tabbar，只使用自定义tabbar组件 */
+	.uni-tab-bar-bottom,
+	.uni-tab-bar {
+		display: none !important;
 	}
 </style>

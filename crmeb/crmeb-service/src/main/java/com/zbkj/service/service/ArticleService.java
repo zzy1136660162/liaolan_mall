@@ -94,4 +94,12 @@ public interface ArticleService extends IService<Article> {
      * @return Article
      */
     Article getDetail(Integer id);
+
+    /**
+     * 文章绑定商品
+     * @param id 文章id
+     * @param productId 商品id
+     * @return Boolean
+     */
+    Boolean bindProduct(Integer id, Integer productId);
 }

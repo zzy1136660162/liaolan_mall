@@ -59,6 +59,22 @@ export function InfoArticle(id) {
 }
 
 /**
+ * 文章详情（含案例扩展信息）
+ * @param id
+ * @constructor
+ */
+export function InfoArticleCase(id) {
+  const data = {
+    id: id,
+  };
+  return request({
+    url: '/admin/article/info/case',
+    method: 'get',
+    params: data,
+  });
+}
+
+/**
  * 文章列表
  * @param pram
  * @constructor
@@ -69,6 +85,8 @@ export function ListArticle(pram) {
     cid: pram.cid,
     page: pram.page,
     limit: pram.limit,
+    industryCategory: pram.industryCategory,
+    regionCategory: pram.regionCategory,
   };
   return request({
     url: '/admin/article/list',
@@ -96,6 +114,7 @@ export function AddArticle(pram) {
     synopsis: pram.synopsis,
     title: pram.title,
     url: pram.url,
+    caseInfo: pram.caseInfo,
   };
   return request({
     url: '/admin/article/save',
@@ -123,6 +142,7 @@ export function UpdateArticle(pram) {
     synopsis: pram.synopsis,
     title: pram.title,
     url: pram.url,
+    caseInfo: pram.caseInfo,
   };
   return request({
     url: '/admin/article/update',

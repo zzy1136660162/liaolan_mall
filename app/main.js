@@ -18,9 +18,11 @@ import global from './libs/global.js'
 import apps from './libs/apps.js' //校验登录是否失效
 import * as Order from './libs/order';
 import skeleton from './components/skeleton/index.vue'
+import tabBar from './components/tab-bar/index.vue'
 import * as filters from '@/filters'
 
 Vue.component('skeleton', skeleton)
+Vue.component('tab-bar', tabBar)
 
 Vue.prototype.$util = util;
 Vue.prototype.$config = configs;
