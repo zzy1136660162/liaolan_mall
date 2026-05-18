@@ -168,6 +168,9 @@ public class Constants {
     public static final String CONFIG_KEY_SITE_LOGO = "mobile_top_logo"; //logo地址
     public static final String CONFIG_KEY_MOBILE_LOGIN_LOGO = "mobile_login_logo"; // 移动端登录 logo
     public static final String CONFIG_KEY_SITE_NAME = "site_name"; //网站名称
+    public static final String CONFIG_KEY_CONTACT_COMPANY_ADDRESS = "contact_company_address"; //公司地址
+    public static final String CONFIG_KEY_CONTACT_MAP_LINK = "contact_map_link"; //地图链接
+    public static final String CONFIG_KEY_CONTACT_SERVICE_QRCODE = "contact_service_qrcode"; //客服二维码
 //    public static final String CONFIG_SITE_TENG_XUN_MAP_KEY = "tengxun_map_key"; //腾讯地图key
     public static final String CONFIG_BANK_LIST = "user_extract_bank"; //可提现银行
     public static final String CONFIG_EXTRACT_FREEZING_TIME = "extract_time"; //提现冻结时间

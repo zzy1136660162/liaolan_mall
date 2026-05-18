@@ -260,6 +260,20 @@ export function getImageDomain() {
 }
 
 /**
+ * 获取联系我们信息
+ */
+export function getContactInfo() {
+  return request.get('contact/info', {}, { noAuth: true });
+}
+
+/**
+ * 提交联系我们留言
+ */
+export function saveContactMessage(data) {
+  return request.post('contact/message', data, { noAuth: true });
+}
+
+/**
  * 商品排行榜
 */
 export function productRank(){
