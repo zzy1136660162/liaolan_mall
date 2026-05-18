@@ -14,6 +14,12 @@ import store from '@/store';
 import { getToken } from '@/utils/auth';
 import SettingMer from '@/utils/settingMer';
 import { isPhone } from '@/libs/wechat';
+
+// 网络错误重试配置
+const RETRY_COUNT = 2; // 最大重试次数
+const RETRY_DELAY = 2000; // 重试间隔(ms)
+let networkErrorShown = false; // 防止多个请求同时弹出重复提示
+
 const service = axios.create({
   baseURL: SettingMer.apiBaseURL,
   timeout: 60000, // 过期时间
@@ -66,11 +72,35 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000,
-    });
+    const config = error.config;
+    // 网络错误（后端未启动/重启中）自动重试
+    if (!error.response && config) {
+      config.__retryCount = config.__retryCount || 0;
+      if (config.__retryCount < RETRY_COUNT) {
+        config.__retryCount += 1;
+        return new Promise((resolve) => {
+          setTimeout(() => resolve(service(config)), RETRY_DELAY);
+        });
+      }
+    }
+    // 避免多个请求同时弹出重复的提示
+    if (!error.response && !networkErrorShown) {
+      networkErrorShown = true;
+      Message({
+        message: '无法连接到服务器，请确认后端已启动（端口 20500）',
+        type: 'error',
+        duration: 8 * 1000,
+      });
+      setTimeout(() => { networkErrorShown = false; }, 10000);
+    } else if (error.response) {
+      // 有响应但状态码异常
+      const status = error.response.status;
+      let msg = error.message;
+      if (status === 404) msg = '请求的接口不存在';
+      else if (status === 500) msg = '服务器内部错误';
+      else if (status === 502 || status === 503) msg = '服务器正在启动中，请稍后再试';
+      Message({ message: msg, type: 'error', duration: 5 * 1000 });
+    }
     return Promise.reject(error);
   },
 );

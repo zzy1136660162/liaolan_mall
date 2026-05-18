@@ -1,7 +1,7 @@
 <template>
 	<view class="liaolan-me" :data-theme="theme">
 		<view class="page-content">
-			<!-- 用户信息头部 -->
+			<!-- 鐢ㄦ埛淇℃伅澶撮儴 -->
 			<view class="user-header">
 				<view class="header-bg"></view>
 				<view class="header-content">
@@ -10,45 +10,45 @@
 							<image class="avatar" :src="userInfo.avatar || defaultAvatar" mode="aspectFill"></image>
 						</view>
 						<view class="user-detail">
-							<text class="username">{{ userInfo.nickname || '游客用户' }}</text>
-							<text class="company">{{ userInfo.company || '公司名称' }}</text>
+							<text class="username">{{ userInfo.nickname || '娓稿鐢ㄦ埛' }}</text>
+							<text class="company">{{ userInfo.company || '鍏徃鍚嶇О' }}</text>
 							<view class="vip-badge" v-if="userInfo.isVip">
-								<text class="vip-icon">★</text>
-								<text class="vip-text">VIP 采购商</text>
+								<text class="vip-icon">鈽?/text>
+								<text class="vip-text">VIP 閲囪喘鍟?/text>
 							</view>
 						</view>
 						<view class="settings-btn" @click="goSettings">
 							<text class="iconfont icon-shezhi"></text>
 						</view>
 					</view>
-					<!-- 快速统计 -->
+					<!-- 蹇€熺粺璁?-->
 					<view class="quick-stats">
 						<view class="stat-item" @click="goPage('/pages/users/user_goods_collection/index')">
 							<text class="stat-num">{{ userInfo.favoriteCount || 12 }}</text>
-							<text class="stat-label">常购清单</text>
+							<text class="stat-label">甯歌喘娓呭崟</text>
 						</view>
 						<view class="stat-item" @click="goPage('/pages/users/user_coupon/index')">
 							<text class="stat-num">{{ userInfo.couponCount || 5 }}</text>
-							<text class="stat-label">优惠券</text>
+							<text class="stat-label">浼樻儬鍒?/text>
 						</view>
 						<view class="stat-item" @click="goPage('/pages/users/user_integral/index')">
 							<text class="stat-num">{{ formatNumber(userInfo.integral || 1250) }}</text>
-							<text class="stat-label">积分</text>
+							<text class="stat-label">绉垎</text>
 						</view>
 					</view>
 				</view>
 			</view>
 
 			<view class="page-body">
-				<!-- 订单管理 -->
+				<!-- 璁㈠崟绠＄悊 -->
 				<view class="order-card">
 					<view class="card-header">
 						<view class="header-left">
 							<view class="header-line"></view>
-							<text class="header-title">订单管理</text>
+							<text class="header-title">璁㈠崟绠＄悊</text>
 						</view>
 						<view class="header-right" @click="goPage('/pages/users/order_list/index')">
-							<text class="view-all">查看全部订单</text>
+							<text class="view-all">鏌ョ湅鍏ㄩ儴璁㈠崟</text>
 							<text class="iconfont icon-xiangyou"></text>
 						</view>
 					</view>
@@ -58,36 +58,36 @@
 								<text class="iconfont icon-daifukuan"></text>
 								<view class="badge" v-if="orderData.unPaidCount > 0">{{ orderData.unPaidCount > 99 ? '99+' : orderData.unPaidCount }}</view>
 							</view>
-							<text class="menu-text">待付款</text>
+							<text class="menu-text">寰呬粯娆?/text>
 						</view>
 						<view class="menu-item" @click="goPage('/pages/users/order_list/index?status=1')">
 							<view class="icon-box">
 								<text class="iconfont icon-daifahuo"></text>
 							</view>
-							<text class="menu-text">待发货</text>
+							<text class="menu-text">寰呭彂璐?/text>
 						</view>
 						<view class="menu-item" @click="goPage('/pages/users/order_list/index?status=2')">
 							<view class="icon-box">
 								<text class="iconfont icon-daishouhuo"></text>
 								<view class="badge" v-if="orderData.receivedCount > 0">{{ orderData.receivedCount > 99 ? '99+' : orderData.receivedCount }}</view>
 							</view>
-							<text class="menu-text">已发货</text>
+							<text class="menu-text">宸插彂璐?/text>
 						</view>
 						<view class="menu-item" @click="goPage('/pages/users/order_list/index')">
 							<view class="icon-box">
 								<text class="iconfont icon-daipingjia"></text>
 							</view>
-							<text class="menu-text">全部订单</text>
+							<text class="menu-text">鍏ㄩ儴璁㈠崟</text>
 						</view>
 					</view>
 				</view>
 
-				<!-- 服务与工具 -->
+				<!-- 鏈嶅姟涓庡伐鍏?-->
 				<view class="service-card">
 					<view class="card-header">
 						<view class="header-left">
 							<view class="header-line"></view>
-							<text class="header-title">服务与工具</text>
+							<text class="header-title">鏈嶅姟涓庡伐鍏?/text>
 						</view>
 					</view>
 					<view class="service-list">
@@ -95,47 +95,47 @@
 							<view class="service-icon">
 								<text class="iconfont icon-dizhi"></text>
 							</view>
-							<text class="service-text">收货地址</text>
+							<text class="service-text">鏀惰揣鍦板潃</text>
 							<text class="iconfont icon-xiangyou service-arrow"></text>
 						</view>
 						<view class="service-item" @click="goPage('/pages/users/user_sample/index')">
 							<view class="service-icon">
 								<text class="iconfont icon-shangpin"></text>
 							</view>
-							<text class="service-text">我的样品</text>
+							<text class="service-text">鎴戠殑鏍峰搧</text>
 							<text class="iconfont icon-xiangyou service-arrow"></text>
 						</view>
 						<view class="service-item" @click="goKefu">
 							<view class="service-icon">
 								<text class="iconfont icon-kefu"></text>
 							</view>
-							<text class="service-text">专属客服</text>
-							<text class="service-info">工号: L802</text>
+							<text class="service-text">涓撳睘瀹㈡湇</text>
+							<text class="service-info">宸ュ彿: L802</text>
 							<text class="iconfont icon-xiangyou service-arrow"></text>
 						</view>
 						<view class="service-item" @click="goPage('/pages/users/user_feedback/index')">
 							<view class="service-icon">
 								<text class="iconfont icon-shuoming"></text>
 							</view>
-							<text class="service-text">在线反馈</text>
+							<text class="service-text">鍦ㄧ嚎鍙嶉</text>
 							<text class="iconfont icon-xiangyou service-arrow"></text>
 						</view>
-						<view class="service-item" @click="goPage('/pages/users/web_page/index?webUrl=https://www.liaolan.com/about&title=关于我们')">
+						<view class="service-item" @click="goPage('/pages/about/index')">
 							<view class="service-icon">
 								<text class="iconfont icon-gengduo"></text>
 							</view>
-							<text class="service-text">关于我们</text>
+							<text class="service-text">鍏充簬鎴戜滑</text>
 							<text class="iconfont icon-xiangyou service-arrow"></text>
 						</view>
 					</view>
 				</view>
 
-				<!-- 退出登录 -->
-				<button class="logout-btn" @click="handleLogout">退出登录</button>
+				<!-- 閫€鍑虹櫥褰?-->
+				<button class="logout-btn" @click="handleLogout">閫€鍑虹櫥褰?/button>
 			</view>
 		</view>
 
-		<!-- 底部导航 -->
+		<!-- 搴曢儴瀵艰埅 -->
 		<tab-bar></tab-bar>
 	</view>
 </template>
@@ -158,8 +158,8 @@
 				theme: '',
 				defaultAvatar: 'https://img.crmeb.com/crmebimage/perset/staticImg/f.png',
 				userInfo: {
-					nickname: '张建国',
-					company: '沈阳机电设备制造有限公司',
+					nickname: '寮犲缓鍥?,
+					company: '娌堥槼鏈虹數璁惧鍒堕€犳湁闄愬叕鍙?,
 					avatar: '',
 					isVip: true,
 					favoriteCount: 12,
@@ -219,14 +219,14 @@
 						refundCount: res.data.refundCount || 0
 					};
 				}).catch(err => {
-					console.log('获取订单数据失败', err);
+					console.log('鑾峰彇璁㈠崟鏁版嵁澶辫触', err);
 				});
 			},
 			getMyMenus() {
 				getMenuList().then(res => {
 					this.MyMenus = res.data.routine_my_menus || [];
 				}).catch(err => {
-					console.log('获取菜单失败', err);
+					console.log('鑾峰彇鑿滃崟澶辫触', err);
 				});
 			},
 			goPage(url) {
@@ -266,15 +266,15 @@
 			},
 			handleLogout() {
 				uni.showModal({
-					title: '提示',
-					content: '确定要退出登录吗？',
+					title: '鎻愮ず',
+					content: '纭畾瑕侀€€鍑虹櫥褰曞悧锛?,
 					success: (res) => {
 						if (res.confirm) {
 							this.$store.commit("LOGOUT");
 							this.$store.commit('UPDATE_LOGIN', '');
 							this.$store.commit('UPDATE_USERINFO', {});
 							uni.showToast({
-								title: '已退出登录',
+								title: '宸查€€鍑虹櫥褰?,
 								icon: 'success'
 							});
 							setTimeout(() => {
@@ -301,7 +301,7 @@
 		min-height: 100vh;
 	}
 
-	/* 用户信息头部 */
+	/* 鐢ㄦ埛淇℃伅澶撮儴 */
 	.user-header {
 		position: relative;
 		background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
@@ -401,7 +401,7 @@
 		color: #ffffff;
 	}
 
-	/* 快速统计 */
+	/* 蹇€熺粺璁?*/
 	.quick-stats {
 		display: flex;
 		margin-top: 48rpx;
@@ -428,12 +428,12 @@
 		display: block;
 	}
 
-	/* 页面主体 */
+	/* 椤甸潰涓讳綋 */
 	.page-body {
 		padding: 32rpx;
 	}
 
-	/* 订单卡片 */
+	/* 璁㈠崟鍗＄墖 */
 	.order-card {
 		background: #ffffff;
 		border-radius: 24rpx;
@@ -538,7 +538,7 @@
 		color: #434654;
 	}
 
-	/* 服务卡片 */
+	/* 鏈嶅姟鍗＄墖 */
 	.service-card {
 		background: #ffffff;
 		border-radius: 24rpx;
@@ -596,7 +596,7 @@
 		color: #c3c6d7;
 	}
 
-	/* 退出按钮 */
+	/* 閫€鍑烘寜閽?*/
 	.logout-btn {
 		width: 100%;
 		height: 96rpx;

@@ -6,3 +6,10 @@ import request from "@/utils/request.js";
 export function getAboutInfo() {
   return request.get("about/info", {}, { noAuth: true });
 }
+
+/**
+ * 关于辽缆 - 获取完整页面信息（包含所有板块）
+ */
+export function getAboutFullInfo() {
+  return request.get("about/info", {}, { noAuth: true });
+}

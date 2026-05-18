@@ -18,7 +18,7 @@ export default {
 	props: {
 		title: {
 			type: String,
-			default: '辽缆'
+			default: '杈界紗'
 		}
 	},
 	data() {
