@@ -69,6 +69,8 @@ export function ListArticle(pram) {
       cid: pram.cid,
       page: pram.page,
       limit: pram.limit,
+      industryCategory: pram.industryCategory,
+      regionCategory: pram.regionCategory,
     },
   });
 }

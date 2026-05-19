@@ -1,6 +1,18 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/liaolan_home/index",
+			"style": {
+				"navigationBarTitleText": "辽缆",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#003da6",
+				"app-plus": {
+					"scrollIndicator": false
+				}
+			}
+		},
+		{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "首页",
@@ -57,6 +69,57 @@
 						"type": "default"
 					}
 					// #endif
+				}
+			}
+		},
+		{
+			"path": "pages/case/case_list/index",
+			"style": {
+				"navigationBarTitleText": "客户案例",
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},
+		{
+			"path": "pages/case/case_details/index",
+			"style": {
+				"navigationBarTitleText": "案例详情",
+				"navigationStyle": "custom",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},
+		{
+			"path": "pages/liaolan_me/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#003da6",
+				"app-plus": {
+					"scrollIndicator": false
+				}
+			}
+		},
+		{
+			"path": "pages/downloads/index",
+			"style": {
+				"navigationBarTitleText": "资料下载",
+				"app-plus": {
+					"titleNView": {
+						"type": "default"
+					}
 				}
 			}
 		}
@@ -896,13 +959,13 @@
 		"rpxCalcIncludeWidth": 750
 	},
 	"tabBar": {
-		"custom": false,
-		"color": "#282828",
-		"selectedColor": "#fc4141",
+		"custom": true,
+		"color": "#666666",
+		"selectedColor": "#0052d9",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
 		"list": [{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/liaolan_home/index",
 				"iconPath": "static/tabBar/indexwei.png",
 				"selectedIconPath": "static/tabBar/indexxuan.png",
 				"text": "首页"
@@ -911,16 +974,16 @@
 				"pagePath": "pages/goods_cate/goods_cate",
 				"iconPath": "static/tabBar/catewei.png",
 				"selectedIconPath": "static/tabBar/catexuan.png",
-				"text": "分类"
+				"text": "商城"
 			},
 			{
-				"pagePath": "pages/order_addcart/order_addcart",
+				"pagePath": "pages/case/case_list/index",
 				"iconPath": "static/tabBar/cartdwei.png",
 				"selectedIconPath": "static/tabBar/cartdxuan.png",
-				"text": "购物车"
+				"text": "案例"
 			},
 			{
-				"pagePath": "pages/user/index",
+				"pagePath": "pages/liaolan_me/index",
 				"iconPath": "static/tabBar/userwei.png",
 				"selectedIconPath": "static/tabBar/userxuan.png",
 				"text": "我的"

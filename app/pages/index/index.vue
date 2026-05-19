@@ -110,8 +110,7 @@
 				<view class="btn" @click="reconnect">重新连接</view>
 			</view>
 		</view>
-		<!-- 底部 -->
-		<pageFooter></pageFooter>
+		<tab-bar></tab-bar>
 	</view>
 </template>
 
@@ -149,8 +148,8 @@
 	import hotSpot from '@/components/homeIndex/hotSpot.vue';
 	import group from "@/components/homeIndex/group.vue";
 	import bargain from "@/components/homeIndex/bargain.vue";
-	import pageFooter from "@/components/pageFooter/index.vue";
 	import copyRight from './components/copyRight.vue';
+	import tabBar from '@/components/tab-bar/index.vue';
 	import {
 		getIndexData,
 		getTheme,
@@ -188,7 +187,6 @@
 			homeComb,
 			recommend,
 			seckillData,
-			pageFooter,
 			coupon,
 			menus,
 			pictureCube,
@@ -207,7 +205,8 @@
 			hotSpot,
 			group,
 			bargain,
-			copyRight
+			copyRight,
+			tabBar
 		},
 		data() {
 			return {
@@ -315,8 +314,6 @@
 			})
 		},
 		onShow() {
-			// 分类样式3、4跳回首页tabbar处理
-			!this.bottomNavigationIsCustom&&uni.showTabBar()
 			let self = this;
 			// #ifdef APP-PLUS
 			setTimeout(() => {

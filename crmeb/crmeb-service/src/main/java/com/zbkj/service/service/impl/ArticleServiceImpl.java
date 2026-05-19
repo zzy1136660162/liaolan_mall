@@ -336,4 +336,21 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleDao, Article> impleme
         }
         return "";
     }
+
+    /**
+     * 文章绑定商品
+     * @param id 文章id
+     * @param productId 商品id
+     * @return Boolean
+     */
+    @Override
+    public Boolean bindProduct(Integer id, Integer productId) {
+        Article article = getById(id);
+        if (ObjectUtil.isNull(article)) {
+            throw new CrmebException("文章不存在");
+        }
+        article.setProductId(productId);
+        article.setUpdateTime(DateUtil.date());
+        return updateById(article);
+    }
 }
