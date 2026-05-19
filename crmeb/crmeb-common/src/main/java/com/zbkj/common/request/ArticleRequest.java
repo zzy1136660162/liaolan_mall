@@ -7,73 +7,64 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-/**
- * 文章管理 Request
- *  +----------------------------------------------------------------------
- *  | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
- *  +----------------------------------------------------------------------
- *  | Copyright (c) 2016~2025 https://www.crmeb.com All rights reserved.
- *  +----------------------------------------------------------------------
- *  | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
- *  +----------------------------------------------------------------------
- *  | Author: CRMEB Team <admin@crmeb.com>
- *  +----------------------------------------------------------------------
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="ArticleRequest对象", description="文章管理表")
+@ApiModel(value = "ArticleRequest", description = "Article request")
 public class ArticleRequest implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "分类id", required = true)
-    @NotBlank(message = "请选择分类")
+    @ApiModelProperty(value = "Category id", required = true)
+    @NotBlank(message = "Category is required")
     private String cid;
 
-    @ApiModelProperty(value = "文章标题", required = true)
-    @NotBlank(message = "请填写文章标题")
-    @Length(max = 200, message = "文章标题最多200个字符")
+    @ApiModelProperty(value = "Article title", required = true)
+    @NotBlank(message = "Title is required")
+    @Length(max = 200, message = "Title must be at most 200 characters")
     private String title;
 
-    @ApiModelProperty(value = "文章作者", required = true)
-    @NotBlank(message = "请填写文章作者")
-    @Length(max = 50, message = "文章作者最多50个字符")
+    @ApiModelProperty(value = "Author", required = true)
+    @NotBlank(message = "Author is required")
+    @Length(max = 50, message = "Author must be at most 50 characters")
     private String author;
 
-    @ApiModelProperty(value = "文章图片", required = true)
-    @NotBlank(message = "请上传文章图片")
-    @Length(max = 255, message = "文章图片名称最多255个字符")
+    @ApiModelProperty(value = "Cover image", required = true)
+    @NotBlank(message = "Cover image is required")
+    @Length(max = 255, message = "Cover image must be at most 255 characters")
     private String imageInput;
 
-    @ApiModelProperty(value = "文章简介", required = true)
-    @Length(max = 200, message = "文章简介最多200个字符")
-    @NotBlank(message = "请填写文章简介")
+    @ApiModelProperty(value = "Synopsis", required = true)
+    @Length(max = 200, message = "Synopsis must be at most 200 characters")
+    @NotBlank(message = "Synopsis is required")
     private String synopsis;
 
-    @ApiModelProperty(value = "文章分享标题", required = true)
-    @NotBlank(message = "请填写文章分享标题")
-    @Length(max = 200, message = "文章分享标题最多200个字符")
+    @ApiModelProperty(value = "Legacy share title")
+    @Length(max = 200, message = "Share title must be at most 200 characters")
     private String shareTitle;
 
-    @ApiModelProperty(value = "文章分享简介", required = true)
-    @NotBlank(message = "请填写文章分享简介")
-    @Length(max = 200, message = "文章分享简介最多200个字符")
+    @ApiModelProperty(value = "Legacy share synopsis")
+    @Length(max = 200, message = "Share synopsis must be at most 200 characters")
     private String shareSynopsis;
 
-    @ApiModelProperty(value = "是否热门(小程序)", example = "false")
-    @NotNull(message = "是否热门(小程序)不能为空")
+    @ApiModelProperty(value = "SEO and share data")
+    @Valid
+    private ArticleSeoInfoRequest seoInfo;
+
+    @ApiModelProperty(value = "Is hot", example = "false")
+    @NotNull(message = "Hot flag is required")
     private Boolean isHot;
 
-    @ApiModelProperty(value = "是否轮播图(小程序)" , example = "true")
-    @NotNull(message = "是否轮播图(小程序)不能为空")
+    @ApiModelProperty(value = "Is banner", example = "true")
+    @NotNull(message = "Banner flag is required")
     private Boolean isBanner;
 
-    @ApiModelProperty(value = "文章内容", required = true)
-    @NotBlank(message = "请填写文章内容")
+    @ApiModelProperty(value = "Article content", required = true)
+    @NotBlank(message = "Content is required")
     private String content;
 }

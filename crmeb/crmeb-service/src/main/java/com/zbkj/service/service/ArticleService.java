@@ -91,7 +91,7 @@ public interface ArticleService extends IService<Article> {
     /**
      * 获取文章详情
      * @param id 文章id
-     * @return Article
+     * @return ArticleResponse
      */
-    Article getDetail(Integer id);
+    ArticleResponse getDetail(Integer id);
 }

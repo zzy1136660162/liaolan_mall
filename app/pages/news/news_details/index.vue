@@ -1,13 +1,13 @@
 <template>
 	<view :data-theme="theme">
-		<view class='newsDetail' :style="{backgroundColor:bgColor}">
-			<view class='title'>{{articleInfo.title}}</view>
-			<view class='list acea-row row-middle'>
-				<view class='label'>{{articleInfo.author}}</view>
-				<view class='item'></text>{{articleInfo.createTime}}</view>
-				<view class='item'><text class='iconfont icon-liulan'></text>{{articleInfo.visit}}</view>
+		<view class="newsDetail" :style="{ backgroundColor: bgColor }">
+			<view class="title">{{ articleInfo.title }}</view>
+			<view class="list acea-row row-middle">
+				<view class="label">{{ articleInfo.author }}</view>
+				<view class="item">{{ articleInfo.createTime }}</view>
+				<view class="item"><text class="iconfont icon-liulan"></text>{{ articleInfo.visit }}</view>
 			</view>
-			<view class='conter'>
+			<view class="conter">
 				<jyf-parser :html="content" ref="article" :tag-style="tagStyle"></jyf-parser>
 			</view>
 			<view class="picTxt acea-row row-between-wrapper" v-if="store_info.id">
@@ -15,49 +15,47 @@
 					<image :src="store_info.image"></image>
 				</view>
 				<view class="text">
-					<view class="name line1">{{store_info.storeName}}</view>
+					<view class="name line1">{{ store_info.storeName }}</view>
 					<view class="money price_color">
-						￥<text class="num">{{store_info.price}}</text>
+						￥<text class="num">{{ store_info.price }}</text>
 					</view>
-					<view class="y_money">￥{{store_info.otPrice}}</view>
+					<view class="y_money">￥{{ store_info.otPrice }}</view>
 				</view>
-				<navigator :url="'/pages/goods/goods_details/index?id='+store_info.id" hover-class="none" class="label"><text
-						class="span">查看商品</text></navigator>
+				<navigator :url="'/pages/goods/goods_details/index?id=' + store_info.id" hover-class="none" class="label">
+					<text class="span">查看商品</text>
+				</navigator>
 			</view>
 			<!-- #ifdef H5 -->
-			<button class="bnt bg_color" hover-class='none' @click="listenerActionSheet"
-				v-if="this.$wechat.isWeixin()">和好友一起分享</button>
+			<button class="bnt bg_color" hover-class="none" @click="listenerActionSheet" v-if="this.$wechat.isWeixin()">
+				和好友一起分享
+			</button>
 			<!-- #endif -->
 			<!-- #ifdef MP -->
-			<button class="bnt bg_color" open-type="share" hover-class='none'>和好友一起分享</button>
+			<button class="bnt bg_color" open-type="share" hover-class="none">和好友一起分享</button>
 			<!-- #endif -->
 		</view>
 		<shareInfo @setShareInfoStatus="setShareInfoStatus" :shareInfoStatus="shareInfoStatus"></shareInfo>
-		<view class="article_theme">
-
-		</view>
+		<view class="article_theme"></view>
 	</view>
 </template>
 
 <script>
-	import {
-		getArticleDetails
-	} from '@/api/api.js';
-	import {
-		getProductDetail
-	} from '@/api/store.js';
+	import { getArticleDetails } from '@/api/api.js';
+	import { getProductDetail } from '@/api/store.js';
 	import shareInfo from '@/components/shareInfo';
-	import parser from "@/components/jyf-parser/jyf-parser";
+	import parser from '@/components/jyf-parser/jyf-parser';
+
 	let app = getApp();
+
 	export default {
 		components: {
 			shareInfo,
-			"jyf-parser": parser
+			'jyf-parser': parser
 		},
 		data() {
 			return {
 				id: 0,
-				articleInfo: [],
+				articleInfo: {},
 				store_info: {},
 				content: '',
 				shareInfoStatus: false,
@@ -68,13 +66,10 @@
 				},
 				productId: 0,
 				theme: app.globalData.theme,
-				bgColor:'#ffffff'
+				bgColor: '#ffffff'
 			};
 		},
-		/**
-		 * 生命周期函数--监听页面加载
-		 */
-		onLoad: function(options) {
+		onLoad(options) {
 			if (options.hasOwnProperty('id')) {
 				this.id = options.id;
 			} else {
@@ -84,87 +79,122 @@
 				});
 				// #endif
 				// #ifdef H5
-			 history.back();
+				history.back();
 				// #endif
 			}
 		},
-		onShow: function() {
+		onShow() {
 			this.getArticleOne();
 		},
-		/**
-		 * 用户点击右上角分享
-		 */
 		// #ifdef MP
-		onShareAppMessage: function() {
+		onShareAppMessage() {
+			const shareMeta = this.buildShareMeta();
 			return {
-				title: this.articleInfo.title,
-				imageUrl: this.articleInfo.imageInput.length ? this.articleInfo.imageInput : "",
-				desc: this.articleInfo.synopsis,
-				path: '/pages/news/news_details/index?id=' + this.id
+				title: shareMeta.title,
+				imageUrl: shareMeta.imageUrl,
+				desc: shareMeta.desc,
+				path: shareMeta.path
+			};
+		},
+		onShareTimeline() {
+			const shareMeta = this.buildShareMeta();
+			return {
+				title: shareMeta.title,
+				query: `id=${this.id}`,
+				imageUrl: shareMeta.imageUrl
 			};
 		},
 		// #endif
 		methods: {
-			getArticleOne: function() {
-				let that = this;
+			getArticleOne() {
 				getArticleDetails({
-					id: that.id
-				}).then(res => {
+					id: this.id
+				}).then((res) => {
+					const article = res.data || {};
+					const articleTitle = article.title || '';
 					uni.setNavigationBarTitle({
-						title: res.data.title.substring(0, 7) + "..."
+						title: articleTitle.length > 7 ? `${articleTitle.substring(0, 7)}...` : articleTitle
 					});
-					that.$set(that, 'articleInfo', res.data);
-					that.$set(that, 'productId', res.data.productId);
-					if (res.data.productId) {
-						that.goodInfo(res.data.productId);
+					this.$set(this, 'articleInfo', article);
+					this.$set(this, 'productId', article.productId);
+					if (article.productId) {
+						this.goodInfo(article.productId);
 					}
-					that.content = res.data.content;
+					this.content = article.content || '';
 					// #ifdef H5
+					this.setH5Meta();
 					if (this.$wechat.isWeixin()) {
 						this.setShareInfo();
 					}
 					// #endif
 				});
 			},
+			buildShareMeta() {
+				const articleInfo = this.articleInfo || {};
+				const seoInfo = articleInfo.seoInfo || {};
+				const imageUrl = seoInfo.shareImage || articleInfo.imageInput || '';
+				return {
+					title: seoInfo.shareTitle || articleInfo.title || '',
+					desc: seoInfo.seoDescription || articleInfo.shareSynopsis || articleInfo.synopsis || '',
+					imageUrl,
+					link: typeof location !== 'undefined' ? location.href : '',
+					path: `/pages/news/news_details/index?id=${this.id}`
+				};
+			},
 			goodInfo(id) {
-				getProductDetail(id).then(res => {
+				getProductDetail(id).then((res) => {
 					this.$set(this, 'store_info', res.data.storeInfo ? res.data.storeInfo : {});
-				})
+				});
 			},
 			listenerActionSheet() {
-				this.shareInfoStatus = true
+				this.shareInfoStatus = true;
 			},
 			setShareInfoStatus() {
-				this.shareInfoStatus = false
+				this.shareInfoStatus = false;
 			},
-			setShareInfo: function() {
-				let href = location.href;
-				let configAppMessage = {
-					desc: this.articleInfo.synopsis,
-					title: this.articleInfo.title,
-					link: href,
-					imgUrl: this.articleInfo.imageInput.length ? this.articleInfo.imageInput[0] : ""
-				};
-				this.$wechat.wechatEvevt(["updateAppMessageShareData", "updateTimelineShareData"], configAppMessage);
+			setShareInfo() {
+				const shareMeta = this.buildShareMeta();
+				this.$wechat.wechatEvevt(['updateAppMessageShareData', 'updateTimelineShareData'], {
+					desc: shareMeta.desc,
+					title: shareMeta.title,
+					link: shareMeta.link,
+					imgUrl: shareMeta.imageUrl
+				});
 			},
-			bgTheme(value){
+			setH5Meta() {
+				const articleInfo = this.articleInfo || {};
+				const seoInfo = articleInfo.seoInfo || {};
+				const title = seoInfo.seoTitle || articleInfo.title || '';
+				const keywords = seoInfo.seoKeywords || '';
+				const description = seoInfo.seoDescription || articleInfo.shareSynopsis || articleInfo.synopsis || '';
+				if (typeof document === 'undefined') {
+					return;
+				}
+				document.title = title;
+				this.upsertMeta('keywords', keywords);
+				this.upsertMeta('description', description);
+			},
+			upsertMeta(name, content) {
+				if (typeof document === 'undefined') {
+					return;
+				}
+				let meta = document.querySelector(`meta[name="${name}"]`);
+				if (!meta) {
+					meta = document.createElement('meta');
+					meta.setAttribute('name', name);
+					document.head.appendChild(meta);
+				}
+				meta.setAttribute('content', content || '');
+			},
+			bgTheme(value) {
 				this.bgColor = value;
 			}
 		}
-	}
+	};
 </script>
 
 <style lang="scss" scoped>
-	// page {
-	// 	background-color: #fff !important;
-	// }
 	.newsDetail {
-		// background-color: #fff;
-		// background-color: #D8EFD2;
-		// background-color: #F9F2E2;
-		// background-color: #D9EBED;
-		// background-color: #131313;
-		// color: #fff !important;
 		padding: 30rpx 0;
 	}
 
@@ -270,7 +300,7 @@
 	}
 
 	.newsDetail .picTxt .label:after {
-		content: " ";
+		content: ' ';
 		position: absolute;
 		width: 0;
 		height: 0;

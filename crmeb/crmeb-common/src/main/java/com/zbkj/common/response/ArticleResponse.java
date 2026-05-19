@@ -12,49 +12,64 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * 文章响应对象
- *  +----------------------------------------------------------------------
- *  | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
- *  +----------------------------------------------------------------------
- *  | Copyright (c) 2016~2025 https://www.crmeb.com All rights reserved.
- *  +----------------------------------------------------------------------
- *  | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
- *  +----------------------------------------------------------------------
- *  | Author: CRMEB Team <admin@crmeb.com>
- *  +----------------------------------------------------------------------
- */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="ArticleResponse对象", description="文章响应对象")
+@ApiModel(value = "ArticleResponse", description = "Article response")
 public class ArticleResponse implements Serializable {
 
     private static final long serialVersionUID = -4585094537501770138L;
 
-    @ApiModelProperty(value = "文章管理ID")
+    @ApiModelProperty(value = "Article id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @ApiModelProperty(value = "文章标题")
+    @ApiModelProperty(value = "Title")
     private String title;
 
-    @ApiModelProperty(value = "文章作者")
+    @ApiModelProperty(value = "Category id")
+    private String cid;
+
+    @ApiModelProperty(value = "Author")
     private String author;
 
-    @ApiModelProperty(value = "文章图片 前端用")
+    @ApiModelProperty(value = "Cover image")
     private String imageInput;
 
-    @ApiModelProperty(value = "文章简介")
+    @ApiModelProperty(value = "Synopsis")
     private String synopsis;
 
-    @ApiModelProperty(value = "浏览次数")
+    @ApiModelProperty(value = "Share title")
+    private String shareTitle;
+
+    @ApiModelProperty(value = "Share synopsis")
+    private String shareSynopsis;
+
+    @ApiModelProperty(value = "Visits")
     private String visit;
 
-    @ApiModelProperty(value = "文章内容")
+    @ApiModelProperty(value = "Sort")
+    private Integer sort;
+
+    @ApiModelProperty(value = "Original url")
+    private String url;
+
+    @ApiModelProperty(value = "Bound product id")
+    private Integer productId;
+
+    @ApiModelProperty(value = "Hot flag")
+    private Boolean isHot;
+
+    @ApiModelProperty(value = "Banner flag")
+    private Boolean isBanner;
+
+    @ApiModelProperty(value = "Content")
     private String content;
 
-    @ApiModelProperty(value = "创建时间")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    @ApiModelProperty(value = "SEO and share data")
+    private ArticleSeoInfoResponse seoInfo;
+
+    @ApiModelProperty(value = "Created time")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date createTime;
 }
