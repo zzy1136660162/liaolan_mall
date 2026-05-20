@@ -17,8 +17,19 @@ export default {
   name: 'layoutLogo',
   data() {
     return {
-      platMerLoginInfo: JSON.parse(Cookies.get('logoInfo')), //登录后的信息
+      platMerLoginInfo: null,
     };
+  },
+  created() {
+    const logoInfo = Cookies.get('logoInfo');
+    if (logoInfo) {
+      try {
+        this.platMerLoginInfo = JSON.parse(logoInfo);
+      } catch (e) {
+        console.warn('解析 logoInfo Cookie 失败:', e);
+        this.platMerLoginInfo = null;
+      }
+    }
   },
   computed: {
     // 获取布局配置信息

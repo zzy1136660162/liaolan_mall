@@ -45,23 +45,26 @@
 							</easy-loadimage>
 							<view v-if="item.activityStyle" :style="{ backgroundImage: `url(${item.activityStyle})` }"
 								class="border-picture"></view>
+							<view class="cable-tag" v-if="item.productTags && item.productTags.locationUnderTitle.length">电缆</view>
 						</view>
 						<view class="text-info">
 							<view class="title line2" :style="[titleColor]" v-if="titleShow">
 								<span>{{ item.storeName }}</span>
 							</view>
-							<view v-if="item.productTags && item.productTags.locationUnderTitle.length">
+							<view class="specs-row" v-if="item.productTags && item.productTags.locationUnderTitle.length">
 								<text
-									v-for="items in item.productTags.locationUnderTitle.length>3?item.productTags.locationUnderTitle.slice(0,3):item.productTags.locationUnderTitle"
-									:key="items.id" class="mr10 tagSolid">{{items.tagName}}</text>
+									v-for="items in item.productTags.locationUnderTitle.length>2?item.productTags.locationUnderTitle.slice(0,2):item.productTags.locationUnderTitle"
+									:key="items.id" class="spec-tag">{{items.tagName}}</text>
 							</view>
-							<view class="acea-row row-middle price" :style="[priceColor]">
-								<view v-if="priceShow">
-									￥<span class="num semiBold">{{item.price}}</span>
+							<view class="price-row acea-row row-between-wrapper">
+								<view class="acea-row row-middle price" :style="[priceColor]">
+									<view v-if="priceShow">
+										￥<span class="num semiBold">{{item.price}}</span>
+									</view>
 								</view>
-							</view>
-							<view class="old-price" :style="[soldColor]" v-if="soldShow">已售
-								{{ item.sales|| 0 }} {{item.unitName}}
+								<view class="old-price" :style="[soldColor]" v-if="soldShow">已售
+									{{ item.sales|| 0 }}
+								</view>
 							</view>
 						</view>
 					</view>
@@ -365,6 +368,34 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+	@keyframes cardIn {
+		from {
+			opacity: 0;
+			transform: translateY(16rpx);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	.mores-txt {
 		text-align: center;
 	}
@@ -375,6 +406,51 @@
 		justify-content: space-between;
 	}
 
+	.tagSolid {
+		display: inline-block;
+		background: $surface-low;
+		border: 1rpx solid rgba($primary, 0.15);
+		color: $primary;
+		border-radius: 4rpx;
+		font-size: 18rpx;
+		line-height: 32rpx;
+		padding: 0 8rpx;
+	}
+
+	.cable-tag {
+		position: absolute;
+		top: 12rpx;
+		left: 12rpx;
+		background: $primary-container;
+		color: $white;
+		font-size: 18rpx;
+		padding: 2rpx 12rpx;
+		border-radius: 4rpx;
+		z-index: 2;
+	}
+
+	.specs-row {
+		display: flex;
+		gap: 8rpx;
+		margin-top: 8rpx;
+		flex-wrap: wrap;
+	}
+
+	.spec-tag {
+		display: inline-block;
+		background: $surface-low;
+		border: 1rpx solid rgba($primary, 0.12);
+		color: $primary;
+		border-radius: 4rpx;
+		font-size: 18rpx;
+		line-height: 28rpx;
+		padding: 0 8rpx;
+	}
+
+	.price-row {
+		margin-top: 12rpx;
+	}
+
 	.listBig {
 		display: grid;
 		grid-template-rows: auto;
@@ -382,6 +458,17 @@
 
 		.itemBig {
 			width: 100%;
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.img-box {
 				width: 100%;
@@ -391,24 +478,26 @@
 
 			.name {
 				font-size: 28rpx;
-				font-weight: bold;
+				font-weight: 500;
+				color: $on-surface;
 				margin-top: 16rpx;
-				// padding: 0 8px;
 			}
 
 			.price {
-				font-weight: bold;
+				font-weight: 700;
 				font-size: 12px;
+				color: $tertiary-container;
 				margin-top: 10rpx;
-				// padding: 0 8px;
 
 				.num {
 					font-size: 32rpx;
+					font-weight: 700;
+					color: $tertiary-container;
 					margin-right: 10rpx;
 				}
 
 				.old-price {
-					color: #aaa;
+					color: $secondary;
 					font-weight: normal;
 				}
 			}
@@ -424,6 +513,17 @@
 		.item {
 			display: flex;
 			width: 100%;
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.pictrue {
 				width: 220rpx;
@@ -450,6 +550,18 @@
 		width: 100%;
 
 		.item {
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
+
 			.pictrue {
 				width: 100%;
 				height: 220rpx;
@@ -480,7 +592,17 @@
 		}
 
 		.item {
-			background-color: #fff;
+			background-color: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.pictrue {
 				width: 100%;
@@ -509,23 +631,30 @@
 			width: 100%;
 			height: 80rpx;
 			line-height: 40rpx;
-			color: #333;
+			color: $on-surface;
+			font-weight: 500;
 		}
 
 		.old-price {
 			font-weight: normal;
 			font-size: 24rpx;
-			color: #999;
+			color: $secondary;
 		}
 
 		.price {
 			font-size: 36rpx;
-			font-weight: 550;
+			font-weight: 700;
+			color: $tertiary-container;
 
 			text {
 				padding-bottom: 4rpx;
 				font-size: 26rpx;
 				font-weight: normal;
+			}
+
+			.num {
+				font-weight: 700;
+				color: $tertiary-container;
 			}
 		}
 	}

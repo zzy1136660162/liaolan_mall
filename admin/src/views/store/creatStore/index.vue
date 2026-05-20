@@ -25,9 +25,10 @@
     <el-card class="box-card mt14">
       <el-tabs class="list-tabs" v-model="currentTab" @tab-click="tabsHandleClick">
         <el-tab-pane label="商品信息" name="0"></el-tab-pane>
-        <el-tab-pane label="规格库存" name="1"></el-tab-pane>
-        <el-tab-pane label="商品详情" name="2"></el-tab-pane>
-        <el-tab-pane label="其他设置" name="3"></el-tab-pane>
+        <el-tab-pane label="行业参数" name="1"></el-tab-pane>
+        <el-tab-pane label="规格库存" name="2"></el-tab-pane>
+        <el-tab-pane label="商品详情" name="3"></el-tab-pane>
+        <el-tab-pane label="其他设置" name="4"></el-tab-pane>
       </el-tabs>
       <el-form
         ref="formValidate"
@@ -38,545 +39,84 @@
         label-width="90px"
         @submit.native.prevent
       >
-        <el-row v-show="currentTab == 0" :gutter="24">
-          <!-- 商品信息-->
-          <el-col v-bind="grid2">
-            <el-form-item label="商品名称：" prop="storeName">
-              <el-input
-                class="from-ipt-width"
-                v-model="formValidate.storeName"
-                maxlength="249"
-                placeholder="请输入商品名称"
-                :disabled="isDisabled"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid2">
-            <el-form-item label="商品分类：" prop="cateIds">
-              <el-cascader
-                class="from-ipt-width"
-                v-model="formValidate.cateIds"
-                :options="merCateList"
-                :props="props2"
-                clearable
-                :show-all-levels="false"
-                :disabled="isDisabled"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid2">
-            <el-form-item label="商品关键字：" prop="keyword">
-              <el-input
-                class="from-ipt-width"
-                v-model="formValidate.keyword"
-                placeholder="请输入商品关键字"
-                :disabled="isDisabled"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid2">
-            <el-form-item label="单位：" prop="unitName">
-              <el-input
-                class="from-ipt-width"
-                v-model="formValidate.unitName"
-                placeholder="请输入单位"
-                :disabled="isDisabled"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="商品封面图：" prop="image">
-              <div class="acea-row upLoadPicBox row-middle">
-                <div v-if="formValidate.image" class="pictrue" @click="modalPicTap('1')">
-                  <el-image
-                    class="image"
-                    :src="formValidate.image"
-                    :preview-src-list="isDisabled ? [formValidate.image] : []"
-                  >
-                  </el-image>
-                </div>
-                <div v-else class="upLoad" @click="modalPicTap('1')">
-                  <i class="el-icon-camera cameraIconfont" />
-                </div>
-              </div>
-              <div class="from-tips" v-show="!isDisabled">建议尺寸：800*800px，上传小于500kb的图片</div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="商品轮播图：" prop="sliderImages">
-              <div class="acea-row">
-                <div
-                  v-for="(item, index) in formValidate.sliderImages"
-                  :key="index"
-                  class="pictrue"
-                  draggable="true"
-                  @dragstart="handleDragStart($event, item)"
-                  @dragover.prevent="handleDragOver($event, item)"
-                  @dragenter="handleDragEnter($event, item)"
-                  @dragend="handleDragEnd($event, item)"
-                >
-                  <el-image class="image" :src="item" :preview-src-list="formValidate.sliderImages"> </el-image>
-                  <i v-if="!isDisabled" class="el-icon-error btndel" @click="handleRemove(index)" />
-                </div>
-                <div
-                  v-if="formValidate.sliderImages.length < 10 && !isDisabled"
-                  class="upLoadPicBox"
-                  @click="modalPicTap('2')"
-                >
-                  <div class="upLoad">
-                    <i class="el-icon-camera cameraIconfont" />
-                  </div>
-                </div>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="主图视频：">
-              <el-input
-                class="from-ipt-width mr15"
-                maxlength="250"
-                v-model="videoLink"
-                :disabled="isDisabled"
-                placeholder="请输入视频链接"
-              />
-              <el-button v-if="videoLink" @click="zh_uploadFile" :disabled="isDisabled">确认添加</el-button>
-              <el-button v-if="!videoLink" :disabled="isDisabled" @click="modalPicTap('3', '', '', 'video')"
-                >选择视频</el-button
-              >
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <div class="iview-video-style" v-if="formValidate.videoLink">
-              <video
-                style="width: 100%; height: 100% !important; border-radius: 10px"
-                :src="formValidate.videoLink"
-                controls
-                autoplay
-                muted
-              >
-                您的浏览器不支持 video 标签。
-              </video>
-              <div class="mark"></div>
-              <span class="iconv iconfont iconmd-trash" @click="delVideo()"></span>
-            </div>
-          </el-col>
-          <el-col>
-            <el-form-item label="运费模板：" prop="tempId">
-              <el-select
-                class="from-ipt-width mr15"
-                v-model="formValidate.tempId"
-                placeholder="请选择"
-                :disabled="isDisabled"
-                style="width: 100%"
-              >
-                <el-option v-for="item in shippingList" :key="item.id" :label="item.name" :value="item.id" />
-              </el-select>
-              <el-button v-show="!isDisabled" class="mr15" @click="addTem">运费模板</el-button>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row v-show="currentTab == 1">
-          <el-col :span="24">
-            <el-form-item label="商品规格：" props="specType">
-              <el-radio-group
-                v-model="formValidate.specType"
-                @change="onChangeSpec(formValidate.specType)"
-                :disabled="isDisabled"
-              >
-                <el-radio :label="false" class="radio">单规格</el-radio>
-                <el-radio :label="true">多规格</el-radio>
-              </el-radio-group>
-            </el-form-item>
-            <el-form-item label="佣金设置：" props="isSub">
-              <el-radio-group
-                v-model="formValidate.isSub"
-                @change="onChangetype(formValidate.isSub)"
-                :disabled="isDisabled"
-              >
-                <el-radio :label="true" class="radio">单独设置</el-radio>
-                <el-radio :label="false">默认设置</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <!-- 多规格添加-->
-          <el-col v-if="formValidate.specType && !isDisabled" :span="24" class="noForm">
-            <el-form-item label="选择规格：" prop="">
-              <div class="acea-row">
-                <el-select v-model="formValidate.selectRule" @change="confirm">
-                  <el-option v-for="item in ruleList" :key="item.id" :label="item.ruleName" :value="item.id" />
-                </el-select>
-                <el-button class="ml10" @click="addRule">添加规格</el-button>
-              </div>
-            </el-form-item>
-            <el-form-item>
-              <div v-for="(item, index) in formValidate.attr" :key="index">
-                <div class="acea-row row-middle">
-                  <span class="mr5">{{ item.attrName }}</span
-                  ><i class="el-icon-circle-close" @click="handleRemoveAttr(index)" />
-                </div>
-                <div class="rulesBox">
-                  <el-tag
-                    v-for="(j, indexn) in item.attrValue"
-                    :key="indexn"
-                    closable
-                    size="medium"
-                    :disable-transitions="false"
-                    class="mb5 mr10"
-                    @close="handleClose(item.attrValue, indexn, index)"
-                  >
-                    {{ j }}
-                  </el-tag>
-                  <template v-if="!$route.params.isCopy">
-                    <el-input
-                      v-if="item.inputVisible"
-                      ref="saveTagInput"
-                      v-model="item.attrValue.attrsVal"
-                      class="input-new-tag"
-                      size="small"
-                      @keyup.enter.native="createAttr(item.attrValue.attrsVal, index)"
-                      @blur="createAttr(item.attrValue.attrsVal, index)"
-                    />
-                    <el-button v-else class="button-new-tag" size="small" @click="showInput(item)">+ 添加</el-button>
-                  </template>
-                </div>
-              </div>
-            </el-form-item>
-            <el-col v-if="isBtn">
-              <div class="acea-row">
-                <el-form-item label="规格：" class="inputWid">
-                  <el-input v-model="formDynamic.attrsName" placeholder="请输入规格" />
-                </el-form-item>
-                <el-form-item label="规格值：" class="inputWid">
-                  <el-input v-model="formDynamic.attrsVal" placeholder="请输入规格值" />
-                </el-form-item>
-                <el-form-item class="noLeft">
-                  <el-button type="primary" @click="createAttrName">确定</el-button>
-                  <el-button @click="offAttrName">取消</el-button>
-                </el-form-item>
-              </div>
-            </el-col>
-            <el-form-item v-if="!isBtn && !$route.params.isCopy">
-              <el-button type="primary" icon="md-add" class="mr15" @click="addBtn">添加新规格</el-button>
-            </el-form-item>
-          </el-col>
-          <!-- 批量设置-->
-          <el-col v-if="formValidate.attr.length > 0 && formValidate.specType && !isDisabled" :span="24" class="noForm">
-            <el-form-item label="批量设置：">
-              <el-table :data="oneFormBatch" border class="tabNumWidth" size="mini">
-                <el-table-column label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1', 'pi')">
-                      <div v-if="scope.row.image" class="pictrue tabPic">
-                        <el-image :preview-src-list="isDisabled ? [scope.row.image] : []" :src="scope.row.image" />
-                      </div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  v-for="(item, iii) in attrValue"
-                  :key="iii"
-                  :label="formThead[iii].title"
-                  min-width="120"
-                >
-                  <template slot-scope="scope">
-                    <el-input
-                      v-model="scope.row[iii]"
-                      :type="formThead[iii].title === '商品编号' ? 'text' : 'number'"
-                      :min="0"
-                      class="priceBox"
-                      @keyup.native="keyupEvent(iii, scope.row[iii], scope.$index, 1)"
-                    />
-                  </template>
-                </el-table-column>
-                <template v-if="formValidate.isSub">
-                  <el-table-column label="一级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input
-                        v-model="scope.row.brokerage"
-                        type="number"
-                        :min="0"
-                        :max="scope.row.price"
-                        class="priceBox"
-                      />
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="二级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input
-                        v-model="scope.row.brokerageTwo"
-                        type="number"
-                        :min="0"
-                        :max="scope.row.price"
-                        class="priceBox"
-                      />
-                    </template>
-                  </el-table-column>
-                </template>
-                <el-table-column label="操作" width="80">
-                  <template>
-                    <a class="submission" @click="batchAdd">批量添加</a>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-form-item>
-          </el-col>
-          <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
-            <!-- 单规格表格-->
-            <el-form-item v-if="formValidate.specType === false">
-              <el-table :data="OneattrValue" border class="tabNumWidth" size="mini">
-                <el-table-column label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1', 'dan', 'pi')">
-                      <div v-if="formValidate.image" class="pictrue tabPic">
-                        <el-image :preview-src-list="isDisabled ? [scope.row.image] : []" :src="scope.row.image" />
-                      </div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  v-for="(item, iii) in attrValue"
-                  :key="iii"
-                  :label="formThead[iii].title"
-                  min-width="120"
-                >
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="isDisabled"
-                      v-model="scope.row[iii]"
-                      :type="formThead[iii].title === '商品编号' ? 'text' : 'number'"
-                      :min="0"
-                      class="priceBox"
-                      @keyup.native="keyupEvent(iii, scope.row[iii], scope.$index, 2)"
-                    />
-                  </template>
-                </el-table-column>
-                <template v-if="formValidate.isSub">
-                  <el-table-column label="一级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input
-                        :disabled="isDisabled"
-                        v-model="scope.row.brokerage"
-                        type="number"
-                        :min="0"
-                        class="priceBox"
-                      />
-                    </template>
-                  </el-table-column>
-                  <el-table-column label="二级返佣(元)" min-width="120">
-                    <template slot-scope="scope">
-                      <el-input
-                        :disabled="isDisabled"
-                        v-model="scope.row.brokerageTwo"
-                        type="number"
-                        :min="0"
-                        class="priceBox"
-                      />
-                    </template>
-                  </el-table-column>
-                </template>
-              </el-table>
-            </el-form-item>
-            <!-- <div>manyTabDate:{{manyTabDate}}</div> -->
-            <el-form-item label="全部sku：" v-if="$route.params.id && showAll">
-              <el-button type="default" @click="showAllSku()" :disabled="isDisabled">展示</el-button>
-            </el-form-item>
-            <!-- 多规格表格-->
-            <el-form-item
-              v-if="formValidate.attr.length > 0 && formValidate.specType"
-              label="商品属性："
-              class="labeltop"
-              :class="isDisabled ? 'disLabel' : 'disLabelmoren'"
-            >
-              <el-table :data="ManyAttrValue" border class="tabNumWidth" size="mini">
-                <template v-if="manyTabDate">
-                  <el-table-column
-                    v-for="(item, iii) in manyTabDate"
-                    :key="iii"
-                    :label="manyTabTit[iii].title"
-                    min-width="80"
-                  >
-                    <template slot-scope="scope">
-                      <span class="priceBox" v-text="scope.row[iii]" />
-                    </template>
-                  </el-table-column>
-                </template>
-                <el-table-column label="图片" min-width="80">
-                  <template slot-scope="scope">
-                    <div class="upLoadPicBox" @click="modalPicTap('1', 'duo', scope.$index)">
-                      <div v-if="scope.row.image" class="pictrue tabPic">
-                        <el-image
-                          class="preview-src"
-                          :preview-src-list="isDisabled ? [scope.row.image] : []"
-                          :src="scope.row.image"
-                        />
-                      </div>
-                      <div v-else class="upLoad tabPic">
-                        <i class="el-icon-camera cameraIconfont" />
-                      </div>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  v-for="(item, iii) in attrValue"
-                  :key="iii"
-                  :label="formThead[iii].title"
-                  min-width="120"
-                >
-                  <template slot-scope="scope">
-                    <!--                    <span>scope.row:{{scope.row}}</span>-->
-                    <el-input
-                      :disabled="isDisabled"
-                      v-model="scope.row[iii]"
-                      :type="formThead[iii].title === '商品编号' ? 'text' : 'number'"
-                      class="priceBox"
-                      @keyup.native="keyupEvent(iii, scope.row[iii], scope.$index, 3)"
-                    />
-                  </template>
-                </el-table-column>
-                <el-table-column label="一级返佣(元)" min-width="120" v-if="formValidate.isSub">
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="isDisabled"
-                      v-model="scope.row.brokerage"
-                      type="number"
-                      :min="0"
-                      :max="scope.row.price"
-                      class="priceBox"
-                    />
-                  </template>
-                </el-table-column>
-                <el-table-column label="二级返佣(元)" min-width="120" v-if="formValidate.isSub">
-                  <template slot-scope="scope">
-                    <el-input
-                      :disabled="isDisabled"
-                      v-model="scope.row.brokerageTwo"
-                      type="number"
-                      :min="0"
-                      :max="scope.row.price"
-                      class="priceBox"
-                    />
-                  </template>
-                </el-table-column>
-                <el-table-column v-if="!isDisabled" key="3" label="操作" min-width="80">
-                  <template slot-scope="scope">
-                    <a class="submission" @click="delAttrTable(scope.$index)">删除</a>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 商品详情-->
-        <el-row v-show="currentTab == 2 && !isDisabled">
-          <el-col :span="24">
-            <el-form-item label="商品详情：">
-              <Tinymce v-model.trim="formValidate.content" :key="htmlKey"></Tinymce>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row v-show="currentTab == 2 && isDisabled">
-          <el-col :span="24">
-            <el-form-item label="商品详情：">
-              <span v-html="formValidate.content || '无'"></span>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <!-- 其他设置-->
-        <el-row v-show="currentTab == 3">
-          <el-col :span="24">
-            <el-col v-bind="grid">
-              <el-form-item label="排序：">
-                <el-input-number
-                  controls-position="right"
-                  v-model="formValidate.sort"
-                  :min="0"
-                  placeholder="请输入排序"
-                  :disabled="isDisabled"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col v-bind="grid">
-              <el-form-item label="积分：">
-                <el-input-number
-                  controls-position="right"
-                  v-model="formValidate.giveIntegral"
-                  :min="0"
-                  placeholder="请输入排序"
-                  :disabled="isDisabled"
-                />
-              </el-form-item>
-            </el-col>
-            <el-col v-bind="grid">
-              <el-form-item label="虚拟销量：">
-                <el-input-number
-                  controls-position="right"
-                  v-model="formValidate.ficti"
-                  :min="0"
-                  placeholder="请输入排序"
-                  :disabled="isDisabled"
-                />
-              </el-form-item>
-            </el-col>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="商品推荐：">
-              <el-checkbox-group v-model="checkboxGroup" size="small" @change="onChangeGroup" :disabled="isDisabled">
-                <el-checkbox v-for="(item, index) in recommend" :key="index" :label="item.value">{{
-                  item.name
-                }}</el-checkbox>
-              </el-checkbox-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="活动优先级：">
-              <div class="color-list acea-row row-middle">
-                <div
-                  :disabled="isDisabled"
-                  class="color-item"
-                  :class="activity[item]"
-                  v-for="item in formValidate.activity"
-                  :key="item"
-                  draggable="true"
-                  @dragstart="handleDragStart($event, item)"
-                  @dragover.prevent="handleDragOver($event, item)"
-                  @dragenter="handleDragEnterFont($event, item)"
-                  @dragend="handleDragEnd($event, item)"
-                >
-                  {{ item }}
-                </div>
-                <div class="tip">可拖动按钮调整活动的优先展示顺序</div>
-              </div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="优惠券：" class="proCoupon">
-              <div>
-                <el-tag
-                  v-for="(tag, index) in formValidate.coupons"
-                  :key="index"
-                  class="mr10"
-                  :closable="!isDisabled"
-                  :disable-transitions="false"
-                  @close="handleCloseCoupon(tag)"
-                >
-                  {{ tag.name }}
-                </el-tag>
-                <span class="mr10" v-if="formValidate.couponIds == null">暂无优惠券</span>
-                <el-button v-if="!isDisabled" class="mr15" @click="addCoupon">选择优惠券</el-button>
-              </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
+        <product-base-info
+          v-show="currentTab == 0"
+          :formValidate="formValidate"
+          :isDisabled="isDisabled"
+          :merCateList="merCateList"
+          :shippingList="shippingList"
+          :props2="props2"
+          @openPicModal="modalPicTap"
+          @removeSliderImage="handleRemove"
+          @dragStart="handleDragStart"
+          @dragOver="handleDragOver"
+          @dragEnter="handleDragEnter"
+          @dragEnd="handleDragEnd"
+          @addVideo="zh_uploadFile"
+          @delVideo="delVideo"
+          @addTemplate="addTem"
+        />
+        <product-industry-info
+          v-show="currentTab == 1"
+          :formValidate="formValidate"
+          :isDisabled="isDisabled"
+        />
+        <product-spec-stock
+          v-show="currentTab == 2"
+          :formValidate="formValidate"
+          :isDisabled="isDisabled"
+          :ruleList="ruleList"
+          :OneattrValue="OneattrValue"
+          :ManyAttrValue="ManyAttrValue"
+          :oneFormBatch="oneFormBatch"
+          :formThead="formThead"
+          :attrValue="attrValue"
+          :manyTabDate="manyTabDate"
+          :manyTabTit="manyTabTit"
+          :showAll="showAll"
+          :isBtn="isBtn"
+          :formDynamic="formDynamic"
+          @changeSpecType="onChangeSpec"
+          @changeSubType="onChangetype"
+          @selectRule="confirm"
+          @addRule="addRule"
+          @removeAttr="handleRemoveAttr"
+          @closeAttr="handleClose"
+          @createAttr="createAttr"
+          @showInput="showInput"
+          @createAttrName="createAttrName"
+          @offAttrName="offAttrName"
+          @addBtn="addBtn"
+          @batchAdd="batchAdd"
+          @openPicModal="modalPicTap"
+          @keyupEvent="keyupEvent"
+          @delAttrTable="delAttrTable"
+          @showAllSku="showAllSku"
+        />
+        <product-content
+          v-show="currentTab == 3"
+          :formValidate="formValidate"
+          :isDisabled="isDisabled"
+          :htmlKey="htmlKey"
+        />
+        <product-other-settings
+          v-show="currentTab == 4"
+          :formValidate="formValidate"
+          :isDisabled="isDisabled"
+          :checkboxGroup="checkboxGroup"
+          :recommend="recommend"
+          @changeGroup="onChangeGroup"
+          @dragStart="handleDragStart"
+          @dragOver="handleDragOver"
+          @dragEnter="handleDragEnterFont"
+          @dragEnd="handleDragEnd"
+          @closeCoupon="handleCloseCoupon"
+          @addCoupon="addCoupon"
+        />
         <el-form-item>
           <el-button v-show="Number(currentTab) > 0" class="submission" @click="handleSubmitUp">上一步</el-button>
           <el-button
-            v-show="Number(currentTab) < 3"
+            v-show="Number(currentTab) < 4"
             class="submission"
             :class="Number(currentTab) == 0 ? 'onePrimary' : ''"
             @click="handleSubmitNest('formValidate')"
@@ -603,6 +143,11 @@ import CreatTemplates from '@/views/systemSetting/deliverGoods/freightSet/creatT
 import Templates from '../../appSetting/wxAccount/wxTemplate/index';
 import { Debounce } from '@/utils/validate';
 import { copyConfigApi, copyProductApi } from '@/api/store';
+import ProductBaseInfo from './components/ProductBaseInfo.vue';
+import ProductIndustryInfo from './components/ProductIndustryInfo.vue';
+import ProductSpecStock from './components/ProductSpecStock.vue';
+import ProductContent from './components/ProductContent.vue';
+import ProductOtherSettings from './components/ProductOtherSettings.vue';
 const defaultObj = {
   image: '',
   sliderImages: [],
@@ -644,6 +189,19 @@ const defaultObj = {
   couponIds: [],
   coupons: [],
   activity: ['默认', '秒杀', '砍价', '拼团'],
+  industryInfo: {
+    modelNo: '',
+    voltageLevel: '',
+    conductorMaterial: '',
+    coreCount: '',
+    crossSectionArea: '',
+    sheathMaterial: '',
+    flameRetardantGrade: '',
+    standardCode: '',
+    applicationScene: '',
+    certificateFiles: [],
+    downloadFileIds: [],
+  },
 };
 const objTitle = {
   price: {
@@ -670,7 +228,7 @@ const objTitle = {
 };
 export default {
   name: 'SortCreat',
-  components: { Templates, CreatTemplates, Tinymce },
+  components: { Templates, CreatTemplates, Tinymce, ProductBaseInfo, ProductIndustryInfo, ProductSpecStock, ProductContent, ProductOtherSettings },
   data() {
     return {
       htmlKey: 0,
@@ -752,6 +310,9 @@ export default {
       videoLink: '',
       copyConfig: {},
       url: '',
+      voltageLevelOptions: ['300/500V', '450/750V', '0.6/1kV', '1.8/3kV', '3.6/6kV', '6/10kV', '8.7/10kV', '10kV', '35kV'],
+      coreCountOptions: ['1芯', '2芯', '3芯', '4芯', '5芯', '3+1芯', '3+2芯', '4+1芯', '5+1芯'],
+      crossSectionOptions: ['1.5mm²', '2.5mm²', '4mm²', '6mm²', '10mm²', '16mm²', '25mm²', '35mm²', '50mm²', '70mm²', '95mm²', '120mm²', '150mm²', '185mm²', '240mm²', '300mm²', '400mm²'],
     };
   },
   computed: {
@@ -900,6 +461,8 @@ export default {
     getCopyConfig() {
       copyConfigApi().then((res) => {
         this.copyConfig = res;
+      }).catch(() => {
+        this.copyConfig = {};
       });
     },
     tabsHandleClick(tab, event) {
@@ -958,6 +521,12 @@ export default {
       this.checkboxGroup.includes('isHot') ? (this.formValidate.isHot = true) : (this.formValidate.isHot = false);
     },
     watCh(val) {
+      // 防御性检查：确保 attr 是有效数组
+      if (!Array.isArray(this.formValidate.attr) || this.formValidate.attr.length === 0) {
+        console.warn('watCh警告: formValidate.attr 数据无效或为空');
+        return;
+      }
+
       const tmp = {};
       const tmpTab = {};
       this.formValidate.attr.forEach((o, i) => {
@@ -978,12 +547,24 @@ export default {
       this.formThead = Object.assign({}, this.formThead, tmp);
     },
     attrFormat(arr) {
+      // 防御性检查：确保传入的参数是有效数组
+      if (!Array.isArray(arr) || arr.length === 0) {
+        console.warn('attrFormat警告: 传入的属性数据无效或为空 -', arr);
+        return [];
+      }
+
       let data = [];
       const res = [];
       return format(arr);
       function format(arr) {
         if (arr.length > 1) {
           arr.forEach((v, i) => {
+            // 防御性检查：确保当前元素和 attrValue 存在
+            if (!v || !Array.isArray(v['attrValue'])) {
+              console.warn('format警告: 多规格属性数据格式异常 - 索引:', i, '数据:', v);
+              return;
+            }
+
             if (i === 0) data = arr[i]['attrValue'];
             const tmp = [];
             if (!data) return;
@@ -1023,6 +604,11 @@ export default {
         } else {
           const dataArr = [];
           arr.forEach((v, k) => {
+            // 防御性检查：确保 attrValue 存在且是数组
+            if (!v || !Array.isArray(v['attrValue'])) {
+              console.warn('attrFormat警告: 属性数据格式异常 -', v);
+              return; // 跳过无效数据
+            }
             v['attrValue'].forEach((vv, kk) => {
               dataArr[kk] = v['attrName'] + '_' + vv;
               res[kk] = {
@@ -1300,6 +886,19 @@ export default {
             coupons: info.coupons,
             couponIds: info.couponIds,
             activity: info.activity ? info.activity : ['默认', '秒杀', '砍价', '拼团'],
+            industryInfo: info.industryInfo || {
+              modelNo: '',
+              voltageLevel: '',
+              conductorMaterial: '',
+              coreCount: '',
+              crossSectionArea: '',
+              sheathMaterial: '',
+              flameRetardantGrade: '',
+              standardCode: '',
+              applicationScene: '',
+              certificateFiles: [],
+              downloadFileIds: [],
+            },
           };
           marketingSendApi({ type: 3 }).then((res) => {
             if (this.formValidate.couponIds !== null) {
@@ -1677,6 +1276,25 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+.section-title {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ebeef5;
+}
+.section-title-bar {
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background: #1a3c7e;
+  border-radius: 2px;
+  margin-right: 10px;
+}
+.section-title-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #303133;
+}
 .upLoadPicBox {
   ::v-deep.el-alert {
     padding: 0 !important;

@@ -123,12 +123,15 @@ public class UploadServiceImpl implements UploadService {
      * @return 后缀名
      */
     private String uploadValidate(String fileName, float fileSize, String fileType, String contentType) {
-        // 文件后缀名
         String extName = FilenameUtils.getExtension(fileName).toLowerCase();
         if (StrUtil.isEmpty(extName)) {
-            if (StrUtil.isNotBlank(contentType)) {
-                extName = contentType.split("/")[1];
-            } else {
+            if (StrUtil.isNotBlank(contentType) && contentType.contains("/")) {
+                String[] parts = contentType.split("/");
+                if (parts.length > 1 && StrUtil.isNotBlank(parts[1])) {
+                    extName = parts[1];
+                }
+            }
+            if (StrUtil.isEmpty(extName)) {
                 throw new CrmebException(CommonResultCode.VALIDATE_FAILED, "文件类型未定义，无法上传...");
             }
         }
@@ -226,98 +229,82 @@ public class UploadServiceImpl implements UploadService {
             systemAttachmentService.save(systemAttachment);
             return resultFile;
         }
+        boolean cloudUploadSuccess = false;
         CloudVo cloudVo = new CloudVo();
-        // 判断是否保存本地
         String fileIsSave = systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_FILE_IS_SAVE);
         multipartFile.transferTo(file);
-        switch (uploadTypeInt) {
-            case 2:
-                systemAttachment.setImageType(2);
-                cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_UPLOAD_URL));
-                cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_ACCESS_KEY));
-                cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_SECRET_KEY));
-                cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_STORAGE_NAME));
-                cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_STORAGE_REGION));
-                try {
-                    // 构造一个带指定Zone对象的配置类, 默认华东
-                    Configuration cfg = new Configuration(Region.autoRegion());
-//                    if (cloudVo.getRegion().equals("huabei")) {
-//                        cfg = new Configuration(Region.huabei());
-//                    }
-//                    if (cloudVo.getRegion().equals("huanan")) {
-//                        cfg = new Configuration(Region.huanan());
-//                    }
-//                    if (cloudVo.getRegion().equals("beimei")) {
-//                        cfg = new Configuration(Region.beimei());
-//                    }
-//                    if (cloudVo.getRegion().equals("dongnanya")) {
-//                        cfg = new Configuration(Region.xinjiapo());
-//                    }
-
-                    // 其他参数参考类注释
-                    UploadManager uploadManager = new UploadManager(cfg);
-                    // 生成上传凭证，然后准备上传
-                    Auth auth = Auth.create(cloudVo.getAccessKey(), cloudVo.getSecretKey());
-                    String upToken = auth.uploadToken(cloudVo.getBucketName());
-
-                    String webPathQn = crmebConfig.getImagePath();
-                    qiNiuService.uploadFile(uploadManager, upToken,
-                            systemAttachment.getSattDir(), webPathQn + "/" + systemAttachment.getSattDir(), file);   //异步处理
-                } catch (Exception e) {
-                    logger.error("AsyncServiceImpl.qCloud.fail " + e.getMessage());
-                }
-                break;
-            case 3:
-                systemAttachment.setImageType(3);
-                cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_UPLOAD_URL));
-                cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_ACCESS_KEY));
-                cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_SECRET_KEY));
-                cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_STORAGE_NAME));
-                cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_STORAGE_REGION));
-                try {
-                    String webPathAl = crmebConfig.getImagePath();
-                    ossService.upload(cloudVo, systemAttachment.getSattDir(), webPathAl + "/" + systemAttachment.getSattDir(),
-                            file);
-                } catch (Exception e) {
-                    logger.error("AsyncServiceImpl.oss fail " + e.getMessage());
-                }
-                break;
-            case 4:
-                systemAttachment.setImageType(4);
-                cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_UPLOAD_URL));
-                cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_ACCESS_KEY));
-                cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_SECRET_KEY));
-                cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_STORAGE_NAME));
-                cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_STORAGE_REGION));
-                // 1 初始化用户身份信息(secretId, secretKey)
-                COSCredentials cred = new BasicCOSCredentials(cloudVo.getAccessKey(), cloudVo.getSecretKey());
-                // 2 设置bucket的区域, COS地域的简称请参照 https://cloud.tencent.com/document/product/436/6224
-                ClientConfig clientConfig = new ClientConfig(new com.qcloud.cos.region.Region(cloudVo.getRegion()));
-                // 3 生成 cos 客户端。
-                COSClient cosClient = new COSClient(cred, clientConfig);
-                try {
-                    String webPathTx = crmebConfig.getImagePath();
-                    cosService.uploadFile(cloudVo, systemAttachment.getSattDir(), webPathTx + "/" + systemAttachment.getSattDir(), systemAttachment.getAttId(), cosClient);
-                } catch (Exception e) {
-                    logger.error("AsyncServiceImpl.cos.fail " + e.getMessage());
-                } finally {
-                    cosClient.shutdown();
-                }
-                break;
-            case 5: // 京东云存储
-                systemAttachment.setImageType(5);
-                String bucket = systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_JD_BUCKET_NAME);
-                try {
-                    String webPathTx = crmebConfig.getImagePath();
-                    jdCloudService.uploadFile(systemAttachment.getSattDir(), webPathTx + "/" + systemAttachment.getSattDir(), bucket);
-                } catch (Exception e) {
-                    logger.error("AsyncServiceImpl.cos.fail " + e.getMessage());
-                }
-                break;
+        try {
+            switch (uploadTypeInt) {
+                case 2:
+                    systemAttachment.setImageType(2);
+                    cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_UPLOAD_URL));
+                    cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_ACCESS_KEY));
+                    cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_SECRET_KEY));
+                    cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_STORAGE_NAME));
+                    cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_QN_STORAGE_REGION));
+                    {
+                        Configuration cfg = new Configuration(Region.autoRegion());
+                        UploadManager uploadManager = new UploadManager(cfg);
+                        Auth auth = Auth.create(cloudVo.getAccessKey(), cloudVo.getSecretKey());
+                        String upToken = auth.uploadToken(cloudVo.getBucketName());
+                        String webPathQn = crmebConfig.getImagePath();
+                        qiNiuService.uploadFile(uploadManager, upToken,
+                                systemAttachment.getSattDir(), webPathQn + "/" + systemAttachment.getSattDir(), file);
+                        cloudUploadSuccess = true;
+                    }
+                    break;
+                case 3:
+                    systemAttachment.setImageType(3);
+                    cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_UPLOAD_URL));
+                    cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_ACCESS_KEY));
+                    cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_SECRET_KEY));
+                    cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_STORAGE_NAME));
+                    cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_AL_STORAGE_REGION));
+                    {
+                        String webPathAl = crmebConfig.getImagePath();
+                        ossService.upload(cloudVo, systemAttachment.getSattDir(), webPathAl + "/" + systemAttachment.getSattDir(), file);
+                        cloudUploadSuccess = true;
+                    }
+                    break;
+                case 4:
+                    systemAttachment.setImageType(4);
+                    cloudVo.setDomain(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_UPLOAD_URL));
+                    cloudVo.setAccessKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_ACCESS_KEY));
+                    cloudVo.setSecretKey(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_SECRET_KEY));
+                    cloudVo.setBucketName(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_STORAGE_NAME));
+                    cloudVo.setRegion(systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_TX_STORAGE_REGION));
+                    {
+                        COSCredentials cred = new BasicCOSCredentials(cloudVo.getAccessKey(), cloudVo.getSecretKey());
+                        ClientConfig clientConfig = new ClientConfig(new com.qcloud.cos.region.Region(cloudVo.getRegion()));
+                        COSClient cosClient = new COSClient(cred, clientConfig);
+                        try {
+                            String webPathTx = crmebConfig.getImagePath();
+                            cosService.uploadFile(cloudVo, systemAttachment.getSattDir(), webPathTx + "/" + systemAttachment.getSattDir(), systemAttachment.getAttId(), cosClient);
+                            cloudUploadSuccess = true;
+                        } finally {
+                            cosClient.shutdown();
+                        }
+                    }
+                    break;
+                case 5:
+                    systemAttachment.setImageType(5);
+                    {
+                        String bucket = systemConfigService.getValueByKeyException(SysConfigConstants.CONFIG_JD_BUCKET_NAME);
+                        String webPathTx = crmebConfig.getImagePath();
+                        jdCloudService.uploadFile(systemAttachment.getSattDir(), webPathTx + "/" + systemAttachment.getSattDir(), bucket);
+                        cloudUploadSuccess = true;
+                    }
+                    break;
+                default:
+                    throw new CrmebException("未知的上传类型：" + uploadTypeInt);
+            }
+        } catch (Exception e) {
+            logger.error("云存储上传失败，uploadType={}，error={}", uploadTypeInt, e.getMessage(), e);
+            systemAttachment.setImageType(1);
+            cloudUploadSuccess = false;
         }
         systemAttachmentService.save(systemAttachment);
-        if (!fileIsSave.equals("1")) {
-            // 删除本地文件
+        if (cloudUploadSuccess && !fileIsSave.equals("1")) {
             file.delete();
         }
         return resultFile;

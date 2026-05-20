@@ -34,4 +34,13 @@ public class ProductListRequest implements Serializable {
     @ApiModelProperty(value = "分类id")
     private Integer cid;
 
+    @ApiModelProperty(value = "电压等级筛选")
+    private String voltageLevel;
+
+    @ApiModelProperty(value = "导体材质筛选")
+    private String conductorMaterial;
+
+    @ApiModelProperty(value = "阻燃等级筛选")
+    private String flameRetardantGrade;
+
 }

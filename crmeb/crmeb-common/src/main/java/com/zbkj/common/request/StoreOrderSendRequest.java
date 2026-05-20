@@ -71,4 +71,7 @@ public class StoreOrderSendRequest {
 
     @ApiModelProperty(value = "商家发货一号通内置功能")
     private OnePassShipmentCreateOrderRequest shipment;
+
+    @ApiModelProperty(value = "履约扩展信息-批次号/出厂编号等")
+    private OrderDeliveryExtendRequest deliveryExtend;
 }

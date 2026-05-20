@@ -9,7 +9,7 @@
       :unique-opened="getThemeConfig.isUniqueOpened"
       :collapse-transition="true"
     >
-      <template v-for="val in filteredMenuList">
+      <template v-for="val in menuList">
         <el-submenu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
           <template slot="title">
             <i class="ivu-icon" :class="val.icon ? 'el-icon-' + val.icon : ''"></i>
@@ -65,18 +65,6 @@ export default {
     setIsCollapse() {
       return document.body.clientWidth < 1000 ? false : this.$store.state.themeConfig.themeConfig.isCollapse;
     },
-    filteredMenuList() {
-      const seen = new Set();
-      // 先清理无路径的权限按钮子项，再去重
-      return this.cleanMenuList(this.menuList).filter((item) => {
-        const key = item.path + '|' + item.title;
-        if (seen.has(key)) {
-          return false;
-        }
-        seen.add(key);
-        return true;
-      });
-    },
   },
   watch: {
     // 监听路由的变化
@@ -90,26 +78,6 @@ export default {
     },
   },
   created() {},
-  methods: {
-    /** 递归清理菜单：移除没有可导航路径的子项（权限按钮） */
-    cleanMenuList(arr) {
-      return arr.map((item) => {
-        const copy = { ...item };
-        // 关于辽缆：不需要子菜单，点击直接跳转编辑页
-        if (copy.path === '/content/aboutManager') {
-          copy.children = [];
-          return copy;
-        }
-        if (copy.children && copy.children.length > 0) {
-          const navigableChildren = copy.children.filter(
-            (child) => child.path && child.path.trim() !== ''
-          );
-          copy.children = this.cleanMenuList(navigableChildren);
-        }
-        return copy;
-      });
-    },
-  },
 };
 </script>
 <style lang="scss" scoped>

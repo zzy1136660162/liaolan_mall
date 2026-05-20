@@ -120,9 +120,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/"+ UploadConstants.UPLOAD_FILE_KEYWORD +"/**").permitAll()
             .antMatchers("/"+ UploadConstants.DOWNLOAD_FILE_KEYWORD +"/**").permitAll()
             .antMatchers("/"+ UploadConstants.UPLOAD_AFTER_FILE_KEYWORD +"/**").permitAll()
-                // 放行图片、文件上传
-            .antMatchers("/api/admin/upload/image").permitAll()
-            .antMatchers("/api/admin/upload/file").permitAll()
 //            .antMatchers("/wx/user/*/login","/citylife/nocheck/**").anonymous()
             .antMatchers(
                     HttpMethod.GET,
@@ -144,8 +141,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/captcha/get", "/captcha/check").anonymous()
             .antMatchers("/api/admin/payment/callback/**").anonymous()
             .antMatchers("/api/public/**").permitAll()
-            // 关于辽缆 - 前台页面无需登录即可访问
-            .antMatchers("/api/front/about/**").permitAll()
             // 除上面外的所有请求全部需要鉴权认证
             .anyRequest().authenticated()
             .and()

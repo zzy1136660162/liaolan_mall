@@ -237,6 +237,20 @@
 							<view class='conter'>已发货，请注意查收</view>
 						</view>
 					</view>
+					<view class='wrapper borRadius14' v-if="orderInfo.deliveryExtend && (orderInfo.deliveryExtend.batchNo || orderInfo.deliveryExtend.factorySerialNo || orderInfo.deliveryExtend.deliveryRemark)">
+						<view class='item acea-row row-between' v-if="orderInfo.deliveryExtend.batchNo">
+							<view>线缆批次号：</view>
+							<view class='conter'>{{orderInfo.deliveryExtend.batchNo}}</view>
+						</view>
+						<view class='item acea-row row-between' v-if="orderInfo.deliveryExtend.factorySerialNo">
+							<view>出厂编号：</view>
+							<view class='conter'>{{orderInfo.deliveryExtend.factorySerialNo}}</view>
+						</view>
+						<view class='item acea-row row-between' v-if="orderInfo.deliveryExtend.deliveryRemark">
+							<view>发货备注：</view>
+							<view class='conter'>{{orderInfo.deliveryExtend.deliveryRemark}}</view>
+						</view>
+					</view>
 				</view>
 				<view class='wrapper borRadius14'>
 					<view class='item acea-row row-between'>

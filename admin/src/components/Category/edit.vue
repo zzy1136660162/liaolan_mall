@@ -6,7 +6,10 @@
         prop="name"
         :rules="[{ required: true, message: '请输入分类名称', trigger: ['blur', 'change'] }]"
       >
-        <el-input v-model="editPram.name" :maxlength="biztype.value === 1 ? 8 : 20" placeholder="分类名称" />
+        <el-input v-model="editPram.name" :maxlength="biztype.value === 1 ? 50 : 20" placeholder="分类名称" />
+      </el-form-item>
+      <el-form-item label="分类描述：" v-if="biztype.value === 1">
+        <el-input v-model="editPram.description" type="textarea" :rows="2" :maxlength="255" placeholder="请输入分类描述/用途，如：输配电能，适用于固定敷设" />
       </el-form-item>
       <el-form-item label="URL：" v-if="biztype.value !== 1 && biztype.value !== 3">
         <el-input v-model="editPram.url" placeholder="URL" />
@@ -100,6 +103,7 @@ export default {
       editPram: {
         extra: null,
         name: null,
+        description: null,
         pid: null,
         sort: 0,
         status: true,
@@ -155,10 +159,11 @@ export default {
     initEditData() {
       this.parentOptions = [...this.allTreeList];
       this.addTreeListLabelForCasCard(this.parentOptions, 'child');
-      const { extra, name, pid, sort, status, type, id, url } = this.editData;
+      const { extra, name, description, pid, sort, status, type, id, url } = this.editData;
       if (this.isCreate === 1) {
         this.editPram.extra = extra;
         this.editPram.name = name;
+        this.editPram.description = description || null;
         this.editPram.pid = pid;
         this.editPram.sort = sort;
         this.editPram.status = status;
@@ -173,9 +178,18 @@ export default {
     addTreeListLabelForCasCard(arr, child) {
       arr.forEach((o, i) => {
         if (o.child && o.child.length) {
-          // o.disabled = true
           o.child.forEach((j) => {
-            j.disabled = true;
+            if (j.child && j.child.length) {
+              j.child.forEach((k) => {
+                if (k.child && k.child.length) {
+                  k.child.forEach((m) => {
+                    m.disabled = true;
+                  });
+                } else {
+                  k.disabled = true;
+                }
+              });
+            }
           });
         }
       });

@@ -49,4 +49,13 @@ public class StoreProductSearchRequest implements Serializable {
     @ApiModelProperty(value = "销量排序", allowableValues = "range[asc,desc]")
     private String salesOrder;
 
+    @ApiModelProperty(value = "电压等级筛选")
+    private String voltageLevel;
+
+    @ApiModelProperty(value = "导体材质筛选")
+    private String conductorMaterial;
+
+    @ApiModelProperty(value = "阻燃等级筛选")
+    private String flameRetardantGrade;
+
 }

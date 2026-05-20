@@ -1,10 +1,10 @@
 package com.zbkj.admin.controller;
 
+import com.zbkj.common.model.article.Article;
 import com.zbkj.common.page.CommonPage;
 import com.zbkj.common.request.ArticleRequest;
 import com.zbkj.common.request.ArticleSearchRequest;
 import com.zbkj.common.request.PageParamRequest;
-import com.zbkj.common.response.ArticleResponse;
 import com.zbkj.common.result.CommonResult;
 import com.zbkj.common.vo.ArticleVo;
 import com.zbkj.service.service.ArticleService;
@@ -109,27 +109,9 @@ public class ArticleController {
     @ApiOperation(value = "详情")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiImplicitParam(name="id", value="文章ID")
-    public CommonResult<ArticleResponse> info(@RequestParam(value = "id") Integer id) {
+    public CommonResult<Article> info(@RequestParam(value = "id") Integer id) {
         return CommonResult.success(articleService.getDetail(id));
-    }
-
-    /**
-     * 文章绑定商品
-     * @param id 文章ID
-     * @param productId 商品ID
-     */
-    @PreAuthorize("hasAuthority('admin:article:update')")
-    @ApiOperation(value = "文章绑定商品")
-    @RequestMapping(value = "/bind/product", method = RequestMethod.POST)
-    @ApiImplicitParam(name="id", value="文章ID")
-    public CommonResult<String> bindProduct(@RequestParam(value = "id") Integer id,
-                                             @RequestParam(value = "productId") Integer productId) {
-        if (articleService.bindProduct(id, productId)) {
-            return CommonResult.success();
-        } else {
-            return CommonResult.failed();
-        }
-    }
+   }
 }
 
 

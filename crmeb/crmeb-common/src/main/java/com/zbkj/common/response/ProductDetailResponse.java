@@ -49,4 +49,7 @@ public class ProductDetailResponse implements Serializable {
 
     @ApiModelProperty(value = "收藏标识")
     private Boolean userCollect;
+
+    @ApiModelProperty(value = "行业扩展信息-电线电缆结构化参数")
+    private ProductIndustryResponse industryInfo;
 }

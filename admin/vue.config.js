@@ -37,14 +37,6 @@ module.exports = {
       warnings: false,
       errors: true,
     },
-    proxy: {
-      // 将 /dev-api 开头的请求代理到后端
-      '/dev-api': {
-        target: 'http://127.0.0.1:20500',
-        changeOrigin: true,
-        pathRewrite: { '^/dev-api': '' },
-      },
-    },
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

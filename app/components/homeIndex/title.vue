@@ -135,13 +135,38 @@
 </script>
 
 <style scoped lang="scss">
+	$primary: #003da6;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$secondary: #5c5f60;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.title-box{
 		background-repeat: no-repeat;
 		object-fit: contain;
+		position: relative;
+		padding-left: 20rpx;
+
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 6rpx;
+			height: 32rpx;
+			background: $primary;
+			border-radius: 3rpx;
+		}
 	}
 	.title {
 		font-size: 32rpx;
-		color: #000;
+		color: $on-surface;
 		text-align: center;
 
 		&.left {
@@ -162,5 +187,9 @@
 	}
 	.ml6 {
 	  margin-left: 12rpx;
+	}
+	.iconfont {
+		color: $secondary;
+		transition: color 0.2s $ease;
 	}
 </style>

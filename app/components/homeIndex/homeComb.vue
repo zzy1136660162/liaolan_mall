@@ -85,7 +85,7 @@
 				</view>
 			</view>
 			<!-- #endif -->
-			<view v-if="tabShowConfig" class="navTabBox tabNav tui-skeletonpictrue acea-row" :style="'top:'+isTop">
+			<view v-if="false" class="navTabBox tabNav tui-skeletonpictrue acea-row" :style="'top:'+isTop">
 				<view class="longTab">
 					<scroll-view scroll-x="true" style="white-space: nowrap; display: flex;" scroll-with-animation
 						:scroll-left="tabLeft" show-scrollbar="true">
@@ -107,7 +107,7 @@
 					<text v-if="!isShow" class="iconfont icon-xiangxia" @click="isShow=true"></text>
 				</view>
 			</view>
-			<view v-if="isShow" class="navChangeBox" catchtouchmove="true" :style="'top:'+isTop">
+			<view v-if="false" class="navChangeBox" catchtouchmove="true" :style="'top:'+isTop">
 				<view class="navChange">
 					<block v-for="(item,index) in tabList" :key="index">
 						<view class="titleBox">
@@ -457,6 +457,23 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.uninput {
 		/* #ifdef MP */
 		width: 510rpx !important;
@@ -472,7 +489,7 @@
 	}
 
 	.bgwhite {
-		background-color: #fff !important;
+		background-color: $surface-lowest !important;
 	}
 
 	.mask {
@@ -485,26 +502,28 @@
 	}
 
 	.navChange {
-		background-color: #fff;
+		background-color: $surface-lowest;
 		position: absolute;
 		z-index: 999999;
 		width: 100%;
-		border-radius: 0px 0px 16rpx 16rpx;
+		border-radius: 0px 0px $r-lg $r-lg;
 		padding: 24rpx 20rpx;
 		display: grid;
 		grid-template-rows: auto;
 		grid-template-columns: repeat(5, 1fr);
 		grid-column-gap: 10rpx;
 		grid-row-gap: 20rpx;
+		border: 1rpx solid $outline-variant;
+		border-top: none;
 
 		.nobg {
-			background-color: #fff !important;
+			background-color: $surface-lowest !important;
 		}
 
 		.titleBox {
 			height: 58rpx;
-			background: #F2F2F2;
-			border-radius: 8rpx;
+			background: $surface-low;
+			border-radius: $r-sm;
 			text-align: center;
 		}
 
@@ -517,7 +536,7 @@
 			text-align: center;
 
 			opacity: 1;
-			color: #333333;
+			color: $on-surface;
 			font-size: 24rpx;
 		}
 
@@ -530,7 +549,7 @@
 		}
 
 		.changed {
-			border-radius: 8rpx;
+			border-radius: $r-sm;
 			@include cate-two-btn(theme);
 			@include coupons_border_color(theme);
 
@@ -547,12 +566,13 @@
 	.navTabBox {
 		width: 100%;
 		height: 66rpx;
-		color: rgba(255, 255, 255, 1);
+		color: $on-surface-variant;
 		position: relative;
 		padding: 0 24rpx 0 24rpx;
 		display: flex;
 		justify-content: space-between;
 		z-index: 9;
+		transition: color .3s $ease;
 
 		&.isFixed {
 			z-index: 10;
@@ -565,27 +585,26 @@
 		}
 
 		.click {
-			color: white;
+			color: $primary;
 		}
 
 		.longTab {
 			width: 94%;
 
 			.longItem {
-				//height: 72rpx;
 				display: inline-block;
-				// line-height: 52rpx;
 				text-align: center;
 				font-size: 28rpx;
-				color: #fff;
+				color: $on-surface-variant;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 				margin-right: 42rpx;
+				transition: color .3s $ease;
 
 				&.click {
 					font-weight: bold;
 					font-size: 30rpx;
-					color: #fff;
+					color: $primary;
 					font-weight: bold;
 				}
 
@@ -597,7 +616,7 @@
 			.underlineBox {
 				margin-top: 8rpx;
 				height: 3px;
-				transition: .5s;
+				transition: .5s $ease;
 
 				.underline {
 					width: 33rpx;
@@ -611,9 +630,10 @@
 			line-height: 46rpx;
 			z-index: 3;
 
-			// padding: 0 15rpx 0 25rpx;
 			.iconfont {
 				font-size: 24rpx;
+				color: $on-surface-variant;
+				transition: color .3s $ease;
 			}
 		}
 	}
@@ -636,7 +656,7 @@
 			width: 100%;
 			height: auto;
 			margin: 0 auto;
-			border-radius: 10rpx;
+			border-radius: $r-md;
 			overflow: hidden;
 			z-index: 8;
 			padding:  0rpx 20rpx 0rpx;
@@ -645,13 +665,13 @@
 				width: 100%;
 				height: 310rpx;
 				margin: 0 auto;
-				border-radius: 10rpx;
+				border-radius: $r-md;
 			}
 
 			.acea-row.row-between-wrapper {
 				height: 310rpx;
 				margin: 0 auto;
-				border-radius: 10rpx;
+				border-radius: $r-md;
 			}
 
 			.acea-row.row-between-wrapper-1 {
@@ -676,7 +696,7 @@
 
 			image {
 				transform: scale(0.96);
-				transition: all 0.6s ease;
+				transition: all 0.6s $ease;
 			}
 
 			/deep/ swiper-item.active {
@@ -698,9 +718,10 @@
 			.dot-item {
 				width: 10rpx;
 				height: 10rpx;
-				background-color: rgba(255, 255, 255, .4);
+				background-color: rgba($white, .4);
 				border-radius: 50%;
 				margin: 0 6rpx;
+				transition: background-color .3s $ease;
 			}
 
 			/*未选中时的小圆点样式 */
@@ -709,7 +730,8 @@
 				height: 6rpx;
 				border-radius: 6rpx;
 				margin-right: 6rpx;
-				background-color: rgba(255, 255, 255, .4);
+				background-color: rgba($white, .4);
+				transition: background-color .3s $ease;
 			}
 		}
 	}
@@ -720,38 +742,38 @@
 		left: 0;
 		top: 0;
 		width: 100%;
-		background-color: #fff !important;
-		color: #000 !important;
-		transition: background-color .5s ease;
+		background-color: $surface-lowest !important;
+		color: $on-surface !important;
+		transition: background-color .5s $ease, color .5s $ease;
 
 		.longItem,
 		.click,
 		.category text {
-			color: #000 !important;
+			color: $on-surface !important;
 		}
 
 		.btn .iconfont {
-			color: #333 !important;
+			color: $on-surface !important;
 		}
 
 		.iconnum {
-			background: #333 !important;
+			background: $on-surface !important;
 		}
 
 		.underline {
-			background: #000 !important;
+			background: $primary !important;
 		}
 
 		.click {
 			&::after {
-				background-color: #fff !important;
+				background-color: $primary !important;
 			}
 		}
 
 		.input,
 		.uninput {
-
-			background-color: #eee !important;
+			background-color: $surface-low !important;
+			border: 1rpx solid $outline-variant;
 		}
 	}
 
@@ -788,7 +810,7 @@
 				bottom: 0;
 				width: 100%;
 				height: 136px;
-				background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, #f5f5f5 100%);
+				background: linear-gradient(180deg, rgba($surface, 0) 0%, $surface 100%);
 			}
 		}
 	}
@@ -799,7 +821,7 @@
 		top: 0;
 		width: 100%;
 		z-index: 30;
-		transition: background-color .5s ease;
+		transition: background-color .5s $ease;
 	}
 
 	.page_count {
@@ -830,11 +852,14 @@
 					font-size: 26rpx;
 					padding-right: 4rpx;
 					box-sizing: border-box;
+					background-color: $surface-low;
+					border: 1rpx solid $outline-variant;
+					transition: background-color .3s $ease, border-color .3s $ease;
 
 					.iconfont {
 						margin-right: 4rpx;
 						font-size: 26rpx;
-						color: #666666;
+						color: $on-surface-variant;
 					}
 				}
 			}
@@ -882,9 +907,13 @@
 					padding-left: 20rpx;
 					font-size: 28rpx;
 					box-sizing: border-box;
+					background-color: $surface-low;
+					border: 1rpx solid $outline-variant;
+					transition: background-color .3s $ease, border-color .3s $ease;
 
 					.iconfont {
 						margin-right: 20rpx;
+						color: $on-surface-variant;
 					}
 				}
 			}
@@ -905,13 +934,13 @@
 
 		.swiperTxt .text .label {
 			font-size: 20rpx;
-			color: #ff4c48;
+			color: $primary;
 			width: 64rpx;
 			height: 30rpx;
 			border-radius: 40rpx;
 			text-align: center;
 			line-height: 28rpx;
-			border: 2rpx solid #ff4947;
+			border: 2rpx solid rgba($primary, 0.3);
 		}
 
 		.swiperTxt .text .newsTitle {
@@ -926,6 +955,7 @@
 	.navChecked {
 		font-size: 32rpx !important;
 		font-weight: 500;
+		color: $primary;
 	}
 
 	.checkColor {

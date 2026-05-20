@@ -10,47 +10,14 @@
 					:navIndex="navIndex"></homeComb>
 				<!-- 顶部搜索框 -->
 				<headerSearch :isScrolled="isScrolled" v-if="showHeaderSerch" :dataConfig="headerSerchCombData"></headerSearch>
-				<!-- 分类 -->
-				<cateNav v-if="showCateNav" :dataConfig="cateNavData" @changeTab="changeTab"></cateNav>
 				<view class="page_content skeleton">
 					<view v-if="navIndex === 0">
-						<view v-for="(item, index) in styleConfig" :key="index">
-							<!-- 新闻简报 -->
-							<news v-if="item.name == 'news'&&!item.isHide" :dataConfig="item"></news>
-							<!-- 导航组 -->
-							<menus v-if="item.name == 'menus'&&!item.isHide" :dataConfig="item"></menus>
-							<!-- 文章列表 -->
-							<articleList v-if="item.name == 'homeArticle'&&!item.isHide" :dataConfig="item"></articleList>
-							<!-- 秒杀 -->
-							<seckill-data v-if="item.name == 'seckill'&&!item.isHide" :dataConfig="item"></seckill-data>
-							<!-- 优惠券 -->
-							<coupon v-if="item.name == 'homeCoupons'&&!item.isHide" :dataConfig="item"></coupon>
-							<!-- 图片魔方 -->
-							<pictureCube v-if="item.name == 'pictureCube'&&!item.isHide" :dataConfig="item"></pictureCube>
-							<!-- 热区 -->
-							<hotSpot v-if="item.name == 'homeHotspot'&&!item.isHide" :dataConfig="item"></hotSpot>
-							<!-- 轮播图 -->
-							<swiperBg v-if="item.name == 'swiperBg'&&!item.isHide" :dataConfig="item"></swiperBg>
-							<!-- 视频 -->
-							<shortVideo v-if="item.name == 'video'&&!item.isHide" :dataConfig="item"></shortVideo>
-							<!-- 拼团 -->
-							<group v-if="item.name == 'group'&&!item.isHide" :dataConfig="item"></group>
-							<!-- 砍价 -->
-							<bargain v-if="item.name == 'bargain'&&!item.isHide" :dataConfig="item"></bargain>
-							<!-- 辅助线 -->
-							<guide v-if="item.name == 'guide'&&!item.isHide" :dataConfig="item"></guide>
-							<!-- 富文本-->
-							<rich-text-editor v-if="item.name == 'richTextEditor'&&!item.isHide"
-								:dataConfig="item"></rich-text-editor>
-							<!-- 辅助空白-->
-							<blank-page v-if="item.name == 'blankPage'&&!item.isHide" :dataConfig="item"></blank-page>
-							<!-- 标题 -->
-							<home-title v-if="item.name == 'titles'&&!item.isHide" :dataConfig="item"></home-title>
-							<!-- 商品列表 -->
-							<goodList v-if="item.name == 'goodList'&&!item.isHide" :dataConfig="item" @detail="goDetail"></goodList>
-							<!-- 选项卡商品列表-->
-							<homeTab v-if="item.name == 'homeTab'&&!item.isHide" :dataConfig="item" @detail="goDetail"></homeTab>
-						</view>
+						<!-- 电缆分类快捷导航 -->
+						<cableCategoryNav />
+						<!-- 电缆产品总览 -->
+						<cableProductOverview @detail="goDetail" />
+						<!-- 联系咨询 -->
+						<cableContact />
 					</view>
 
 					<!-- 分类页-->
@@ -110,7 +77,8 @@
 				<view class="btn" @click="reconnect">重新连接</view>
 			</view>
 		</view>
-		<tab-bar></tab-bar>
+		<!-- 底部 -->
+		<pageFooter></pageFooter>
 	</view>
 </template>
 
@@ -128,28 +96,13 @@
 	import Cache from '../../utils/cache';
 	import homeComb from '@/components/homeIndex/homeComb';
 	import recommend from "@/components/base/recommend.vue";
-	import seckillData from "@/components/homeIndex/seckill.vue";
 	import aTip from './components/addTips.vue';
-	import coupon from "@/components/homeIndex/coupon.vue";
-	import menus from "@/components/homeIndex/menus.vue";
-	import pictureCube from '@/components/homeIndex/pictureCube'
-	import news from '@/components/homeIndex/news'
-	import goodList from '@/components/homeIndex/goodList'
-	import guide from '@/components/homeIndex/guide';
-	import articleList from '@/components/homeIndex/articleList'
-	import swiperBg from '@/components/homeIndex/swiperBg'
 	import headerSearch from '@/components/homeIndex/headerSearch';
-	import cateNav from '@/components/homeIndex/cateNav';
-	import richTextEditor from '@/components/homeIndex/richTextEditor';
-	import shortVideo from '@/components/homeIndex/video';
-	import homeTab from '@/components/homeIndex/homeTab';
-	import blankPage from '@/components/homeIndex/blankPage';
-	import homeTitle from '@/components/homeIndex/title';
-	import hotSpot from '@/components/homeIndex/hotSpot.vue';
-	import group from "@/components/homeIndex/group.vue";
-	import bargain from "@/components/homeIndex/bargain.vue";
+	import pageFooter from "@/components/pageFooter/index.vue";
 	import copyRight from './components/copyRight.vue';
-	import tabBar from '@/components/tab-bar/index.vue';
+	import cableCategoryNav from '@/components/homeIndex/cableCategoryNav.vue';
+	import cableProductOverview from '@/components/homeIndex/cableProductOverview.vue';
+	import cableContact from '@/components/homeIndex/cableContact.vue';
 	import {
 		getIndexData,
 		getTheme,
@@ -186,27 +139,12 @@
 			aTip,
 			homeComb,
 			recommend,
-			seckillData,
-			coupon,
-			menus,
-			pictureCube,
-			news,
-			goodList,
-			articleList,
-			swiperBg,
+			pageFooter,
 			headerSearch,
-			cateNav,
-			guide,
-			richTextEditor,
-			shortVideo,
-			homeTab,
-			blankPage,
-			homeTitle,
-			hotSpot,
-			group,
-			bargain,
 			copyRight,
-			tabBar
+			cableCategoryNav,
+			cableProductOverview,
+			cableContact
 		},
 		data() {
 			return {
@@ -314,6 +252,8 @@
 			})
 		},
 		onShow() {
+			// 分类样式3、4跳回首页tabbar处理
+			!this.bottomNavigationIsCustom&&uni.showTabBar()
 			let self = this;
 			// #ifdef APP-PLUS
 			setTimeout(() => {
@@ -692,13 +632,39 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-		/* #ifdef H5 */
-		background-color: #fff;
-		/* #endif */
-
+		background-color: #f9f9ff;
 	}
 </style>
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$error: #ba1a1a;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+	@keyframes slideUp {
+		from {
+			opacity: 0;
+			transform: translateY(16rpx);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	.error-network {
 		position: fixed;
 		left: 0;
@@ -709,8 +675,9 @@
 		width: 100%;
 		height: 100%;
 		padding-top: 40rpx;
-		background: #fff;
+		background: $surface-lowest;
 		padding-top: 30%;
+		animation: slideUp 0.4s $ease both;
 
 		.img {
 			width: 414rpx;
@@ -721,15 +688,18 @@
 			position: relative;
 			top: -40rpx;
 			font-size: 32rpx;
-			color: #666;
+			color: $on-surface;
+			font-weight: 500;
 		}
 
 		.con {
 			font-size: 24rpx;
-			color: #999;
+			color: $on-surface-variant;
 
 			.label {
 				margin-bottom: 20rpx;
+				color: $on-surface;
+				font-weight: 500;
 			}
 
 			.item {
@@ -744,10 +714,16 @@
 			width: 508rpx;
 			height: 86rpx;
 			margin-top: 100rpx;
-			border: 1px solid #d74432;
-			color: #e93323;
+			border: 1px solid $primary;
+			color: $primary;
 			font-size: 30rpx;
-			border-radius: 120rpx;
+			border-radius: $r-md;
+			transition: background 0.2s $ease, color 0.2s $ease;
+
+			&:active {
+				background: $primary;
+				color: $white;
+			}
 		}
 	}
 
@@ -769,10 +745,24 @@
 
 	.noCommodity {
 		margin-top: 30%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.pictrue {
+			width: 300rpx;
+			height: 300rpx;
+		}
+
+		.text-ccc {
+			color: $on-surface-variant;
+			font-size: 28rpx;
+			margin-top: 20rpx;
+		}
 	}
 
 	.icon-gengduo1 {
-		color: #F8F8F8;
+		color: $surface-variant;
 	}
 
 	.pageIndex {
@@ -780,18 +770,19 @@
 	}
 
 	.productList {
-		background-color: #F5F5F5;
+		background-color: $surface;
 		margin-top: 20rpx;
 
-		// min-height: 70vh;
 		.sort {
 			width: 710rpx;
 			max-height: 380rpx;
-			background: rgba(255, 255, 255, 1);
-			border-radius: 16rpx;
+			background: $surface-lowest;
+			border: 1px solid $outline-variant;
+			border-radius: $r-md;
 			padding: 0rpx 0rpx 20rpx 0rpx !important;
 			flex-wrap: wrap;
 			margin: 25rpx auto 0 auto;
+			animation: slideUp 0.35s $ease both;
 
 			&.no_pad {
 				padding: 0;
@@ -805,7 +796,7 @@
 				.pictrues {
 					width: 90rpx;
 					height: 90rpx;
-					background: #F5F5F5;
+					background: $surface-low;
 					border-radius: 50%;
 					margin: 0 auto;
 				}
@@ -813,7 +804,7 @@
 				.pictrue {
 					width: 90rpx;
 					height: 90rpx;
-					background: #F5F5F5;
+					background: $surface-low;
 					border-radius: 50%;
 					margin: 0 auto;
 				}
@@ -834,10 +825,9 @@
 				}
 
 				.text {
-					color: #272727;
+					color: $on-surface-variant;
 					font-size: 24rpx;
 					margin-top: 10rpx;
-					// overflow: hidden;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 				}
@@ -850,15 +840,18 @@
 	}
 
 	.productList .list.on {
-		background-color: #fff;
-		border-top: 1px solid #f6f6f6;
+		background-color: $surface-lowest;
+		border-top: 1px solid $outline-variant;
 	}
 
 	.productList .list .item {
 		width: 345rpx;
 		margin-top: 20rpx;
-		background-color: #fff;
-		border-radius: 10rpx;
+		background-color: $surface-lowest;
+		border: 1px solid $outline-variant;
+		border-radius: $r-md;
+		box-shadow: 0 1rpx 4rpx rgba(0, 0, 0, 0.04);
+		animation: slideUp 0.35s $ease both;
 
 		.name {
 			display: flex;
@@ -876,16 +869,20 @@
 		flex-direction: column;
 		min-height: 100%;
 
+		&.bgf {
+			background-color: $surface;
+		}
+
 		.page_content {
 			overflow: hidden;
+			padding: 0 4rpx;
 
-			// background-color: #f5f5f5;
 			.swiper {
 				position: relative;
 				width: 100%;
 				height: 246rpx;
 				margin: 0 auto;
-				border-radius: 10rpx;
+				border-radius: $r-md;
 				overflow: hidden;
 				margin-bottom: 25rpx;
 				/* #ifdef MP */
@@ -898,7 +895,7 @@
 				image {
 					width: 100%;
 					height: 246rpx;
-					border-radius: 10rpx;
+					border-radius: $r-md;
 				}
 			}
 		}
@@ -909,13 +906,12 @@
 		position: fixed;
 		left: 0;
 		top: 0;
-		background: linear-gradient(90deg, red 50%, #ff5400 100%);
-
+		background: linear-gradient(90deg, $primary 50%, $primary-container 100%);
 	}
 
 	.menu-txt {
 		font-size: 24rpx;
-		color: #454545;
+		color: $on-surface-variant;
 	}
 
 	.footerBottom-h10 {

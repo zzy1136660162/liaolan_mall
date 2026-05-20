@@ -92,6 +92,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ActivityStyleService activityStyleService;
 
+    @Autowired
+    private StoreProductIndustryService storeProductIndustryService;
+
     /**
      * 获取分类
      * @return List<CategoryTreeVo>
@@ -200,6 +203,10 @@ public class ProductServiceImpl implements ProductService {
             storeProduct.setVipPrice(vipPrice);
         }
         productDetailResponse.setProductInfo(storeProduct);
+
+        // 查询行业扩展信息
+        ProductIndustryResponse industryInfo = storeProductIndustryService.getIndustryInfo(id);
+        productDetailResponse.setIndustryInfo(industryInfo);
 
         // 获取商品规格
         List<StoreProductAttr> attrList = attrService.getListByProductIdAndType(storeProduct.getId(), Constants.PRODUCT_TYPE_NORMAL);
@@ -524,7 +531,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public CommonPage<IndexProductResponse> getCategoryProductList(ProductListRequest request, PageParamRequest pageParamRequest) {
         ProductRequest searchRequest = new ProductRequest();
-        BeanUtils.copyProperties(searchRequest, request);
+        BeanUtils.copyProperties(request, searchRequest);
         List<StoreProduct> storeProductList = storeProductService.findH5List(searchRequest, pageParamRequest);
         if (CollUtil.isEmpty(storeProductList)) {
             return CommonPage.restPage(new ArrayList<>());

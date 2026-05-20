@@ -138,6 +138,9 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
     @Autowired
     private SmsTemplateService smsTemplateService;
 
+    @Autowired
+    private StoreOrderDeliveryExtendService storeOrderDeliveryExtendService;
+
 
 //    @Autowired
 //    private WechatOrderShippingService wechatOrderShippingService;
@@ -647,6 +650,9 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
 
         storeOrderInfoResponse.setProTotalPrice(storeOrder.getTotalPrice().subtract(storeOrder.getTotalPostage()));
 
+        OrderDeliveryExtendResponse deliveryExtend = storeOrderDeliveryExtendService.getDeliveryExtend(storeOrder.getId());
+        storeOrderInfoResponse.setDeliveryExtend(deliveryExtend);
+
         // 手机号脱敏处理
         storeOrderInfoResponse.setUserPhone(CrmebUtil.maskMobile(storeOrderInfoResponse.getUserPhone()));
         storeOrderInfoResponse.setPhone(CrmebUtil.maskMobile(storeOrderInfoResponse.getPhone()));
@@ -714,6 +720,11 @@ public class StoreOrderServiceImpl extends ServiceImpl<StoreOrderDao, StoreOrder
             default:
                 throw new CrmebException("类型错误");
         }
+
+        if (request.getDeliveryExtend() != null) {
+            storeOrderDeliveryExtendService.saveDeliveryExtend(storeOrder.getId(), request.getDeliveryExtend());
+        }
+
         return mianDanResult;
     }
 

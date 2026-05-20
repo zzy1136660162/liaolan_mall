@@ -93,11 +93,18 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
         /** 本地文件上传路径 */
+        String imagePath = crmebConfig.getImagePath();
+        if (imagePath == null || imagePath.isEmpty()) {
+            imagePath = "./";
+        }
+        if (!imagePath.endsWith("/") && !imagePath.endsWith(File.separator)) {
+            imagePath = imagePath + "/";
+        }
         registry.addResourceHandler(UploadConstants.UPLOAD_FILE_KEYWORD + "/**")
-                .addResourceLocations("file:" + crmebConfig.getImagePath() + "/" + UploadConstants.UPLOAD_FILE_KEYWORD + "/");
+                .addResourceLocations("file:" + imagePath + UploadConstants.UPLOAD_FILE_KEYWORD + "/");
 
         registry.addResourceHandler(UploadConstants.UPLOAD_AFTER_FILE_KEYWORD + "/**")
-                .addResourceLocations("file:" +crmebConfig.getImagePath() + "/" + UploadConstants.UPLOAD_AFTER_FILE_KEYWORD + "/" );
+                .addResourceLocations("file:" + imagePath + UploadConstants.UPLOAD_AFTER_FILE_KEYWORD + "/");
 
     }
 

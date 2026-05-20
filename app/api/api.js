@@ -107,49 +107,6 @@ export function getArticleDetails(id){
   return request.get('article/info',id,{noAuth:true});
 }
 
-export function getDownloadCategoryList() {
-  return request.get('download/material/category/list', {}, { noAuth: true });
-}
-
-export function getDownloadMaterialList(data) {
-  return request.get('download/material/list', data, { noAuth: true });
-}
-
-export function getDownloadMaterialInfo(id) {
-  return request.get(`download/material/info/${id}`, {}, { noAuth: true });
-}
-
-export function saveDownloadMaterialRecord(data) {
-  return request.post('download/material/record', data, { noAuth: true });
-}
-
-export function getDownloadMaterialFile(id, data) {
-  return request.get(`download/material/file/${id}`, data, { noAuth: true });
-}
-
-/**
- * 案例列表（支持行业/区域/类型筛选）
- * @param object data 筛选参数
- */
-export function getCaseList(data){
-  return request.get('case/list', data, {noAuth:true});
-}
-
-/**
- * 案例详情（包含扩展信息和关联商品）
- * @param int id 文章ID
- */
-export function getCaseDetails(id){
-  return request.get('case/info', {id: id}, {noAuth:true});
-}
-
-/**
- * 案例行业分类列表（去重）
- */
-export function getCaseIndustryCategories(){
-  return request.get('case/industry/categories', {}, {noAuth:true});
-}
-
 /**
  * 手机号+验证码登录接口
  * @param object data

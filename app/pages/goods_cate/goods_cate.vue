@@ -1,20 +1,16 @@
 <template>
 	<view class="page" :data-theme="theme" :style="{height:winHeight + 'px'}">
-		<cate v-show="currentPage == 'one'"></cate>
-		<tab-bar></tab-bar>
+		<stitchCate v-show="currentPage == 'one'"></stitchCate>
+		<pageFooter v-if="footerShow"></pageFooter>
 	</view>
 </template>
 <script>
-	import cate from './components/default_cate';
+	import pageFooter from '@/components/pageFooter/index.vue'
+	import stitchCate from './components/stitch_cate';
 	import {getShare} from '@/api/public.js';
 	import {mapGetters} from 'vuex';
-	import tabBar from '@/components/tab-bar/index.vue';
 	const app = getApp();
 	export default {
-		components: {
-			cate,
-			tabBar
-		},
 		data() {
 			return {
 				footerShow:true,
@@ -22,7 +18,7 @@
 				theme:app.globalData.theme,
 				showSlide:true,
 				winHeight:'',
-				configApi: {}, //分享类容配置
+				configApi: {},
 			}
 		},
 		computed: mapGetters(['isLogin', 'uid']),
@@ -39,9 +35,13 @@
 					break;
 				case '3':
 					that.$set(that,'currentPage','three');
+					uni.hideTabBar()
+					this.footerShow=false
 					break;
 				case '4':
 					that.$set(that,'currentPage','four');
+					uni.hideTabBar()
+					this.footerShow=false
 					break;
 			}
 			uni.getSystemInfo({
@@ -60,6 +60,8 @@
 				case 'two':
 					break;
 				case 'three':
+					uni.hideTabBar()
+					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classThree.getCartNum();
@@ -68,6 +70,8 @@
 					},500)
 					break;
 				case 'four':
+					uni.hideTabBar()
+					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classFour.getCartNum();
@@ -78,7 +82,7 @@
 			}
 		},
 		components:{
-			cate
+			stitchCate,pageFooter
 		},
 		methods:{
 			shareApi: function() {
@@ -89,7 +93,6 @@
 					// #endif
 				})
 			},
-			// 微信分享；
 			setOpenShare: function(data) {
 				let that = this;
 				if (that.$wechat.isWeixin()) {

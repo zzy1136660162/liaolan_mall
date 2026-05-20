@@ -4,38 +4,39 @@
       ref="pageHeader"
       :title="$route.params.id ? '编辑文章' : '添加文章'"
       backUrl="/content/articleManager"
-    />
+    ></pages-header>
     <el-card class="box-card mt14">
       <div class="components-container">
-        <el-form ref="pram" label-width="110px" :model="pram">
+        <el-form ref="pram" label-width="90px" :model="pram">
           <el-form-item
-            label="标题"
+            label="标题："
             prop="title"
             :rules="[{ required: true, message: '请填写标题', trigger: ['blur', 'change'] }]"
           >
             <el-input v-model="pram.title" class="selWidth" placeholder="标题" maxlength="100" />
           </el-form-item>
           <el-form-item
-            label="作者"
+            label="作者："
             prop="author"
-            :rules="[{ required: true, message: '请填写作者', trigger: ['blur', 'change'] }]"
+            :rules="[{ required: true, message: '请填作者', trigger: ['blur', 'change'] }]"
           >
-            <el-input v-model="pram.author" class="selWidth" placeholder="作者" maxlength="20" />
+            <el-input class="selWidth" v-model="pram.author" placeholder="作者" maxlength="20" />
           </el-form-item>
           <el-form-item
-            label="文章分类"
+            label="文章分类："
             :rules="[{ required: true, message: '请选择分类', trigger: ['blur', 'change'] }]"
           >
-            <el-select v-model="pram.cid" class="selWidth" placeholder="请选择">
-              <el-option v-for="item in categoryTreeData" :key="item.id" :label="item.name" :value="item.id" />
+            <el-select class="selWidth" v-model="pram.cid" placeholder="请选择">
+              <el-option v-for="item in categoryTreeData" :key="item.id" :label="item.name" :value="item.id">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item
-            label="文章封面"
+            label="图文封面："
             prop="imageInput"
-            :rules="[{ required: true, message: '请上传文章封面', trigger: 'change' }]"
+            :rules="[{ required: true, message: '请上传图文封面', trigger: 'change' }]"
           >
-            <div class="upLoadPicBox" @click="modalPicTap('cover')">
+            <div class="upLoadPicBox" @click="modalPicTap('1')">
               <div v-if="pram.imageInput" class="pictrue"><img :src="pram.imageInput" /></div>
               <div v-else class="upLoad">
                 <i class="el-icon-camera cameraIconfont" />
@@ -43,7 +44,7 @@
             </div>
           </el-form-item>
           <el-form-item
-            label="文章简介"
+            label="文章简介："
             prop="synopsis"
             :rules="[{ required: true, message: '请填写文章简介', trigger: ['blur', 'change'] }]"
           >
@@ -58,69 +59,26 @@
             />
           </el-form-item>
           <el-form-item
-            label="文章内容"
+            label="文章内容："
             prop="content"
             :rules="[{ required: true, message: '请填写文章内容', trigger: ['blur', 'change'] }]"
           >
-            <Tinymce v-model="pram.content" />
+            <Tinymce v-model="pram.content"></Tinymce>
           </el-form-item>
-
-          <el-divider content-position="left">SEO / 分享</el-divider>
-
-          <el-form-item label="SEO 标题">
-            <el-input
-              v-model="pram.seoInfo.seoTitle"
-              class="selWidth"
-              maxlength="255"
-              placeholder="为空时默认使用文章标题"
-            />
-          </el-form-item>
-          <el-form-item label="SEO 关键词">
-            <el-input
-              v-model="pram.seoInfo.seoKeywords"
-              class="selWidth"
-              maxlength="255"
-              placeholder="多个关键词用逗号分隔"
-            />
-          </el-form-item>
-          <el-form-item label="SEO 描述">
-            <el-input
-              v-model="pram.seoInfo.seoDescription"
-              class="selWidth"
-              maxlength="500"
-              type="textarea"
-              :rows="3"
-              resize="none"
-              placeholder="为空时默认使用文章简介"
-            />
-          </el-form-item>
-          <el-form-item label="分享标题">
-            <el-input
-              v-model="pram.seoInfo.shareTitle"
-              class="selWidth"
-              maxlength="255"
-              placeholder="为空时默认使用文章标题"
-            />
-          </el-form-item>
-          <el-form-item label="分享封面">
-            <div class="upLoadPicBox" @click="modalPicTap('share')">
-              <div v-if="pram.seoInfo.shareImage" class="pictrue"><img :src="pram.seoInfo.shareImage" /></div>
-              <div v-else class="upLoad">
-                <i class="el-icon-camera cameraIconfont" />
-              </div>
-            </div>
-          </el-form-item>
-
-          <el-form-item label="是否 Banner">
+          <el-form-item label="是否Banner：">
             <el-switch v-model="pram.isBanner" />
           </el-form-item>
-          <el-form-item label="是否热门">
+          <el-form-item label="是否热门：">
             <el-switch v-model="pram.isHot" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" :loading="loading" @click="handerSubmit('pram')" v-hasPermi="['admin:article:update']">
-              保存
-            </el-button>
+            <el-button
+              type="primary"
+              :loading="loading"
+              @click="handerSubmit('pram')"
+              v-hasPermi="['admin:article:update']"
+              >保存</el-button
+            >
           </el-form-item>
         </el-form>
       </div>
@@ -132,39 +90,46 @@
 import Tinymce from '@/components/Tinymce/index';
 import * as categoryApi from '@/api/categoryApi.js';
 import * as articleApi from '@/api/article.js';
+import * as selfUtil from '@/utils/ZBKJIutil.js';
+import { fileImageApi } from '@/api/systemSetting';
+import { getToken } from '@/utils/auth';
 import { Debounce } from '@/utils/validate';
-
-const defaultSeoInfo = () => ({
-  seoTitle: '',
-  seoKeywords: '',
-  seoDescription: '',
-  shareTitle: '',
-  shareImage: '',
-});
-
 export default {
+  // name: "edit",
   components: { Tinymce },
   data() {
     return {
       loading: false,
+      constants: this.$constants,
       categoryTreeData: [],
+      categoryProps: {
+        value: 'id',
+        label: 'name',
+        children: 'child',
+        expandTrigger: 'hover',
+        checkStrictly: true,
+        emitPath: false,
+      },
       pram: {
-        author: '',
+        author: null,
         cid: null,
-        content: '',
+        content: '', //<span>My Document\'s Title</span>
         imageInput: '',
         isBanner: false,
-        isHot: false,
-        shareSynopsis: '',
-        shareTitle: '',
+        isHot: null,
+        shareSynopsis: null,
+        shareTitle: null,
         sort: 0,
-        synopsis: '',
-        title: '',
-        url: '',
+        synopsis: null,
+        title: null,
+        url: null,
         id: null,
-        seoInfo: defaultSeoInfo(),
+        // mediaId: null
       },
       editData: {},
+      myHeaders: { 'X-Token': getToken() },
+      editorContentLaebl: '',
+      // basicForm:{editorContent:""}
     };
   },
   created() {
@@ -184,17 +149,13 @@ export default {
         this.hadlerInitEditData();
       });
     },
-    modalPicTap(target) {
+    modalPicTap(tit) {
+      const _this = this;
       this.$modalUpload(
-        (img) => {
-          const imagePath = img[0].sattDir;
-          if (target === 'share') {
-            this.pram.seoInfo.shareImage = imagePath;
-            return;
-          }
-          this.pram.imageInput = imagePath;
+        function (img) {
+          _this.pram.imageInput = img[0].sattDir;
         },
-        '1',
+        tit,
         'content',
       );
     },
@@ -214,53 +175,27 @@ export default {
         title,
         url,
         id,
-        seoInfo,
       } = this.editData;
-      const mergedSeoInfo = {
-        ...defaultSeoInfo(),
-        ...(seoInfo || {}),
-      };
       this.pram.author = author;
-      this.pram.cid = cid ? Number.parseInt(cid, 10) : null;
+      this.pram.cid = Number.parseInt(cid);
       this.pram.content = content;
       this.pram.imageInput = imageInput;
       this.pram.isBanner = isBanner;
       this.pram.isHot = isHot;
-      this.pram.shareSynopsis = shareSynopsis || synopsis || '';
-      this.pram.shareTitle = shareTitle || title || '';
+      this.pram.shareSynopsis = shareSynopsis;
+      this.pram.shareTitle = shareTitle;
       this.pram.sort = sort;
       this.pram.synopsis = synopsis;
       this.pram.title = title;
       this.pram.url = url;
       this.pram.id = id;
-      this.pram.seoInfo = {
-        ...mergedSeoInfo,
-        seoTitle: mergedSeoInfo.seoTitle || '',
-        seoKeywords: mergedSeoInfo.seoKeywords || '',
-        seoDescription: mergedSeoInfo.seoDescription || shareSynopsis || synopsis || '',
-        shareTitle: mergedSeoInfo.shareTitle || shareTitle || title || '',
-        shareImage: mergedSeoInfo.shareImage || imageInput || '',
-      };
+      // this.pram.mediaId = mediaId
     },
     handlerGetCategoryTreeData() {
       categoryApi.listCategroy({ type: 3, status: '' }).then((data) => {
         this.categoryTreeData = data;
         localStorage.setItem('adminArticleClassify', JSON.stringify(data));
       });
-    },
-    buildSubmitPayload() {
-      const cid = Array.isArray(this.pram.cid) ? this.pram.cid[0] : this.pram.cid;
-      const seoInfo = {
-        ...defaultSeoInfo(),
-        ...(this.pram.seoInfo || {}),
-      };
-      return {
-        ...this.pram,
-        cid,
-        shareTitle: seoInfo.shareTitle || this.pram.title,
-        shareSynopsis: seoInfo.seoDescription || this.pram.synopsis,
-        seoInfo,
-      };
     },
     handerSubmit: Debounce(function (form) {
       this.$refs[form].validate((valid) => {
@@ -274,9 +209,12 @@ export default {
     }),
     handlerUpdate() {
       this.loading = true;
+      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0] : this.pram.cid;
+      this.pram.shareTitle = this.pram.title;
+      this.pram.shareSynopsis = this.pram.synopsis;
       articleApi
-        .UpdateArticle(this.buildSubmitPayload())
-        .then(() => {
+        .UpdateArticle(this.pram)
+        .then((data) => {
           this.$message.success('编辑文章成功');
           this.loading = false;
           this.$router.push({ path: '/content/articleManager' });
@@ -287,9 +225,12 @@ export default {
     },
     handlerSave() {
       this.loading = true;
+      this.pram.cid = Array.isArray(this.pram.cid) ? this.pram.cid[0] : this.pram.cid;
+      this.pram.shareTitle = this.pram.title;
+      this.pram.shareSynopsis = this.pram.synopsis;
       articleApi
-        .AddArticle(this.buildSubmitPayload())
-        .then(() => {
+        .AddArticle(this.pram)
+        .then((data) => {
           this.$message.success('新增文章成功');
           this.loading = false;
           this.$router.push({ path: '/content/articleManager' });

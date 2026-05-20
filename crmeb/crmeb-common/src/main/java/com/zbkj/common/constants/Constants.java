@@ -143,6 +143,12 @@ public class Constants {
     //商品库存redis key
     public static final String PRODUCT_STOCK_LIST = "product_stock_list";
 
+    //商品分类缓存key（优化移动端分类筛选性能）
+    public static final String CATEGORY_CHILDREN_CACHE = "category_children_cache_";  //子分类缓存前缀
+    public static final Long CATEGORY_CACHE_EXPIRE = 300L;  //分类缓存过期时间（5分钟）
+    public static final String PRODUCT_LIST_WITH_INDUSTRY_CACHE = "product_list_industry_";  //行业筛选商品列表缓存前缀
+    public static final Long PRODUCT_LIST_CACHE_EXPIRE = 60L;  //商品列表缓存过期时间（1分钟）
+
 
     //sku库存变动队列key
 //    public static final String SKU_STOCK_UPDATE = "product_stock_update";

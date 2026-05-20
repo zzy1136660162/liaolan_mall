@@ -260,6 +260,23 @@
                     </template>
                   </el-table-column>
                 </el-table>
+                <div v-if="orderDatalist.deliveryExtend && (orderDatalist.deliveryExtend.batchNo || orderDatalist.deliveryExtend.factorySerialNo || orderDatalist.deliveryExtend.deliveryRemark)" class="detailSection" style="border-top: 1px solid #eee; margin-top: 15px;">
+                  <div class="title">履约扩展信息</div>
+                  <ul class="list">
+                    <li class="item" v-if="orderDatalist.deliveryExtend.batchNo">
+                      <div class="lang">线缆批次号：</div>
+                      <div class="value">{{ orderDatalist.deliveryExtend.batchNo }}</div>
+                    </li>
+                    <li class="item" v-if="orderDatalist.deliveryExtend.factorySerialNo">
+                      <div class="lang">出厂编号：</div>
+                      <div class="value">{{ orderDatalist.deliveryExtend.factorySerialNo }}</div>
+                    </li>
+                    <li class="item" v-if="orderDatalist.deliveryExtend.deliveryRemark">
+                      <div class="lang">发货备注：</div>
+                      <div class="value">{{ orderDatalist.deliveryExtend.deliveryRemark }}</div>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </template>
           </el-tab-pane>

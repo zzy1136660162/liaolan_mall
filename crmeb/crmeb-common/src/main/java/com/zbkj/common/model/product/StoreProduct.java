@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.zbkj.common.response.ProductIndustryResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -171,4 +172,8 @@ public class StoreProduct implements Serializable {
     @ApiModelProperty(value = "活动边框 列表中是边框 详情中是背景图")
     @TableField(exist = false)
     private String activityStyle;
+
+    @ApiModelProperty(value = "行业扩展信息-电线电缆结构化参数")
+    @TableField(exist = false)
+    private ProductIndustryResponse industryInfo;
 }
