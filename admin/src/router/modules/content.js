@@ -1,4 +1,14 @@
-import Layout from '@/layout'
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2025 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
+
+import Layout from '@/layout';
 
 const contentRouter = {
   path: '/content',
@@ -7,7 +17,7 @@ const contentRouter = {
   name: 'content',
   meta: {
     title: '内容',
-    icon: 'clipboard'
+    icon: 'clipboard',
   },
   children: [
     {
@@ -16,8 +26,8 @@ const contentRouter = {
       component: () => import('@/views/content/article/list'),
       meta: {
         title: '文章管理',
-        icon: 'clipboard'
-      }
+        icon: 'clipboard',
+      },
     },
     {
       path: 'articleCreat/:id?',
@@ -93,8 +103,16 @@ const contentRouter = {
         title: '资料分类',
         icon: 'clipboard'
       }
-    }
+    }, {
+      path: 'aboutManager',
+      name: 'aboutManager',
+      component: () => import('@/views/content/about/index'),
+      meta: {
+        title: '关于辽缆',
+        icon: 'clipboard',
+      },
+    },
   ]
 }
 
-export default contentRouter
+export default contentRouter;

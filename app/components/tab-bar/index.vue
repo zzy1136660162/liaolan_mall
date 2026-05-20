@@ -28,7 +28,7 @@ export default {
 			tabList: [
 				{
 					text: '首页',
-					pagePath: '/pages/liaolan_home/index',
+					pagePath: '/pages/liaolan_index/index',
 					iconPath: '/static/tabBar/index.png',
 					selectedIconPath: '/static/tabBar/indexd.png'
 				},

@@ -6,7 +6,7 @@
 -->
 <template>
   <div>
-    <template v-for="val in chil">
+    <template v-for="val in filteredChil">
       <el-submenu :index="val.path" :key="val.path" v-if="val.children && val.children.length > 0">
         <template slot="title">
           <i class="ivu-icon" :class="'el-icon-' + val.icon"></i>
@@ -36,6 +36,20 @@ export default {
         return [];
       },
     },
+  },
+  computed: {
+    filteredChil() {
+      const seen = new Set();
+      return this.chil.filter((item) => {
+        // 过滤掉没有可导航路径的权限按钮
+        if (!item.path || item.path.trim() === '') return false;
+        const key = item.path + '|' + item.title;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    },
+    // 关于辽缆不需要子菜单，直接点击跳转；子项在递归中已被上层过滤，这里保持兼容即可
   },
 };
 </script>
