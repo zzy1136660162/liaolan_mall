@@ -424,6 +424,28 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+	@keyframes cardIn {
+		from { opacity: 0; transform: translateY(16rpx); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
 	.longTab {
 		.longItem {
 			height: 70rpx;
@@ -431,13 +453,14 @@
 			line-height: 70rpx;
 			text-align: center;
 			font-size: 28rpx;
-			color: #333333;
+			color: $on-surface-variant;
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			margin-right: 46rpx;
+			transition: color 0.2s $ease;
 			&.click {
-				font-weight: bold;
+				font-weight: 600;
 				font-size: 30rpx;
 				position: relative;
 
@@ -445,11 +468,12 @@
 					content: '';
 					width: 40rpx;
 					height: 4rpx;
-					background: var(--color);
+					background: $primary;
 					position: absolute;
 					bottom: 0;
 					left: 50%;
 					transform: translateX(-50%);
+					transition: all 0.3s $ease;
 				}
 			}
 		}
@@ -465,14 +489,16 @@
 			height: 70rpx;
 			line-height: 70rpx;
 			padding-left: 20rpx;
-			background: #fff;
+			background: $surface-lowest;
+			border-bottom: 1rpx solid $outline-variant;
 
 			.item {
 				display: inline-block;
 				font-size: 28rpx;
-				color: #333;
+				color: $on-surface-variant;
 				font-weight: 400;
 				padding-right: 48rpx;
+				transition: color 0.2s $ease;
 
 				&.on {
 					border-radius: 0;
@@ -487,6 +513,17 @@
 		justify-content: space-between;
 	}
 
+	.tagSolid {
+		display: inline-block;
+		background: $surface-low;
+		border: 1rpx solid rgba($primary, 0.12);
+		color: $primary;
+		border-radius: 4rpx;
+		font-size: 18rpx;
+		line-height: 28rpx;
+		padding: 0 8rpx;
+	}
+
 	.listBig {
 		display: grid;
 		grid-template-rows: auto;
@@ -495,6 +532,17 @@
 
 		.itemBig {
 			width: 100%;
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.img-box {
 				width: 100%;
@@ -504,24 +552,26 @@
 
 			.name {
 				font-size: 28rpx;
-				font-weight: bold;
+				font-weight: 500;
+				color: $on-surface;
 				margin-top: 16rpx;
-				// padding: 0 8px;
 			}
 
 			.price {
-				font-weight: bold;
+				font-weight: 700;
 				font-size: 12px;
+				color: $tertiary-container;
 				margin-top: 10rpx;
-				// padding: 0 8px;
 
 				.num {
 					font-size: 32rpx;
+					font-weight: 700;
+					color: $tertiary-container;
 					margin-right: 10rpx;
 				}
 
 				.old-price {
-					color: #aaa;
+					color: $secondary;
 					font-weight: normal;
 				}
 			}
@@ -538,6 +588,17 @@
 		.item {
 			display: flex;
 			width: 100%;
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.pictrue {
 				width: 220rpx;
@@ -565,6 +626,18 @@
 		padding: 0 20rpx;
 
 		.item {
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
+			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
+
 			.pictrue {
 				width: 100%;
 				height: 220rpx;
@@ -596,8 +669,17 @@
 		}
 
 		.item {
-			background-color: #fff;
+			background-color: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.03);
 			overflow: hidden;
+			animation: cardIn 0.4s $ease both;
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.97);
+			}
 
 			.pictrue {
 				width: 100%;
@@ -626,31 +708,38 @@
 			width: 100%;
 			height: 80rpx;
 			line-height: 40rpx;
-			color: #333;
+			color: $on-surface;
+			font-weight: 500;
 		}
 
 		.old-price {
 			font-weight: normal;
 			font-size: 24rpx;
-			color: #999;
+			color: $secondary;
 		}
 
 		.price {
 			font-size: 36rpx;
-			font-weight: 550;
+			font-weight: 700;
+			color: $tertiary-container;
 
 			text {
 				padding-bottom: 4rpx;
 				font-size: 26rpx;
 				font-weight: normal;
 			}
+
+			.num {
+				font-weight: 700;
+				color: $tertiary-container;
+			}
 		}
 	}
 
 	.mer_badge {
 		padding: 0 4rpx;
-		background-color: theme;
-		color: #fff;
+		background-color: $primary;
+		color: $white;
 		font-size: 20rpx;
 		display: inline-block;
 		border-radius: 4rpx;

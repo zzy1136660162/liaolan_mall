@@ -99,10 +99,37 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.articleList {
 
 		.item {
-			padding: 0 20rpx;
+			background: $surface-lowest;
+			border: 1rpx solid $outline-variant;
+			border-radius: $r-md;
+			padding: 16rpx;
+			margin-bottom: 16rpx;
+			box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.03);
+			transition: transform 0.15s $ease;
+
+			&:active {
+				transform: scale(0.98);
+			}
 
 			&:last-child {
 				margin-bottom: 0 !important;
@@ -113,13 +140,13 @@
 
 				.name {
 					font-size: 30rpx;
-					color: #282828;
+					color: $on-surface;
 					height: 82rpx;
 				}
 
 				.time {
 					font-size: 30rpx;
-					color: #999;
+					color: $secondary;
 					margin-top: 40rpx;
 				}
 			}
@@ -127,7 +154,8 @@
 			.pictrue {
 				width: 37%;
 				height: 156rpx;
-				border-radius: 6rpx;
+				border-radius: $r-sm;
+				overflow: hidden;
 
 				image {
 					width: 100%;

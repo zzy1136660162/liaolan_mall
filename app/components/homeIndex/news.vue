@@ -121,17 +121,34 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.news {
 		display: flex;
 		align-items: center;
 		flex-wrap: nowrap;
-		box-shadow: 0 10rpx 30rpx #f5f5f5;
+		background: $surface-lowest;
+		border: 1rpx solid $outline-variant;
+		border-radius: $r-md;
+		box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.03);
 	}
 
 	.news .pictrue {
 		width: 130rpx;
 		height: 36rpx;
-		border-right: 1rpx solid #ddd;
+		border-right: 1rpx solid $outline-variant;
 		padding-right: 23rpx;
 		box-sizing: content-box;
 	}
@@ -161,27 +178,37 @@
 
 	.news .swiperTxt .text .label {
 		font-size: 20rpx;
-		color: #ff4c48;
+		color: $primary;
 		width: 64rpx;
 		height: 30rpx;
 		border-radius: 40rpx;
 		text-align: center;
 		line-height: 28rpx;
-		border: 2rpx solid #ff4947;
+		border: 2rpx solid rgba($primary, 0.3);
 	}
 
 	.news .swiperTxt .text .newsTitle {
 		width: 100%;
 		font-size: 24rpx;
-		color: #666;
+		color: $on-surface-variant;
 	}
 
 	.news .swiperTxt .iconfont {
 		font-size: 28rpx;
-		color: #888;
+		color: $on-surface-variant;
 	}
 
 	.news .swiperTxt swiper {
 		height: 100%;
+	}
+
+	.news-tag {
+		background: $surface-low;
+		color: $primary;
+		border: 1rpx solid rgba($primary, 0.15);
+		border-radius: 4rpx;
+		font-size: 18rpx;
+		padding: 0 8rpx;
+		line-height: 28rpx;
 	}
 </style>

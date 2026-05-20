@@ -186,9 +186,28 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.seckill {
 		width: auto;
-		background: #fff;
+		background: $surface-lowest;
+		border: 1rpx solid $outline-variant;
+		box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.03);
 		border-radius: 14rpx;
 		box-sizing: border-box;
 		position: relative;
@@ -199,6 +218,7 @@
 			left: 0;
 			width: 100%;
 			height: 256rpx;
+			background: linear-gradient(135deg, $primary 0%, $primary-container 100%);
 			background-repeat: no-repeat;
 			background-size: cover;
 			border-radius: 14rpx 14rpx 0 0;
@@ -219,14 +239,13 @@
 			.lines {
 				width: 1rpx;
 				height: 24rpx;
-				background-color: #fff;
-				opacity: 0.6;
+				background-color: rgba($white, 0.3);
 				margin-left: 16rpx;
 			}
 
 			.point {
 				font-size: 26rpx;
-				color: #fff;
+				color: $white;
 				margin-left: 21rpx;
 				margin-right: 4rpx;
 				z-index: 9;
@@ -244,11 +263,12 @@
 			.more {
 				width: 86rpx;
 				height: 40rpx;
-				background: linear-gradient(142deg, #FFE9CE 0%, #FFD6A7 100%);
+				background: $surface-low;
 				opacity: 1;
-				border-radius: 18px;
+				border: 1rpx solid rgba($primary, 0.2);
+				border-radius: $r-lg;
 				font-size: 22rpx;
-				color: #FE960F;
+				color: $primary;
 				padding-left: 8rpx;
 				font-weight: 800;
 				z-index: 9;
@@ -284,13 +304,13 @@
 
 					.name {
 						font-size: 26rpx;
-						color: #333;
+						color: $on-surface;
 						margin-top: 8rpx;
 					}
 
 					.y_money {
 						font-size: 24rpx;
-						color: #999999;
+						color: $secondary;
 						text-decoration: line-through;
 					}
 
@@ -298,6 +318,7 @@
 						font-size: 28rpx;
 						height: 100%;
 						font-weight: bold;
+						color: $tertiary-container;
 						margin-top: 4rpx;
 
 						.num {
@@ -344,18 +365,19 @@
 					width: 100%;
 					height: 80rpx;
 					line-height: 40rpx;
-					color: #333;
+					color: $on-surface;
 				}
 
 				.old-price {
 					font-weight: normal;
 					font-size: 24rpx;
-					color: #999;
+					color: $secondary;
 				}
 
 				.price {
 					font-size: 36rpx;
 					font-weight: 550;
+					color: $tertiary-container;
 
 					text {
 						padding-bottom: 4rpx;
