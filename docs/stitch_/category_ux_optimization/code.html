@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>辽缆 - 产品分类</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eef0fc",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#2c1600",
+                        "primary": "#003da6",
+                        "on-secondary-container": "#606365",
+                        "secondary": "#5c5f60",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#d7dae5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "surface-variant": "#dfe2ed",
+                        "on-tertiary-fixed-variant": "#693c00",
+                        "primary-fixed": "#dbe1ff",
+                        "primary-container": "#0052d9",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0353da",
+                        "surface-container-low": "#f1f3ff",
+                        "on-secondary-fixed": "#191c1e",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e5e8f3",
+                        "tertiary-fixed-dim": "#ffb86f",
+                        "surface-container": "#ebedf9",
+                        "surface": "#f9f9ff",
+                        "surface-bright": "#f9f9ff",
+                        "on-primary-container": "#cbd6ff",
+                        "tertiary": "#683b00",
+                        "on-tertiary": "#ffffff",
+                        "on-surface-variant": "#434654",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#895000",
+                        "on-tertiary-container": "#ffcea0",
+                        "inverse-surface": "#2c3039",
+                        "secondary-fixed": "#e1e2e4",
+                        "outline-variant": "#c3c6d7",
+                        "on-background": "#181c23",
+                        "error-container": "#ffdad6",
+                        "on-secondary": "#ffffff",
+                        "background": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#444749",
+                        "on-surface": "#181c23",
+                        "tertiary-fixed": "#ffdcbd",
+                        "secondary-container": "#dee0e2",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-highest": "#dfe2ed",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "outline": "#737686",
+                        "secondary-fixed-dim": "#c5c6c8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "grid-gutter": "12px",
+                        "section-padding": "24px",
+                        "container-margin": "16px",
+                        "stack-gap": "12px",
+                        "inline-gap": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter", "PingFang SC"],
+                        "h2": ["Inter", "PingFang SC"],
+                        "body-lg": ["Inter", "PingFang SC"],
+                        "label-sm": ["Inter", "PingFang SC"],
+                        "h1": ["Inter", "PingFang SC"],
+                        "label-md": ["Inter", "PingFang SC"],
+                        "h3": ["Inter", "PingFang SC"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "22px", "fontWeight": "400" }],
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+                        "h1": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "h3": ["16px", { "lineHeight": "24px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', 'PingFang SC', sans-serif; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Accordion transition logic */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            opacity: 0;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        .accordion-item.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex flex-col h-screen overflow-hidden">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-container-margin h-12 bg-surface border-b border-outline-variant z-50">
+<button class="flex items-center justify-center w-10 h-10 text-primary transition-colors duration-200 active:opacity-80 hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">menu</span>
+</button>
+<div class="font-h2 text-h2 font-bold text-primary">
+        辽缆
+    </div>
+<button class="flex items-center justify-center w-10 h-10 text-primary transition-colors duration-200 active:opacity-80 hover:bg-surface-container rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex overflow-hidden">
+<!-- Left Sidebar: Level 1 Categories -->
+<aside class="w-24 md:w-32 bg-surface-container-lowest border-r border-outline-variant overflow-y-auto hide-scrollbar flex-shrink-0">
+<nav class="flex flex-col py-2">
+<!-- Active Item -->
+<button class="w-full relative py-4 px-2 flex flex-col items-center justify-center bg-surface text-primary transition-colors duration-200">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r"></div>
+<span class="font-body-md text-body-md font-semibold text-center">电力电缆</span>
+</button>
+<!-- Inactive Items -->
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">控制电缆</span>
+</button>
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">特种电缆</span>
+</button>
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">通信光缆</span>
+</button>
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">架空导线</span>
+</button>
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">布电线</span>
+</button>
+<button class="w-full py-4 px-2 flex flex-col items-center justify-center text-secondary hover:bg-surface-container transition-colors duration-200">
+<span class="font-body-md text-body-md text-center">矿用电缆</span>
+</button>
+</nav>
+</aside>
+<!-- Right Content Area: Level 2, 3, 4 -->
+<section class="flex-1 overflow-y-auto p-container-margin bg-background pb-24 hide-scrollbar">
+<!-- Level 2 Section Header -->
+<div class="mb-section-padding">
+<h2 class="font-h1 text-h1 text-on-surface font-bold mb-4 flex items-center">
+                中低压电力电缆
+                <span class="ml-2 text-primary/50 text-sm font-normal">Level 2</span>
+</h2>
+<div class="space-y-stack-gap">
+<!-- Level 3 Accordion Group 1 (Expanded) -->
+<div class="accordion-item active border border-outline-variant rounded overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('active')">
+<div class="flex items-center">
+<div class="w-1 h-4 bg-primary rounded-full mr-3"></div>
+<h3 class="font-h3 text-h3 text-on-surface">YJV 系列 (交联聚乙烯绝缘)</h3>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-4 grid grid-cols-2 gap-grid-gutter ml-4 border-l-2 border-primary-fixed">
+<!-- Level 4 Item -->
+<div class="bg-surface border border-outline-variant rounded p-2 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer group">
+<div class="w-16 h-16 bg-surface-variant rounded mb-2 overflow-hidden flex items-center justify-center">
+<img alt="Cross section of a YJV power cable" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAK77Zh9HanqEnSxYJjgd7k1L-M5WR_udszLItGKhaPxoQ5WUxnmm6npq585NzVxy__KgJQR3VRmiMyh3A5YK1okuKMF1s_cH51M3QJn17JwlPA-EZ0DkfXiOkHVyLEanuHNvVk3wi-PTLywQX06Rmp5oz_tc5lpjPA8of_JHP3wISUDZbYghXhrJo6Y0cut1hLUTPYjzQgyd2SmgRfoNJU6A217H2OTnHIk3XkMMD2tjzDxUalD_vpz7Xj5bmDSBWFrj2XC3hLw6Q"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">YJV 铜芯无铠装</span>
+</div>
+<!-- Level 4 Item -->
+<div class="bg-surface border border-outline-variant rounded p-2 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer group">
+<div class="w-16 h-16 bg-surface-variant rounded mb-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl">cable</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">YJV22 钢带铠装</span>
+</div>
+<!-- Level 4 Item -->
+<div class="bg-surface border border-outline-variant rounded p-2 flex flex-col items-center justify-center hover:border-primary transition-colors cursor-pointer group">
+<div class="w-16 h-16 bg-surface-variant rounded mb-2 flex items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl">bolt</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface text-center">YJLV 铝芯</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Level 3 Accordion Group 2 (Collapsed) -->
+<div class="accordion-item border border-outline-variant rounded overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('active')">
+<div class="flex items-center">
+<div class="w-1 h-4 bg-primary rounded-full mr-3"></div>
+<h3 class="font-h3 text-h3 text-on-surface">阻燃/耐火系列</h3>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-4 flex flex-wrap gap-inline-gap ml-4 border-l-2 border-primary-fixed">
+<button class="bg-surface border border-outline-variant text-on-surface font-body-md text-body-md px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors">
+                                ZC-YJV 阻燃C类
+                            </button>
+<button class="bg-surface border border-outline-variant text-on-surface font-body-md text-body-md px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors">
+                                ZB-YJV 阻燃B类
+                            </button>
+<button class="bg-surface border border-outline-variant text-on-surface font-body-md text-body-md px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors">
+                                ZA-YJV 阻燃A类
+                            </button>
+<button class="bg-surface border border-outline-variant text-on-surface font-body-md text-body-md px-3 py-1.5 rounded hover:border-primary hover:text-primary transition-colors">
+                                NH-YJV 耐火型
+                            </button>
+</div>
+</div>
+</div>
+<!-- Level 3 Accordion Group 3 (Collapsed) -->
+<div class="accordion-item border border-outline-variant rounded overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('active')">
+<div class="flex items-center">
+<div class="w-1 h-4 bg-primary rounded-full mr-3"></div>
+<h3 class="font-h3 text-h3 text-on-surface">VV 系列 (聚氯乙烯绝缘)</h3>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-4 grid grid-cols-2 gap-grid-gutter ml-4 border-l-2 border-primary-fixed">
+<div class="bg-surface border border-outline-variant rounded p-2 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl mb-1">power</span>
+<span class="font-label-md text-label-md">VV 铜芯</span>
+</div>
+<div class="bg-surface border border-outline-variant rounded p-2 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-outline text-3xl mb-1">cable</span>
+<span class="font-label-md text-label-md">VLV 铝芯</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Additional Level 2 Section for context -->
+<div class="mb-section-padding">
+<h2 class="font-h1 text-h1 text-on-surface font-bold mb-4 flex items-center">
+                高压电力电缆
+                <span class="ml-2 text-primary/50 text-sm font-normal">Level 2</span>
+</h2>
+<div class="space-y-stack-gap">
+<div class="accordion-item border border-outline-variant rounded overflow-hidden bg-surface-container-lowest">
+<button class="w-full flex items-center justify-between p-4 bg-surface-container-low transition-colors" onclick="this.parentElement.classList.toggle('active')">
+<div class="flex items-center">
+<div class="w-1 h-4 bg-primary rounded-full mr-3"></div>
+<h3 class="font-h3 text-h3 text-on-surface">110kV 级电缆</h3>
+</div>
+<span class="material-symbols-outlined arrow-icon transition-transform duration-300 text-outline">expand_more</span>
+</button>
+<div class="accordion-content">
+<div class="p-4 ml-4 border-l-2 border-primary-fixed text-on-surface-variant font-body-md italic">
+                            暂无型号，请联系销售咨询。
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 pb-safe bg-surface-container-lowest border-t border-outline-variant md:hidden">
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 transition-all duration-300 active:scale-95 hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md">首页</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">shopping_cart</span>
+<span class="font-label-md text-label-md font-bold">商城</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 transition-all duration-300 active:scale-95 hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+<span class="font-label-md text-label-md">案例</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary px-4 py-1 transition-all duration-300 active:scale-95 hover:bg-surface-container-high rounded-full">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">person</span>
+<span class="font-label-md text-label-md">我的</span>
+</button>
+</nav>
+<script>
+    // Logic for initial state: Expand the first Level 3 item of the first Level 2 group
+    // Handled via CSS class 'active' in the HTML above.
+</script>
+</body></html>

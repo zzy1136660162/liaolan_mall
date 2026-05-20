@@ -1,0 +1,20 @@
+.idea/
+app/unpackage
+Crmeb-2022-01-04.log
+crmeb_front_log
+crmeb_admin_log
+crmeb/LOG_HOME_IS_UNDEFINED
+*.
+*.
+.DS_Store
+
+# Large files
+*.zip
+*.sql
+*.dump
+*.tar.gz
+*.rar
+*.7z
+
+# Working directories
+.claude/
