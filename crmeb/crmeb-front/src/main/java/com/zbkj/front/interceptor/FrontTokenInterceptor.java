@@ -32,10 +32,17 @@ public class FrontTokenInterceptor implements HandlerInterceptor {
     //程序处理之前需要处理的业务
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json;charset=UTF-8");
+        String uri = RequestUtil.getUri(request);
         String token = frontTokenComponent.getToken(request);
         if(token == null || token.isEmpty()){
-            //判断路由，部分路由不管用户是否登录都可以访问
-            boolean result = frontTokenComponent.checkRouter(RequestUtil.getUri(request));
+            if(uri.startsWith("/api/front/case/")){
+                return true;
+            }
+            if(uri.startsWith("/api/front/download/")){
+                return true;
+            }
+            boolean result = frontTokenComponent.checkRouter(uri);
             if(result){
                 return true;
             }
@@ -43,6 +50,12 @@ public class FrontTokenInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        if(uri.startsWith("/api/front/case/")){
+            return true;
+        }
+        if(uri.startsWith("/api/front/download/")){
+            return true;
+        }
         Boolean result = frontTokenComponent.check(token, request);
         if(!result){
             response.getWriter().write(JSONObject.toJSONString(CommonResult.failed(CommonResultCode.PERMISSION_EXPIRATION)));

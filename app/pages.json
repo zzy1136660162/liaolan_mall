@@ -1,5 +1,13 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
+		{
+			"path": "pages/liaolan_index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -7,13 +15,40 @@
 				"navigationStyle": "custom",
 				"navigationBarTextStyle":"white",
 				"app-plus": {
-					"scrollIndicator": false //禁用原生导航栏
+					"scrollIndicator": false
 					// #ifdef APP-PLUS
 					// "titleNView": {
 					// 	"type": "default"
 					// }
 					// #endif
 				}
+			}
+		},
+		{
+			"path": "pages/goods_cate/goods_cate",
+			"style": {
+				"navigationBarTitleText": "商品分类",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},
+		{
+			"path": "pages/case/case_list/index",
+			"style": {
+				"navigationBarTitleText": "客户案例",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/liaolan_me/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -46,22 +81,47 @@
 					// #endif
 				}
 			}
-		},
-		{
-			"path": "pages/goods_cate/goods_cate",
-			"style": {
-				"navigationBarTitleText": "商品分类",
-				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"type": "default"
-					}
-					// #endif
-				}
-			}
 		}
     ],
 	"subPackages": [{
+			"root": "pages/case_details",
+			"name": "case_detail",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "案例详情",
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/about",
+			"name": "about",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "关于我们",
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/downloads",
+			"name": "downloads",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "资料下载"
+					}
+				}
+			]
+		},
+		{
 			"root": "pages/users",
 			"name": "users",
 			"pages": [
@@ -897,33 +957,33 @@
 		"rpxCalcIncludeWidth": 750
 	},
 	"tabBar": {
-		"custom": false,
-		"color": "#282828",
-		"selectedColor": "#fc4141",
+		"custom": true,
+		"color": "#666666",
+		"selectedColor": "#0052d9",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
 		"list": [{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/tabBar/indexwei.png",
-				"selectedIconPath": "static/tabBar/indexxuan.png",
+				"pagePath": "pages/liaolan_index/index",
+				"iconPath": "static/tabBar/index.png",
+				"selectedIconPath": "static/tabBar/indexd.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/goods_cate/goods_cate",
-				"iconPath": "static/tabBar/catewei.png",
-				"selectedIconPath": "static/tabBar/catexuan.png",
-				"text": "分类"
+				"iconPath": "static/tabBar/mall.png",
+				"selectedIconPath": "static/tabBar/malld.png",
+				"text": "商城"
 			},
 			{
-				"pagePath": "pages/order_addcart/order_addcart",
-				"iconPath": "static/tabBar/cartdwei.png",
-				"selectedIconPath": "static/tabBar/cartdxuan.png",
-				"text": "购物车"
+				"pagePath": "pages/case/case_list/index",
+				"iconPath": "static/tabBar/case.png",
+				"selectedIconPath": "static/tabBar/cased.png",
+				"text": "案例"
 			},
 			{
-				"pagePath": "pages/user/index",
-				"iconPath": "static/tabBar/userwei.png",
-				"selectedIconPath": "static/tabBar/userxuan.png",
+				"pagePath": "pages/liaolan_me/index",
+				"iconPath": "static/tabBar/my.png",
+				"selectedIconPath": "static/tabBar/myd.png",
 				"text": "我的"
 			}
 		]

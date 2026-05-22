@@ -11,7 +11,7 @@
             </view>
             <view class="user-detail">
               <text class="username">{{ userInfo.nickname || '游客用户' }}</text>
-              <text class="company">{{ userInfo.company || '公司名称' }}</text>
+              <text class="company" v-if="userInfo.company">{{ userInfo.company }}</text>
               <view class="vip-badge" v-if="userInfo.isVip">
                 <text class="vip-icon">★</text>
                 <text class="vip-text">VIP 采购商</text>
@@ -24,15 +24,15 @@
           <!-- 快速统计 -->
           <view class="quick-stats">
             <view class="stat-item" @click="goPage('/pages/users/user_goods_collection/index')">
-              <text class="stat-num">{{ userInfo.favoriteCount || 12 }}</text>
+              <text class="stat-num">{{ userInfo.collectCount || 0 }}</text>
               <text class="stat-label">常购清单</text>
             </view>
             <view class="stat-item" @click="goPage('/pages/users/user_coupon/index')">
-              <text class="stat-num">{{ userInfo.couponCount || 5 }}</text>
+              <text class="stat-num">{{ userInfo.couponCount || 0 }}</text>
               <text class="stat-label">优惠券</text>
             </view>
             <view class="stat-item" @click="goPage('/pages/users/user_integral/index')">
-              <text class="stat-num">{{ formatNumber(userInfo.integral || 1250) }}</text>
+              <text class="stat-num">{{ formatNumber(userInfo.integral || 0) }}</text>
               <text class="stat-label">积分</text>
             </view>
           </view>
@@ -110,7 +110,6 @@
                 <text class="iconfont icon-kefu"></text>
               </view>
               <text class="service-text">专属客服</text>
-              <text class="service-info">工号: L802</text>
               <text class="iconfont icon-xiangyou service-arrow"></text>
             </view>
             <view class="service-item" @click="goPage('/pages/users/user_feedback/index')">
@@ -130,8 +129,11 @@
           </view>
         </view>
 
+        <!-- 未登录时显示登录按钮 -->
+        <button class="login-btn" v-if="!isLogin" @click="goLogin">立即登录</button>
+
         <!-- 退出登录 -->
-        <button class="logout-btn" @click="handleLogout">退出登录</button>
+        <button class="logout-btn" v-if="isLogin" @click="handleLogout">退出登录</button>
       </view>
     </view>
 
@@ -153,23 +155,31 @@ export default {
   computed: {
     ...mapGetters(['isLogin', 'uid'])
   },
+  watch: {
+    isLogin(newVal) {
+      if (newVal && this.uid) {
+        this.getUserCenterData();
+      }
+    }
+  },
   data() {
     return {
       theme: '',
+      loaded: false,
       defaultAvatar: 'https://img.crmeb.com/crmebimage/perset/staticImg/f.png',
       userInfo: {
-        nickname: '张建国',
-        company: '沈阳机电设备制造有限公司',
+        nickname: '',
         avatar: '',
-        isVip: true,
-        favoriteCount: 12,
-        couponCount: 5,
-        integral: 1250
+        company: '',
+        isVip: false,
+        collectCount: 0,
+        couponCount: 0,
+        integral: 0
       },
       orderData: {
-        unPaidCount: 2,
+        unPaidCount: 0,
         unShippedCount: 0,
-        receivedCount: 5,
+        receivedCount: 0,
         evaluatedCount: 0,
         refundCount: 0
       },
@@ -178,38 +188,58 @@ export default {
   },
   onLoad() {
     this.theme = this.$Cache.get('theme') || 'theme4';
-    this.getUserInfo();
-    this.getOrderData();
-    this.getMyMenus();
+    if (this.isLogin && this.uid) {
+      this.getUserCenterData();
+    } else {
+      this.showLoginModal();
+    }
   },
   onShow() {
-    if (this.isLogin) {
-      this.getUserInfo();
-      this.getOrderData();
+    if (this.isLogin && this.uid) {
+      this.getUserCenterData();
     }
   },
   methods: {
     formatNumber(num) {
+      if (!num) return '0';
       if (num >= 1000) {
         return (num / 1000).toFixed(1).replace(/\.0$/, '') + ',000';
       }
       return num.toString();
     },
-    getUserInfo() {
-      if (this.uid) {
-        this.$store.dispatch('USERINFO').then(res => {
-          if (res) {
-            this.userInfo = {
-              ...this.userInfo,
-              ...res,
-              isVip: res.vip || false
-            };
+    showLoginModal() {
+      this.$Cache.set('login_back_url', '/pages/liaolan_me/index');
+      uni.showModal({
+        title: '登录提醒',
+        content: '您还未登录，请先登录',
+        confirmText: '去登录',
+        cancelText: '取消',
+        success: (res) => {
+          if (res.confirm) {
+            uni.navigateTo({
+              url: '/pages/users/login/index'
+            });
           }
-        });
-      }
+        }
+      });
     },
-    getOrderData() {
-      if (!this.uid) return;
+    getUserCenterData() {
+      this.$store.dispatch('USERINFO').then(res => {
+        this.userInfo = {
+          nickname: res.nickname || '用户',
+          avatar: res.avatar || '',
+          company: res.company || '',
+          isVip: res.vip || false,
+          collectCount: res.collectCount || 0,
+          couponCount: res.couponCount || 0,
+          integral: res.integral || 0,
+          nowMoney: res.nowMoney || 0
+        };
+        this.loaded = true;
+      }).catch(() => {
+        this.loaded = true;
+      });
+
       orderData().then(res => {
         this.orderData = {
           unPaidCount: res.data.unPaidCount || 0,
@@ -218,9 +248,7 @@ export default {
           evaluatedCount: res.data.evaluatedCount || 0,
           refundCount: res.data.refundCount || 0
         };
-      }).catch(err => {
-        console.log('获取订单数据失败', err);
-      });
+      }).catch(() => {});
     },
     getMyMenus() {
       getMenuList().then(res => {
@@ -231,7 +259,7 @@ export default {
     },
     goPage(url) {
       if (!this.isLogin) {
-        this.goLogin();
+        this.showLoginModal();
         return;
       }
       uni.navigateTo({
@@ -240,7 +268,7 @@ export default {
     },
     goSettings() {
       if (!this.isLogin) {
-        this.goLogin();
+        this.showLoginModal();
         return;
       }
       uni.navigateTo({
@@ -260,6 +288,7 @@ export default {
       // #endif
     },
     goLogin() {
+      this.$Cache.set('login_back_url', '/pages/liaolan_me/index');
       uni.navigateTo({
         url: '/pages/users/login/index'
       });
@@ -273,15 +302,26 @@ export default {
             this.$store.commit("LOGOUT");
             this.$store.commit('UPDATE_LOGIN', '');
             this.$store.commit('UPDATE_USERINFO', {});
+            this.userInfo = {
+              nickname: '',
+              avatar: '',
+              company: '',
+              isVip: false,
+              collectCount: 0,
+              couponCount: 0,
+              integral: 0
+            };
+            this.orderData = {
+              unPaidCount: 0,
+              unShippedCount: 0,
+              receivedCount: 0,
+              evaluatedCount: 0,
+              refundCount: 0
+            };
             uni.showToast({
               title: '已退出登录',
               icon: 'success'
             });
-            setTimeout(() => {
-              uni.navigateTo({
-                url: '/pages/users/login/index'
-              });
-            }, 1500);
           }
         }
       });
@@ -597,6 +637,20 @@ export default {
 }
 
 /* 退出按钮 */
+.login-btn {
+  width: 100%;
+  height: 96rpx;
+  background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
+  border: none;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+
 .logout-btn {
   width: 100%;
   height: 96rpx;

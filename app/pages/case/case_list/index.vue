@@ -157,7 +157,7 @@ export default {
     },
     goToDetail(id) {
       uni.navigateTo({
-        url: '/pages/case/case_details/index?id=' + id
+        url: '/pages/case_details/index?id=' + id
       });
     }
   }

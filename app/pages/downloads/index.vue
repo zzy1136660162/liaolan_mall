@@ -2,20 +2,20 @@
   <view class="downloads-page" :data-theme="theme">
     <view class="hero">
       <view class="hero-mark"></view>
-      <view class="hero-title">Resources</view>
-      <view class="hero-desc">Get the latest product materials, technical documents and certificates.</view>
+      <view class="hero-title">资料下载</view>
+      <view class="hero-desc">获取最新的产品资料、技术文档和资质证书。</view>
     </view>
     <view class="search-box">
       <input
         v-model="keywords"
         confirm-type="search"
-        placeholder="Search by title or file type"
+        placeholder="按标题或文件类型搜索"
         @confirm="doSearch"
       />
-      <view class="search-btn" @click="doSearch">Search</view>
+      <view class="search-btn" @click="doSearch">搜索</view>
     </view>
     <scroll-view class="tabs" scroll-x>
-      <view class="tab" :class="{ active: activeCategory === 0 }" @click="selectCategory(0)">All</view>
+      <view class="tab" :class="{ active: activeCategory === 0 }" @click="selectCategory(0)">全部</view>
       <view
         v-for="item in categories"
         :key="item.id"
@@ -33,30 +33,30 @@
           <view class="material-info">
             <view class="material-title">{{ item.title }}</view>
             <view class="material-meta">
-              <text>{{ item.categoryName || 'Uncategorized' }}</text>
+              <text>{{ item.categoryName || '未分类' }}</text>
               <text class="dot"></text>
-              <text>{{ item.needForm ? 'Form required' : 'Public' }}</text>
+              <text>{{ item.needForm ? '需填写表单' : '公开资料' }}</text>
               <text class="dot"></text>
-              <text>{{ item.downloadCount || 0 }} downloads</text>
+              <text>{{ item.downloadCount || 0 }} 次下载</text>
             </view>
-            <view class="material-desc">{{ item.description || 'No description' }}</view>
+            <view class="material-desc">{{ item.description || '暂无描述' }}</view>
           </view>
         </view>
-        <view class="download-btn" @click="handleDownload(item)">Download</view>
+        <view class="download-btn" @click="handleDownload(item)">下载</view>
       </view>
     </view>
-    <view v-if="loaded && list.length === 0" class="empty-box">No resources</view>
-    <view v-if="list.length > 0 && !finished" class="more-btn" @click="getList">Load more</view>
+    <view v-if="loaded && list.length === 0" class="empty-box">暂无资料</view>
+    <view v-if="list.length > 0 && !finished" class="more-btn" @click="getList">加载更多</view>
     <view v-if="showForm" class="mask" @click="closeForm"></view>
     <view v-if="showForm" class="form-popup">
-      <view class="form-title">Download form</view>
-      <input v-model="form.companyName" class="form-input" placeholder="Company name" />
-      <input v-model="form.contactName" class="form-input" placeholder="Contact name" />
-      <input v-model="form.phone" class="form-input" placeholder="Phone number" type="number" maxlength="11" />
-      <textarea v-model="form.requirementDesc" class="form-textarea" placeholder="Requirement"></textarea>
+      <view class="form-title">下载登记</view>
+      <input v-model="form.companyName" class="form-input" placeholder="请输入公司名称" />
+      <input v-model="form.contactName" class="form-input" placeholder="请输入联系人姓名" />
+      <input v-model="form.phone" class="form-input" placeholder="请输入手机号" type="number" maxlength="11" />
+      <textarea v-model="form.requirementDesc" class="form-textarea" placeholder="请输入需求说明"></textarea>
       <view class="form-actions">
-        <view class="form-cancel" @click="closeForm">Cancel</view>
-        <view class="form-submit" @click="submitForm">Submit</view>
+        <view class="form-cancel" @click="closeForm">取消</view>
+        <view class="form-submit" @click="submitForm">提交</view>
       </view>
     </view>
   </view>
@@ -169,10 +169,10 @@ export default {
     },
     submitForm() {
       if (!this.form.phone) {
-        return this.$util.Tips({ title: 'Please enter phone number' })
+        return this.$util.Tips({ title: '请输入手机号' })
       }
       if (!/^1\d{10}$/.test(this.form.phone)) {
-        return this.$util.Tips({ title: 'Invalid phone number' })
+        return this.$util.Tips({ title: '手机号格式不正确' })
       }
       const materialId = this.currentItem && this.currentItem.id
       const phone = this.form.phone
@@ -201,7 +201,7 @@ export default {
           })
         })
         .catch((err) => {
-          this.$util.Tips({ title: err || 'Download failed' })
+          this.$util.Tips({ title: err || '下载失败' })
         })
     },
     downloadFile(url) {

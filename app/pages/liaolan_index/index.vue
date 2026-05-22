@@ -155,6 +155,7 @@
 <script>
 import liaolanNavbar from '@/components/liaolanNavbar/index.vue';
 import tabBar from '@/components/tab-bar/index.vue';
+import { getProducts } from '@/api/api.js';
 
 export default {
   components: {
@@ -174,7 +175,7 @@ export default {
       quickNavs: [
         { label: '产品', icon: 'icon-shangpin', path: '/pages/goods_cate/goods_cate' },
         { label: '新闻', icon: 'icon-tuwen', path: '/pages/news/news_list/index' },
-        { label: '下载', icon: 'icon-xiazai5', path: '/pages/download/index' },
+        { label: '下载', icon: 'icon-xiazai5', path: '/pages/downloads/index' },
         { label: '关于', icon: 'icon-shuoming', path: '/pages/about/index' }
       ],
       newsList: [
@@ -182,25 +183,32 @@ export default {
         '公司荣获国家级高新技术企业认定',
         '新产品KVV系列控制电缆正式投产'
       ],
-      products: [
-        {
-          id: 1,
-          name: 'YJV 高压交联电缆',
-          spec: '8.7/15kV 铜芯交联聚乙烯',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD7s_LSVVIhtCLSx2OHKIDLxnBS_TnfuhC5Dm8Yri4Oof8mXgawg0nfTZwuk-MYICc2YEgGLXfAf5KZqRcqlUFTeUYFmoVNzQ2NrzC3XDlMbfIFo_cnYj2UMLlzAwv2pWjz727Nm1Jq-QPLWvIH40JgOeJytHiNVBnmpLpb9R3gnPpqeyziCaXiV3UbiQy7l9FPoMb-YCDiSAbpiPBRCNbU2YjM1_3PFX0dqc1D0ad1FEHk5BStwkoCA-zeud6V00MjYmDeDvbA4Rk',
-          tag: '现货'
-        },
-        {
-          id: 2,
-          name: 'KVVP 屏蔽控制电缆',
-          spec: '铜芯聚氯乙烯绝缘及护套',
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBY-yxwIjASvdMDjKEH2kTdE9HEMhKzJbr331yKNGQF2K-ujJ41wouX2xnHh9fmst2rkryJstZnUBWCqE6c5pw1TGHCkMmTQM21ArO3OTiZcRY8qqZYKmNCZcGgOakP4HiNo6ty4_NiwzJuyJg25RDOqKpRRq0tQw1lEQqRVpAEfOPeDwcitkRRIf7dgkp7RJ32amyaaE1vQliIaVRqNu6VhuK_zI5YWW8U58j1WtD-m76LX1AaAtylywl3HzXkvFji4tZBRH4ItiY',
-          tag: ''
-        }
-      ]
+      products: [],
+      imgHost: ''
     };
   },
+  onLoad() {
+    this.imgHost = this.$Cache.get('imgHost') || '';
+    this.fetchProducts();
+  },
   methods: {
+    fetchProducts() {
+      getProducts({ page: 1, limit: 2 }).then(res => {
+        const list = (res.data && res.data.list) ? res.data.list : [];
+        this.products = list.map(item => ({
+          id: item.id,
+          name: item.storeName,
+          image: item.image,
+          price: item.price,
+          spec: item.unitName || '',
+          tag: this.getActivityTag(item.activity)
+        }));
+      });
+    },
+    getActivityTag(activity) {
+      const activityMap = { '1': '秒杀', '2': '砍价', '3': '拼团' };
+      return activityMap[activity] || '';
+    },
     handleMenuClick() {
       uni.showToast({
         title: '菜单功能开发中',
