@@ -15,6 +15,10 @@ import java.io.Serializable;
 @ApiModel(value = "ContactConfigRequest对象", description = "联系方式配置请求")
 public class ContactConfigRequest implements Serializable {
 
+    @ApiModelProperty(value = "公司名称")
+    @Size(max = 255, message = "公司名称长度不能超过255个字符")
+    private String companyName;
+
     @ApiModelProperty(value = "联系电话")
     @Pattern(regexp = "^$|^(1[3-9]\\d{9}|0\\d{2,3}-?\\d{7,8}|400-?\\d{3}-?\\d{4})$", message = "联系电话格式不正确")
     private String consumerHotline;
