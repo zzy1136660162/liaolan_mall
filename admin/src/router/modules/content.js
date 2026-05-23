@@ -8,7 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-import Layout from '@/layout';
+import Layout from '@/layout'
 
 const contentRouter = {
   path: '/content',
@@ -17,7 +17,7 @@ const contentRouter = {
   name: 'content',
   meta: {
     title: '内容',
-    icon: 'clipboard',
+    icon: 'clipboard'
   },
   children: [
     {
@@ -26,8 +26,8 @@ const contentRouter = {
       component: () => import('@/views/content/article/list'),
       meta: {
         title: '文章管理',
-        icon: 'clipboard',
-      },
+        icon: 'clipboard'
+      }
     },
     {
       path: 'articleCreat/:id?',
@@ -36,8 +36,8 @@ const contentRouter = {
       meta: {
         title: '添加文章',
         noCache: true,
-        activeMenu: `/content/articleManager`,
-      },
+        activeMenu: `/content/articleManager`
+      }
     },
     {
       path: 'classifManager',
@@ -45,10 +45,19 @@ const contentRouter = {
       component: () => import('@/views/content/articleclass/list'),
       meta: {
         title: '文章分类',
-        icon: 'clipboard',
-      },
+        icon: 'clipboard'
+      }
     },
-  ],
-};
+    {
+      path: 'contactMessageManager',
+      name: 'contactMessageManager',
+      component: () => import('@/views/content/contactMessage/index'),
+      meta: {
+        title: '联系我们',
+        icon: 'clipboard'
+      }
+    }
+  ]
+}
 
-export default contentRouter;
+export default contentRouter

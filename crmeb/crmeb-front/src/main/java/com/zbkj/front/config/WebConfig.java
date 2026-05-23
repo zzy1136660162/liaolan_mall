@@ -74,6 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
                 excludePathPatterns("/api/front/search/keyword").
                 excludePathPatterns("/api/front/share").
                 excludePathPatterns("/api/front/article/**").
+                excludePathPatterns("/api/front/contact/**").
                 excludePathPatterns("/api/front/city/**").
                 excludePathPatterns("/api/front/product/hot").
                 excludePathPatterns("/api/front/product/good").
