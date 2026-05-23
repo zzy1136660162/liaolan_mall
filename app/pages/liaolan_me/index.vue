@@ -112,14 +112,14 @@
               <text class="service-text">专属客服</text>
               <text class="iconfont icon-xiangyou service-arrow"></text>
             </view>
-            <view class="service-item" @click="goPage('/pages/users/user_feedback/index')">
+            <view class="service-item" @click="goPage('/pages/contact/index')">
               <view class="service-icon">
                 <text class="iconfont icon-shuoming"></text>
               </view>
               <text class="service-text">在线反馈</text>
               <text class="iconfont icon-xiangyou service-arrow"></text>
             </view>
-            <view class="service-item" @click="goPage('/pages/users/web_page/index?webUrl=https://www.liaolan.com/about&title=关于我们')">
+            <view class="service-item" @click="goPage('/pages/about/index')">
               <view class="service-icon">
                 <text class="iconfont icon-gengduo"></text>
               </view>

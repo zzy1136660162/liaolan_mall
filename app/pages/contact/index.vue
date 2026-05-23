@@ -335,10 +335,18 @@ export default {
   width: 100%;
   background: #f7f8fa;
   border-radius: 12rpx;
-  padding: 22rpx 24rpx;
   box-sizing: border-box;
   font-size: 26rpx;
   color: #303133;
+}
+
+.form-input {
+  height: 88rpx;
+  padding: 0 24rpx;
+}
+
+.form-textarea {
+  padding: 22rpx 24rpx;
 }
 
 .textarea-item {
