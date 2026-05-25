@@ -1,5 +1,13 @@
 {
-	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+	"pages": [
+		{
+			"path": "pages/liaolan_index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom",
+				"navigationBarTextStyle": "white"
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
@@ -7,13 +15,40 @@
 				"navigationStyle": "custom",
 				"navigationBarTextStyle":"white",
 				"app-plus": {
-					"scrollIndicator": false //禁用原生导航栏
+					"scrollIndicator": false
 					// #ifdef APP-PLUS
 					// "titleNView": {
 					// 	"type": "default"
 					// }
 					// #endif
 				}
+			}
+		},
+		{
+			"path": "pages/goods_cate/goods_cate",
+			"style": {
+				"navigationBarTitleText": "商品分类",
+				"app-plus": {
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"type": "default"
+					}
+					// #endif
+				}
+			}
+		},
+		{
+			"path": "pages/case/case_list/index",
+			"style": {
+				"navigationBarTitleText": "客户案例",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/liaolan_me/index",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -48,9 +83,9 @@
 			}
 		},
 		{
-			"path": "pages/goods_cate/goods_cate",
+			"path": "pages/contact/index",
 			"style": {
-				"navigationBarTitleText": "商品分类",
+				"navigationBarTitleText": "联系我们",
 				"app-plus": {
 					// #ifdef APP-PLUS
 					"titleNView": {
@@ -60,8 +95,46 @@
 				}
 			}
 		}
-    ],
+	],
 	"subPackages": [{
+		"root": "pages/case_details",
+		"name": "case_detail",
+		"pages": [
+			{
+				"path": "index",
+				"style": {
+					"navigationBarTitleText": "案例详情",
+					"navigationStyle": "custom"
+				}
+			}
+		]
+	},
+		{
+			"root": "pages/about",
+			"name": "about",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "关于我们",
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/downloads",
+			"name": "downloads",
+			"pages": [
+				{
+					"path": "index",
+					"style": {
+						"navigationBarTitleText": "资料下载"
+					}
+				}
+			]
+		},
+		{
 			"root": "pages/users",
 			"name": "users",
 			"pages": [
@@ -293,11 +366,11 @@
 						"navigationBarTitleText": "绑定手机号",
 						"navigationStyle": "custom",
 						"navigationBarBackgroundColor": "#fff"
-							// #ifdef MP || APP-PLUS
-							,
+						// #ifdef MP || APP-PLUS
+					,
 						"navigationBarTextStyle": "#333"
-							// #endif
-							,
+						// #endif
+					,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -307,43 +380,19 @@
 						}
 					}
 				}
-                ,{
-                    "path" : "alipay_invoke/index",
-                    "style" :                                                                                    
+			,{
+					"path" : "alipay_invoke/index",
+					"style" :
 					{
 						"navigationBarTitleText": "",
 						"enablePullDownRefresh": false
 					}
-                
-                }
-                ,{
-                    "path" : "app_update/app_update",
-                    "style": {
-                    	"navigationBarTitleText": "检查更新",
-                    	"app-plus": {
-                    		// #ifdef APP-PLUS
-                    		"titleNView": {
-                    			"type": "default"
-                    		}
-                    		// #endif
-                    	}
-                    }
-                }
-            ]
-		},
-		{
-			"root": "pages/activity",
-			"name": "activity",
-			"pages": [{
-					"path": "goods_bargain/index",
+
+				}
+			,{
+					"path" : "app_update/app_update",
 					"style": {
-						"navigationBarTitleText": "砍价列表"
-						// #ifdef MP || APP-PLUS
-							,
-						"navigationBarTextStyle": "black",
-						"navigationBarBackgroundColor": "#fff"
-							// #endif
-							,
+						"navigationBarTitleText": "检查更新",
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -352,7 +401,31 @@
 							// #endif
 						}
 					}
-				},
+				}
+			]
+		},
+		{
+			"root": "pages/activity",
+			"name": "activity",
+			"pages": [{
+				"path": "goods_bargain/index",
+				"style": {
+					"navigationBarTitleText": "砍价列表"
+					// #ifdef MP || APP-PLUS
+				,
+					"navigationBarTextStyle": "black",
+					"navigationBarBackgroundColor": "#fff"
+					// #endif
+				,
+					"app-plus": {
+						// #ifdef APP-PLUS
+						"titleNView": {
+							"type": "default"
+						}
+						// #endif
+					}
+				}
+			},
 				{
 					"path": "small_page/index",
 					"style": {
@@ -374,7 +447,7 @@
 						// #ifdef MP || APP-PLUS
 						"navigationBarTextStyle": "black",
 						"navigationBarBackgroundColor": "#fff",
-							// #endif
+						// #endif
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -440,11 +513,11 @@
 					"path": "goods_seckill_details/index",
 					"style": {
 						"navigationBarTitleText": "秒杀详情"
-							// #ifdef MP
-							,
+						// #ifdef MP
+					,
 						"navigationStyle": "custom"
-							// #endif
-							,
+						// #endif
+					,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -458,12 +531,12 @@
 					"path": "poster-poster/index",
 					"style": {
 						"navigationBarTitleText": "砍价海报"
-							// #ifdef MP || APP-PLUS
-							,
+						// #ifdef MP || APP-PLUS
+					,
 						"navigationBarTextStyle": "#fff",
 						"navigationBarBackgroundColor": "#e93323"
-							// #endif
-							,
+						// #endif
+					,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -499,7 +572,7 @@
 						}
 					}
 				}
-            ]
+			]
 		},
 		{
 			"root": "pages/goods",
@@ -720,11 +793,11 @@
 					"style": {
 						"navigationBarTitleText": "修改手机号",
 						"navigationBarBackgroundColor": "#e93323"
-							// #ifdef MP || APP-PLUS
-							,
+						// #ifdef MP || APP-PLUS
+					,
 						"navigationBarTextStyle": "#fff"
-							// #endif
-							,
+						// #endif
+					,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -739,11 +812,11 @@
 					"style": {
 						"navigationBarTitleText": "修改密码",
 						"navigationBarBackgroundColor": "#e93323"
-							// #ifdef MP || APP-PLUS
-							,
+						// #ifdef MP || APP-PLUS
+					,
 						"navigationBarTextStyle": "#fff"
-							// #endif
-							,
+						// #endif
+					,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -870,8 +943,8 @@
 				}
 			]
 		}
-		// #ifdef H5 
-		,
+		// #ifdef H5
+	,
 		{
 			"root": "pages/auth",
 			"name":"auth",
@@ -884,7 +957,7 @@
 				}
 			]
 		}
-		// #endif 
+		// #endif
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -897,33 +970,33 @@
 		"rpxCalcIncludeWidth": 750
 	},
 	"tabBar": {
-		"custom": false,
-		"color": "#282828",
-		"selectedColor": "#fc4141",
+		"custom": true,
+		"color": "#666666",
+		"selectedColor": "#0052d9",
 		"borderStyle": "white",
 		"backgroundColor": "#ffffff",
 		"list": [{
-				"pagePath": "pages/index/index",
-				"iconPath": "static/tabBar/indexwei.png",
-				"selectedIconPath": "static/tabBar/indexxuan.png",
+				"pagePath": "pages/liaolan_index/index",
+				"iconPath": "static/tabBar/index.png",
+				"selectedIconPath": "static/tabBar/indexd.png",
 				"text": "首页"
 			},
 			{
 				"pagePath": "pages/goods_cate/goods_cate",
-				"iconPath": "static/tabBar/catewei.png",
-				"selectedIconPath": "static/tabBar/catexuan.png",
-				"text": "分类"
+				"iconPath": "static/tabBar/mall.png",
+				"selectedIconPath": "static/tabBar/malld.png",
+				"text": "商城"
 			},
 			{
-				"pagePath": "pages/order_addcart/order_addcart",
-				"iconPath": "static/tabBar/cartdwei.png",
-				"selectedIconPath": "static/tabBar/cartdxuan.png",
-				"text": "购物车"
+				"pagePath": "pages/case/case_list/index",
+				"iconPath": "static/tabBar/case.png",
+				"selectedIconPath": "static/tabBar/cased.png",
+				"text": "案例"
 			},
 			{
-				"pagePath": "pages/user/index",
-				"iconPath": "static/tabBar/userwei.png",
-				"selectedIconPath": "static/tabBar/userxuan.png",
+				"pagePath": "pages/liaolan_me/index",
+				"iconPath": "static/tabBar/my.png",
+				"selectedIconPath": "static/tabBar/myd.png",
 				"text": "我的"
 			}
 		]

@@ -110,6 +110,8 @@ public class WebConfig implements WebMvcConfigurer {
                 excludePathPatterns("/api/front/menu/user").
                 excludePathPatterns("/api/front/combination/header").
                 excludePathPatterns("/api/front/combination/detail").
+                excludePathPatterns("/api/front/case/**").
+                excludePathPatterns("/api/front/download/**").
                 excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 

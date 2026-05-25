@@ -209,6 +209,12 @@ public class Constants {
     public static final String CONFIG_KEY_TELEPHONE_SERVICE_SWITCH = "telephone_service_switch";
     // 微信客服额外开关
     public static final String CONFIG_KEY_WX_CHAT_INDEPENDENT = "wx_chat_independent";
+    // 联系我们-公司地址
+    public static final String CONFIG_KEY_CONTACT_COMPANY_ADDRESS = "contact_company_address";
+    // 联系我们-地图链接
+    public static final String CONFIG_KEY_CONTACT_MAP_LINK = "contact_map_link";
+    // 联系我们-客服二维码
+    public static final String CONFIG_KEY_CONTACT_SERVICE_QRCODE = "contact_service_qrcode";
     //商品分类页配置
     public static final String CONFIG_CATEGORY_CONFIG = "category_page_config"; //商品分类页配置
     public static final String CONFIG_IS_SHOW_CATEGORY = "is_show_category"; //是否隐藏一级分类

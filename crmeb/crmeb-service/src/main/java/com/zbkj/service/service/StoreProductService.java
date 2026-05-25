@@ -8,6 +8,7 @@ import com.zbkj.common.request.*;
 import com.zbkj.common.response.StoreProductInfoResponse;
 import com.zbkj.common.response.StoreProductResponse;
 import com.zbkj.common.response.StoreProductTabsHeader;
+import com.zbkj.common.response.ProductSimpleResponse;
 import com.zbkj.common.vo.MyRecord;
 import org.json.JSONException;
 
@@ -42,6 +43,13 @@ public interface StoreProductService extends IService<StoreProduct> {
      * @return 商品信息
      */
     List<StoreProduct> getListInIds(List<Integer> productIds);
+
+    /**
+     * 根据商品ID列表获取商品简洁信息
+     * @param productIds 商品ID列表
+     * @return 商品简洁信息列表
+     */
+    List<ProductSimpleResponse> getSimpleListByIds(List<Integer> productIds);
 
     /**
      * 新增商品

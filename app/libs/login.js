@@ -69,7 +69,7 @@ export function _toLogin(push, pathLogin) {
 	}
 	// #endif
 	
-	if (['pages/user/index','/pages/user/index'].indexOf(login_back_url) == -1) {
+	if (['pages/user/index','/pages/user/index','pages/case/case_list/index','/pages/case/case_list/index','pages/case_details/index','/pages/case_details/index'].indexOf(login_back_url) == -1) {
 		// #ifdef MP
 		uni.navigateTo({
 			 url: '/pages/users/wechat_login/index'

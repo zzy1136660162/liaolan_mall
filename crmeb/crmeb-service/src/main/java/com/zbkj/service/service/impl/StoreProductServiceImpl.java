@@ -290,6 +290,22 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         return dao.selectList(lambdaQueryWrapper);
     }
 
+    @Override
+    public List<ProductSimpleResponse> getSimpleListByIds(List<Integer> productIds) {
+        if (CollUtil.isEmpty(productIds)) {
+            return new ArrayList<>();
+        }
+        List<StoreProduct> productList = getListInIds(productIds);
+        return productList.stream().map(product -> {
+            ProductSimpleResponse response = new ProductSimpleResponse();
+            response.setId(product.getId());
+            response.setStoreName(product.getStoreName());
+            response.setImage(product.getImage());
+            response.setPrice(product.getPrice());
+            return response;
+        }).collect(Collectors.toList());
+    }
+
     /**
      * 新增产品
      * @param request 新增产品request对象
