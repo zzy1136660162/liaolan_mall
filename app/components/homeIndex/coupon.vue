@@ -222,6 +222,23 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.scroll_box {
 		display: flex;
 		overflow: hidden;
@@ -280,12 +297,12 @@
 	  background: url('../../static/images/couponBg2.png') !important;
 	  .right {
 	    width: 13%;
-	    color: #e93323;
+	    color: $primary;
 	    font-weight: 400;
 	    font-size: 13px;
 	  }
 	  .title {
-	    color: #e93323;
+	    color: $primary;
 	  }
 	  .sizePrice {
 	  	font-size: 36rpx !important;
@@ -304,7 +321,7 @@
 			.item {
 				width: 156rpx;
 				height: 152rpx;
-				background: #f12a13;
+				background: $primary;
 				position: relative;
 				border-radius: 12rpx 12rpx 30rpx 30rpx;
 
@@ -312,7 +329,7 @@
 					width: 140rpx;
 					height: 106rpx;
 					background: #ffffff;
-					border: 2rpx solid #fceae9;
+					border: 2rpx solid $surface-variant;
 					position: absolute;
 					left: 9rpx;
 					top: -16rpx;
@@ -320,7 +337,7 @@
 					font-size: 40rpx;
 					font-family: D-DIN-PRO, D-DIN-PRO;
 					font-weight: 600;
-					color: #e93323;
+					color: $primary;
 					padding-top: 6px;
 					border-radius: 12rpx 12rpx 0 0;
 
@@ -330,7 +347,7 @@
 
 					.tips {
 						font-size: 18rpx;
-						color: #999999;
+						color: $secondary;
 						font-weight: 500;
 					}
 
@@ -409,7 +426,7 @@
 					background: linear-gradient(0deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
 					border-radius: 12rpx;
 					text-align: center;
-					color: #e93323;
+					color: $primary;
 					display: flex;
 					flex-direction: column;
 					justify-content: center;

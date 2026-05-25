@@ -150,6 +150,15 @@ public class RedisUtil {
         }
     }
 
+    public Set<String> keys(String pattern) {
+        try {
+            return getRedisTemplate().keys(pattern);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     /**
      * 删除缓存
      *

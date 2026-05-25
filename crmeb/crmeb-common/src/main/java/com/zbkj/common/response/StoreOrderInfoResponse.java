@@ -165,4 +165,7 @@ public class StoreOrderInfoResponse implements Serializable {
 
     @ApiModelProperty(value = "订单类型")
     private String orderTypeText;
+
+    @ApiModelProperty(value = "履约扩展信息")
+    private OrderDeliveryExtendResponse deliveryExtend;
 }

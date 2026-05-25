@@ -179,7 +179,7 @@ public class OnePassUtil {
             throw new CrmebException("一号通平台接口异常！");
         }
         if (OnePassConstants.ONE_PASS_ERROR_CODE.equals(jsonObject.getInteger("status"))) {
-            throw new CrmebException("一号通平台接口" + jsonObject.getString("msg"));
+            throw new CrmebException("一号通平台" + jsonObject.getString("msg"));
         }
         return jsonObject;
     }

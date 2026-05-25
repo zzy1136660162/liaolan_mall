@@ -124,6 +124,9 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
     @Autowired
     private ActivityStyleService activityStyleService;
 
+    @Autowired
+    private StoreProductIndustryService storeProductIndustryService;
+
     private static final Logger logger = LoggerFactory.getLogger(StoreProductServiceImpl.class);
 
     /**
@@ -181,6 +184,28 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         if(StringUtils.isNotBlank(request.getCateId())){
             List<Integer> cateIds = Arrays.stream(request.getCateId().split(",")).map(Integer::valueOf).distinct().collect(Collectors.toList());
             lambdaQueryWrapper.in(StoreProduct::getCateId, cateIds);
+        }
+        boolean hasIndustryFilter = StrUtil.isNotBlank(request.getVoltageLevel())
+                || StrUtil.isNotBlank(request.getConductorMaterial())
+                || StrUtil.isNotBlank(request.getFlameRetardantGrade());
+        if (hasIndustryFilter) {
+            LambdaQueryWrapper<StoreProductIndustry> industryWrapper = Wrappers.lambdaQuery();
+            industryWrapper.select(StoreProductIndustry::getProductId);
+            if (StrUtil.isNotBlank(request.getVoltageLevel())) {
+                industryWrapper.eq(StoreProductIndustry::getVoltageLevel, request.getVoltageLevel());
+            }
+            if (StrUtil.isNotBlank(request.getConductorMaterial())) {
+                industryWrapper.eq(StoreProductIndustry::getConductorMaterial, request.getConductorMaterial());
+            }
+            if (StrUtil.isNotBlank(request.getFlameRetardantGrade())) {
+                industryWrapper.eq(StoreProductIndustry::getFlameRetardantGrade, request.getFlameRetardantGrade());
+            }
+            List<StoreProductIndustry> industryList = storeProductIndustryService.list(industryWrapper);
+            List<Integer> productIds = industryList.stream().map(StoreProductIndustry::getProductId).collect(Collectors.toList());
+            if (CollUtil.isEmpty(productIds)) {
+                return new PageInfo<>();
+            }
+            lambdaQueryWrapper.in(StoreProduct::getId, productIds);
         }
         // 新增销量排行和价格排行
         if (StrUtil.isNotBlank(request.getSalesOrder())) {
@@ -265,6 +290,22 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         return dao.selectList(lambdaQueryWrapper);
     }
 
+    @Override
+    public List<ProductSimpleResponse> getSimpleListByIds(List<Integer> productIds) {
+        if (CollUtil.isEmpty(productIds)) {
+            return new ArrayList<>();
+        }
+        List<StoreProduct> productList = getListInIds(productIds);
+        return productList.stream().map(product -> {
+            ProductSimpleResponse response = new ProductSimpleResponse();
+            response.setId(product.getId());
+            response.setStoreName(product.getStoreName());
+            response.setImage(product.getImage());
+            response.setPrice(product.getPrice());
+            return response;
+        }).collect(Collectors.toList());
+    }
+
     /**
      * 新增产品
      * @param request 新增产品request对象
@@ -283,7 +324,21 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         BeanUtils.copyProperties(request, storeProduct);
         storeProduct.setId(null);
         storeProduct.setAddTime(CrmebDateUtil.getNowTime());
-        storeProduct.setIsShow(false);
+
+        // 自动上架逻辑：优先使用请求参数，否则默认上架（解决后端添加商品无法在前端显示的问题）
+        if (ObjectUtil.isNotNull(request.getAutoShow())) {
+            storeProduct.setIsShow(request.getAutoShow());
+        } else {
+            // 默认自动上架，确保新商品能立即在移动端显示
+            String autoShowConfig = systemConfigService.getValueByKey("product_auto_show");
+            if (StrUtil.isNotBlank(autoShowConfig) && "false".equals(autoShowConfig)) {
+                storeProduct.setIsShow(false);
+            } else {
+                storeProduct.setIsShow(true);
+            }
+        }
+
+        logger.info("新增商品[{}] - 自动上架设置: {}", storeProduct.getStoreName(), storeProduct.getIsShow());
 
         // 设置Acticity活动
         storeProduct.setActivity(getProductActivityStr(request.getActivity()));
@@ -377,6 +432,14 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
                 }
                 storeProductCouponService.saveBatch(couponList);
             }
+
+            if (request.getIndustryInfo() != null) {
+                storeProductIndustryService.saveIndustryInfo(storeProduct.getId(), request.getIndustryInfo());
+            }
+
+            // 清除相关缓存，确保移动端能立即看到新商品
+            clearProductListCache(storeProduct.getCateId());
+
             return Boolean.TRUE;
         });
 
@@ -570,6 +633,13 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
                 storeProductCouponService.deleteByProductId(storeProduct.getId());
             }
 
+            if (storeProductRequest.getIndustryInfo() != null) {
+                storeProductIndustryService.updateIndustryInfo(storeProduct.getId(), storeProductRequest.getIndustryInfo());
+            }
+
+            // 清除相关缓存，确保移动端能立即看到更新后的商品
+            clearProductListCache(storeProduct.getCateId());
+
             return Boolean.TRUE;
         });
 
@@ -724,6 +794,9 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
             List<Integer> ids = storeProductCoupons.stream().map(StoreProductCoupon::getIssueCouponId).collect(Collectors.toList());
             storeProductResponse.setCouponIds(ids);
         }
+
+        storeProductResponse.setIndustryInfo(storeProductIndustryService.getIndustryInfo(storeProduct.getId()));
+
         return storeProductResponse;
     }
 
@@ -1084,6 +1157,8 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
             storeCartService.productStatusNotEnable(id);
             // 商品下架时，清除用户收藏
             storeProductRelationService.deleteByProId(storeProduct.getId());
+            // 清除缓存，确保移动端立即更新
+            clearProductListCache(storeProduct.getCateId());
             return Boolean.TRUE;
         });
 
@@ -1116,6 +1191,8 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         Boolean execute = transactionTemplate.execute(e -> {
             dao.updateById(storeProduct);
             storeCartService.productStatusNoEnable(skuIdList);
+            // 清除缓存，确保移动端立即显示新上架商品
+            clearProductListCache(storeProduct.getCateId());
             return Boolean.TRUE;
         });
         return execute;
@@ -1162,13 +1239,17 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
     }
 
     /**
-     * 获取商品移动端列表
+     * 获取商品移动端列表（性能优化版）
      * @param request 筛选参数
      * @param pageRequest 分页参数
      * @return List
      */
     @Override
     public List<StoreProduct> findH5List(ProductRequest request, PageParamRequest pageRequest) {
+        long startTime = System.currentTimeMillis();
+        logger.info("开始查询移动端商品列表 - 分类ID: {}, 关键字: {}, 行业筛选: {}/{}/{}",
+                request.getCid(), request.getKeyword(),
+                request.getVoltageLevel(), request.getConductorMaterial(), request.getFlameRetardantGrade());
 
         LambdaQueryWrapper<StoreProduct> lqw = Wrappers.lambdaQuery();
         // id、名称、图片、价格、销量、活动
@@ -1181,23 +1262,77 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         lqw.eq(StoreProduct::getMerId, false);
         lqw.gt(StoreProduct::getStock, 0);
         lqw.eq(StoreProduct::getIsShow, true);
+
+        // 优化1: 分类查询（带Redis缓存）
         if (ObjectUtil.isNotNull(request.getCid()) && !request.getCid().isEmpty()) {
             List<Integer> cidList = Stream.of(request.getCid().split(",")).map(Integer::valueOf).collect(Collectors.toList());
-            //查找当前类下的所有子类
-            List<Category> childVoListByPids = categoryService.getByPIds(cidList);
-            List<Integer> categoryIdList = childVoListByPids.stream().map(Category::getId).collect(Collectors.toList());
+            String cacheKey = Constants.CATEGORY_CHILDREN_CACHE + String.join(",", request.getCid().split(","));
+
+            List<Category> allChildCategories;
+            Object cachedData = redisUtil.get(cacheKey);
+            if (cachedData != null) {
+                allChildCategories = (List<Category>) cachedData;
+                logger.debug("从Redis缓存获取子分类数据 - Key: {}", cacheKey);
+            } else {
+                allChildCategories = categoryService.getAllChildCategoriesByPIds(cidList);
+                redisUtil.set(cacheKey, allChildCategories, Constants.CATEGORY_CACHE_EXPIRE);
+                logger.info("子分类数据已缓存 - Key: {}, 数量: {}", cacheKey, allChildCategories.size());
+            }
+
+            List<Integer> categoryIdList = allChildCategories.stream().map(Category::getId).collect(Collectors.toList());
             categoryIdList.addAll(cidList);
+            logger.debug("分类筛选 - 传入分类ID: {}, 所有子分类ID: {}", cidList, categoryIdList);
             lqw.apply(CrmebUtil.getFindInSetSql("cate_id", (ArrayList<Integer>) categoryIdList));
         }
 
         if (StrUtil.isNotBlank(request.getKeyword())) {
-//            if (CrmebUtil.isString2Num(request.getKeyword())) {
-//                Integer productId = Integer.valueOf(request.getKeyword());
-//                lqw.like(StoreProduct::getId, productId);
-//            } else {
             lqw.and(i -> i.like(StoreProduct::getStoreName, request.getKeyword())
                     .or().like(StoreProduct::getKeyword, request.getKeyword()));
-//            }
+        }
+
+        // 优化2: 行业筛选（使用IN查询替代两次查询）
+        boolean hasIndustryFilter = StrUtil.isNotBlank(request.getVoltageLevel())
+                || StrUtil.isNotBlank(request.getConductorMaterial())
+                || StrUtil.isNotBlank(request.getFlameRetardantGrade());
+        if (hasIndustryFilter) {
+            // 构建行业筛选缓存key
+            String industryCacheKey = Constants.PRODUCT_LIST_WITH_INDUSTRY_CACHE +
+                    request.getVoltageLevel() + "_" +
+                    request.getConductorMaterial() + "_" +
+                    request.getFlameRetardantGrade();
+
+            List<Integer> productIds;
+            Object cachedIndustryIds = redisUtil.get(industryCacheKey);
+            if (cachedIndustryIds != null) {
+                productIds = (List<Integer>) cachedIndustryIds;
+                logger.debug("从Redis缓存获取行业筛选商品ID列表 - Key: {}", industryCacheKey);
+            } else {
+                // 查询行业表获取符合条件的商品ID
+                LambdaQueryWrapper<StoreProductIndustry> industryWrapper = Wrappers.lambdaQuery();
+                industryWrapper.select(StoreProductIndustry::getProductId);
+                if (StrUtil.isNotBlank(request.getVoltageLevel())) {
+                    industryWrapper.eq(StoreProductIndustry::getVoltageLevel, request.getVoltageLevel());
+                }
+                if (StrUtil.isNotBlank(request.getConductorMaterial())) {
+                    industryWrapper.eq(StoreProductIndustry::getConductorMaterial, request.getConductorMaterial());
+                }
+                if (StrUtil.isNotBlank(request.getFlameRetardantGrade())) {
+                    industryWrapper.eq(StoreProductIndustry::getFlameRetardantGrade, request.getFlameRetardantGrade());
+                }
+                List<StoreProductIndustry> industryList = storeProductIndustryService.list(industryWrapper);
+                productIds = industryList.stream().map(StoreProductIndustry::getProductId).collect(Collectors.toList());
+
+                // 缓存商品ID列表（短期缓存）
+                redisUtil.set(industryCacheKey, productIds, Constants.PRODUCT_LIST_CACHE_EXPIRE);
+                logger.info("行业筛选商品ID已缓存 - Key: {}, 数量: {}", industryCacheKey, productIds.size());
+            }
+
+            if (CollUtil.isEmpty(productIds)) {
+                long costTime = System.currentTimeMillis() - startTime;
+                logger.info("移动端商品列表查询完成（无符合行业条件的商品） - 耗时: {}ms", costTime);
+                return CollUtil.newArrayList();
+            }
+            lqw.in(StoreProduct::getId, productIds);
         }
 
         // 排序部分
@@ -1219,11 +1354,23 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
             lqw.orderByDesc(StoreProduct::getSort);
             lqw.orderByDesc(StoreProduct::getId);
         }
+
         PageHelper.startPage(pageRequest.getPage(), pageRequest.getLimit());
         List<StoreProduct> storeProducts = dao.selectList(lqw);
         storeProducts.forEach(storeProduct -> {
             storeProduct.setSales(storeProduct.getSales() + storeProduct.getFicti());
         });
+
+        long costTime = System.currentTimeMillis() - startTime;
+        logger.info("移动端商品列表查询完成 - 结果数: {}, 耗时: {}ms, 页码: {}",
+                storeProducts.size(), costTime, pageRequest.getPage());
+
+        // 性能预警：如果超过200ms记录警告日志
+        if (costTime > 200) {
+            logger.warn("⚠️ 移动端商品列表查询耗时过长 - 耗时: {}ms, 参数: cid={}, keyword={}",
+                    costTime, request.getCid(), request.getKeyword());
+        }
+
         return storeProducts;
     }
 
@@ -1255,6 +1402,9 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         if (ObjectUtil.isNotNull(sd)) {
             storeProduct.setContent(StrUtil.isBlank(sd.getDescription()) ? "" : sd.getDescription());
         }
+
+        storeProduct.setIndustryInfo(storeProductIndustryService.getIndustryInfo(storeProduct.getId()));
+
         return storeProduct;
     }
 
@@ -1519,6 +1669,65 @@ public class StoreProductServiceImpl extends ServiceImpl<StoreProductDao, StoreP
         lqw.eq(StoreProduct::getIsDel, false);
         lqw.eq(StoreProduct::getIsRecycle, false);
         lqw.eq(StoreProduct::getIsShow, true);
+    }
+
+    ///////////////////////////////////////////
+    // 缓存管理方法（优化移动端分类筛选性能）
+    ///////////////////////////////////////////
+
+    /**
+     * 清除商品分类相关缓存
+     * 当分类数据变更时调用此方法
+     */
+    private void clearCategoryCache() {
+        try {
+            // 清除所有子分类缓存
+            Set<String> keys = redisUtil.keys(Constants.CATEGORY_CHILDREN_CACHE + "*");
+            if (CollUtil.isNotEmpty(keys)) {
+                for (String key : keys) {
+                    redisUtil.delete(key);
+                }
+                logger.info("已清除商品分类缓存 - 缓存数量: {}", keys.size());
+            }
+        } catch (Exception e) {
+            logger.error("清除商品分类缓存失败", e);
+        }
+    }
+
+    /**
+     * 清除行业筛选相关缓存
+     * 当商品行业信息变更时调用此方法
+     */
+    private void clearIndustryCache() {
+        try {
+            Set<String> keys = redisUtil.keys(Constants.PRODUCT_LIST_WITH_INDUSTRY_CACHE + "*");
+            if (CollUtil.isNotEmpty(keys)) {
+                for (String key : keys) {
+                    redisUtil.delete(key);
+                }
+                logger.info("已清除行业筛选缓存 - 缓存数量: {}", keys.size());
+            }
+        } catch (Exception e) {
+            logger.error("清除行业筛选缓存失败", e);
+        }
+    }
+
+    /**
+     * 清除所有商品列表相关缓存
+     * 在商品上架、下架、保存、更新时调用
+     */
+    private void clearProductListCache(String cateId) {
+        clearCategoryCache();
+        clearIndustryCache();
+        if (StrUtil.isNotBlank(cateId)) {
+            try {
+                String cacheKey = Constants.CATEGORY_CHILDREN_CACHE + cateId;
+                redisUtil.delete(cacheKey);
+                logger.debug("已清除指定分类缓存 - Key: {}", cacheKey);
+            } catch (Exception e) {
+                logger.error("清除指定分类缓存失败 - CateId: {}", cateId, e);
+            }
+        }
     }
 }
 

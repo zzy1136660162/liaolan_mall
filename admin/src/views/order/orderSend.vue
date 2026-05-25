@@ -196,6 +196,16 @@
           <div style="color: #cecece">例如：SF000000000000:3941</div>
         </el-form-item>
       </div>
+      <el-divider content-position="left">履约扩展信息</el-divider>
+      <el-form-item label="线缆批次号：">
+        <el-input v-model="formItem.deliveryExtend.batchNo" placeholder="请输入线缆批次号（用于追溯批次）"></el-input>
+      </el-form-item>
+      <el-form-item label="出厂编号：">
+        <el-input v-model="formItem.deliveryExtend.factorySerialNo" placeholder="请输入出厂追溯编号"></el-input>
+      </el-form-item>
+      <el-form-item label="发货备注：">
+        <el-input v-model="formItem.deliveryExtend.deliveryRemark" type="textarea" :rows="2" placeholder="请输入发货备注说明"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer">
       <el-button @click="cancel('formItem')">取消</el-button>
@@ -260,12 +270,19 @@ export default {
           sendRealName: '',
           sendPhone: '',
           sendAddress: '',
-          kuaidicom: '', //快递公司编码
-          serviceType: '', //快递业务类型
-          pickupStartTime: '', // 取件开始时间
-          pickupEndTime: '', // 取件结束时间
-          tempid: '', //电子面单模板id
-          dayType: 1, //时间
+          kuaidicom: '',
+          serviceType: '',
+          pickupStartTime: '',
+          pickupEndTime: '',
+          tempid: '',
+          dayType: 1,
+        },
+        deliveryExtend: {
+          deliveryCompany: '',
+          deliveryNo: '',
+          deliveryRemark: '',
+          batchNo: '',
+          factorySerialNo: '',
         },
       },
       modals: false,

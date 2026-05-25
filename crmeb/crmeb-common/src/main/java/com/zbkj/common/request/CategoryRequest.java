@@ -48,6 +48,10 @@ public class CategoryRequest implements Serializable {
     @Length(max = 50, message = "分类名称不能超过50个字符")
     private String name;
 
+    @ApiModelProperty(value = "分类描述/用途")
+    @Length(max = 255, message = "分类描述不能超过255个字符")
+    private String description;
+
     @ApiModelProperty(value = "类型，类型，1 产品分类，2 附件分类，3 文章分类， 4 设置分类， 5 菜单分类， 6 配置分类， 7 秒杀配置")
     @NotNull(message = "类型必须选择")
     @Range(min = 1, max = 6, message = "类型，1 产品分类，2 附件分类，3 文章分类， 4 设置分类， 5 菜单分类， 6 配置分类， 7 秒杀配置之间") //取值范围

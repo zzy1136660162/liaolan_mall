@@ -162,6 +162,20 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	/*用来包裹所有的小圆点  */
 	.dots {
 		display: flex;
@@ -174,9 +188,10 @@
 	.dot-item {
 		width: 10rpx;
 		height: 10rpx;
-		background-color: rgba(255, 255, 255, .4);
+		background-color: rgba($primary, 0.25);
 		border-radius: 50%;
 		margin: 0 6rpx;
+		transition: all 0.3s $ease;
 	}
 	
 	/*未选中时的小圆点样式 */
@@ -185,11 +200,12 @@
 		height: 6rpx;
 		border-radius: 6rpx;
 		margin-right: 6rpx;
-		background-color: rgba(255, 255, 255, .4);
+		background-color: rgba($primary, 0.25);
+		transition: all 0.3s $ease;
 	}
 	.swiperBg {
 		position: relative;
-		background: #fff;
+		background: $surface-lowest;
 		z-index: 1;
 
 		.colorBg {
@@ -205,8 +221,9 @@
 			width: 100%;
 			height: auto;
 			margin: 0 auto;
-			border-radius: 10rpx;
+			border-radius: $r-md;
 			overflow-x: hidden;
+			box-shadow: 0 2rpx 12rpx rgba(0, 61, 166, 0.06);
 			/* #ifdef MP */
 			z-index: 20;
 
@@ -236,7 +253,7 @@
 
 			image {
 				transform: scale(0.93);
-				transition: all 0.6s ease;
+				transition: all 0.6s $ease;
 			}
 
 			swiper-item.active {

@@ -150,16 +150,37 @@
 </script>
 
 <style lang="scss">
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$tertiary-container: #895000;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$surface-variant: #dfe2ed;
+	$on-surface: #181c23;
+	$secondary: #5c5f60;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$r-lg: 20rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.grid_box {
 		display: grid;
 		grid-template-rows: auto;
 
 		image {
 			width: 100%;
+			border-radius: $r-md;
+			overflow: hidden;
 		}
 	}
 
 	.pictureCube {
+		box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.03);
+
 		uni-image {
 			width: 100%;
 			max-width: 100%;
@@ -180,10 +201,12 @@
 			.img-left{
 				width: 100%;
 				height: 100%;
+				border-radius: $r-md;
 			}
 			.img-right{
 				width: 100%;
 				height: 100%;
+				border-radius: $r-md;
 			}
 		}
 	}

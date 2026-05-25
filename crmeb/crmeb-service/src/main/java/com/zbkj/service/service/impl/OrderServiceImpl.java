@@ -179,6 +179,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private StoreOrderDeliveryExtendService storeOrderDeliveryExtendService;
+
     /**
      * 发送后台管理员下单提醒通知短信
      *
@@ -566,6 +569,10 @@ public class OrderServiceImpl implements OrderService {
         storeOrderDetailResponse.setPayTypeStr(orderStatusVo.getStr("payTypeStr"));
         BigDecimal proTotalPrice = storeOrderDetailResponse.getPayPrice().add(storeOrderDetailResponse.getCouponPrice()).add(storeOrderDetailResponse.getDeductionPrice()).subtract(storeOrderDetailResponse.getPayPostage());
         storeOrderDetailResponse.setProTotalPrice(proTotalPrice);
+
+        OrderDeliveryExtendResponse deliveryExtend = storeOrderDeliveryExtendService.getDeliveryExtend(storeOrder.getId());
+        storeOrderDetailResponse.setDeliveryExtend(deliveryExtend);
+
         return storeOrderDetailResponse;
     }
 

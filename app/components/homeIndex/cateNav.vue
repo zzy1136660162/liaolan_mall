@@ -141,6 +141,17 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$surface: #f9f9ff;
+	$surface-lowest: #ffffff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$secondary: #5c5f60;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.navTabBox {
 		width: 100%;
 		height: 70rpx;
@@ -148,6 +159,8 @@
 		position: fixed;
 		z-index: 99;
 		padding: 0 20rpx;
+		background: $surface-lowest;
+		border-bottom: 1rpx solid $outline-variant;
 		&.isFixed {
 			z-index: 10;
 			position: fixed;
@@ -159,7 +172,7 @@
 		}
 
 		.click {
-			color: white;
+			color: $primary;
 		}
 
 		.longTab {
@@ -169,13 +182,14 @@
 				line-height: 70rpx;
 				text-align: center;
 				font-size: 28rpx;
-				color: #333333;
+				color: $on-surface-variant;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				margin-right: 30rpx;
+				transition: color 0.2s $ease;
 				&.click {
-					font-weight: bold;
+					font-weight: 600;
 					font-size: 30rpx;
 					position: relative;
 
@@ -183,12 +197,12 @@
 						content: '';
 						width: 40rpx;
 						height: 4rpx;
-						background: var(--color);
-						// background-color: #E93323;
+						background: $primary;
 						position: absolute;
 						bottom: 0;
 						left: 50%;
 						transform: translateX(-50%);
+						transition: all 0.3s $ease;
 					}
 				}
 			}

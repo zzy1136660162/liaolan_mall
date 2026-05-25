@@ -1,24 +1,24 @@
 <template>
 	<view class="page" :data-theme="theme" :style="{height:winHeight + 'px'}">
-		<cate v-show="currentPage == 'one'"></cate>
-		<pageFooter v-if="footerShow"></pageFooter>
+		<stitchCate v-show="currentPage == 'one'"></stitchCate>
+		<tab-bar v-if="showTabBar"></tab-bar>
 	</view>
 </template>
 <script>
-	import pageFooter from '@/components/pageFooter/index.vue'
-	import cate from './components/default_cate';
+	import tabBar from '@/components/tab-bar/index.vue';
+	import stitchCate from './components/stitch_cate';
 	import {getShare} from '@/api/public.js';
 	import {mapGetters} from 'vuex';
 	const app = getApp();
 	export default {
 		data() {
 			return {
-				footerShow:true,
+				showTabBar:true,
 				currentPage:'one',
 				theme:app.globalData.theme,
 				showSlide:true,
 				winHeight:'',
-				configApi: {}, //分享类容配置
+				configApi: {},
 			}
 		},
 		computed: mapGetters(['isLogin', 'uid']),
@@ -35,13 +35,11 @@
 					break;
 				case '3':
 					that.$set(that,'currentPage','three');
-					uni.hideTabBar()
-					this.footerShow=false
+					this.showTabBar=false
 					break;
 				case '4':
 					that.$set(that,'currentPage','four');
-					uni.hideTabBar()
-					this.footerShow=false
+					this.showTabBar=false
 					break;
 			}
 			uni.getSystemInfo({
@@ -60,19 +58,16 @@
 				case 'two':
 					break;
 				case 'three':
-					uni.hideTabBar()
-					this.footerShow=false
+					this.showTabBar=false
 					setTimeout(()=>{
 						if(this.isLogin){
-							//登录的情况下获取模板3,4的购物车商品数量和列表
 							this.$refs.classThree.getCartNum();
 							this.$refs.classThree.getCartLists(1);
 						}
 					},500)
 					break;
 				case 'four':
-					uni.hideTabBar()
-					this.footerShow=false
+					this.showTabBar=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classFour.getCartNum();
@@ -83,7 +78,7 @@
 			}
 		},
 		components:{
-			cate,pageFooter
+			stitchCate,tabBar
 		},
 		methods:{
 			shareApi: function() {
@@ -94,7 +89,6 @@
 					// #endif
 				})
 			},
-			// 微信分享；
 			setOpenShare: function(data) {
 				let that = this;
 				if (that.$wechat.isWeixin()) {

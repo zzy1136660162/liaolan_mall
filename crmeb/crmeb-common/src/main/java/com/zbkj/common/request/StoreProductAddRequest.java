@@ -129,4 +129,10 @@ public class StoreProductAddRequest implements Serializable {
     @ApiModelProperty(value = "展示图")
     @Length(max = 1000, message = "展示图名称长度不能超过1000个字符")
     private String flatPattern;
+
+    @ApiModelProperty(value = "行业扩展信息-电线电缆结构化参数")
+    private ProductIndustryRequest industryInfo;
+
+    @ApiModelProperty(value = "是否自动上架（true=保存后自动上架，false=保存到仓库）")
+    private Boolean autoShow;
 }

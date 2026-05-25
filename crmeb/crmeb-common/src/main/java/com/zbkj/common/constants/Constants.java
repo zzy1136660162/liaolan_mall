@@ -143,6 +143,12 @@ public class Constants {
     //商品库存redis key
     public static final String PRODUCT_STOCK_LIST = "product_stock_list";
 
+    //商品分类缓存key（优化移动端分类筛选性能）
+    public static final String CATEGORY_CHILDREN_CACHE = "category_children_cache_";  //子分类缓存前缀
+    public static final Long CATEGORY_CACHE_EXPIRE = 300L;  //分类缓存过期时间（5分钟）
+    public static final String PRODUCT_LIST_WITH_INDUSTRY_CACHE = "product_list_industry_";  //行业筛选商品列表缓存前缀
+    public static final Long PRODUCT_LIST_CACHE_EXPIRE = 60L;  //商品列表缓存过期时间（1分钟）
+
 
     //sku库存变动队列key
 //    public static final String SKU_STOCK_UPDATE = "product_stock_update";
@@ -168,6 +174,9 @@ public class Constants {
     public static final String CONFIG_KEY_SITE_LOGO = "mobile_top_logo"; //logo地址
     public static final String CONFIG_KEY_MOBILE_LOGIN_LOGO = "mobile_login_logo"; // 移动端登录 logo
     public static final String CONFIG_KEY_SITE_NAME = "site_name"; //网站名称
+    public static final String CONFIG_KEY_CONTACT_COMPANY_ADDRESS = "contact_company_address"; //公司地址
+    public static final String CONFIG_KEY_CONTACT_MAP_LINK = "contact_map_link"; //地图链接
+    public static final String CONFIG_KEY_CONTACT_SERVICE_QRCODE = "contact_service_qrcode"; //客服二维码
 //    public static final String CONFIG_SITE_TENG_XUN_MAP_KEY = "tengxun_map_key"; //腾讯地图key
     public static final String CONFIG_BANK_LIST = "user_extract_bank"; //可提现银行
     public static final String CONFIG_EXTRACT_FREEZING_TIME = "extract_time"; //提现冻结时间

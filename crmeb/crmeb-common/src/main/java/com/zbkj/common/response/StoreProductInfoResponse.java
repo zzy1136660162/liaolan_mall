@@ -163,4 +163,7 @@ public class StoreProductInfoResponse implements Serializable {
 
     @ApiModelProperty(value = "展示图")
     private String flatPattern;
+
+    @ApiModelProperty(value = "行业扩展信息-电线电缆结构化参数")
+    private ProductIndustryResponse industryInfo;
 }

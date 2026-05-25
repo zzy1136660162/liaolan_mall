@@ -24,6 +24,26 @@
             >
             </el-input>
           </el-form-item>
+          <el-form-item label="电压等级：">
+            <el-select v-model="tableFrom.voltageLevel" placeholder="请选择" clearable size="small" class="selWidth" @change="seachList">
+              <el-option v-for="item in voltageLevelOptions" :key="item" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="导体材质：">
+            <el-select v-model="tableFrom.conductorMaterial" placeholder="请选择" clearable size="small" class="selWidth" @change="seachList">
+              <el-option label="铜" value="铜" />
+              <el-option label="铝" value="铝" />
+              <el-option label="铝合金" value="铝合金" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="阻燃等级：">
+            <el-select v-model="tableFrom.flameRetardantGrade" placeholder="请选择" clearable size="small" class="selWidth" @change="seachList">
+              <el-option label="ZR（阻燃）" value="ZR" />
+              <el-option label="NH（耐火）" value="NH" />
+              <el-option label="WDZ（低烟无卤）" value="WDZ" />
+              <el-option label="无" value="无" />
+            </el-select>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="seachList" size="small" v-hasPermi="['admin:product:list']"
               >搜索</el-button
@@ -48,6 +68,9 @@
         </router-link>
         <el-button type="success" @click="onCopy" v-hasPermi="['admin:product:save']">商品采集</el-button>
         <el-button @click="exports" v-hasPermi="['admin:export:excel:product']">导出</el-button>
+        <el-button type="warning" size="small" @click="handleBatchOn" :disabled="!selectedIds.length" v-hasPermi="['admin:product:up']">批量上架</el-button>
+        <el-button size="small" @click="handleBatchOff" :disabled="!selectedIds.length" v-hasPermi="['admin:product:down']">批量下架</el-button>
+        <el-button type="danger" size="small" @click="handleBatchDelete" :disabled="!selectedIds.length" v-hasPermi="['admin:product:delete']">批量删除</el-button>
       </div>
       <el-table
         class="table"
@@ -56,7 +79,9 @@
         style="width: 100%"
         size="mini"
         :highlight-current-row="true"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="55" />
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
@@ -244,9 +269,14 @@ export default {
         cateId: '',
         keywords: '',
         type: '1',
+        voltageLevel: '',
+        conductorMaterial: '',
+        flameRetardantGrade: '',
       },
       categoryList: [],
       merCateList: [],
+      selectedIds: [],
+      voltageLevelOptions: ['300/500V', '450/750V', '0.6/1kV', '1.8/3kV', '3.6/6kV', '6/10kV', '8.7/10kV', '10kV', '35kV'],
       objectUrl: process.env.VUE_APP_BASE_API,
       dialogVisible: false,
       card_select_show: false,
@@ -285,8 +315,44 @@ export default {
     handleReset() {
       this.tableFrom.cateId = '';
       this.tableFrom.keywords = '';
+      this.tableFrom.voltageLevel = '';
+      this.tableFrom.conductorMaterial = '';
+      this.tableFrom.flameRetardantGrade = '';
       this.goodHeade();
       this.getList();
+    },
+    handleSelectionChange(val) {
+      this.selectedIds = val.map((item) => item.id);
+    },
+    handleBatchOn() {
+      if (!this.selectedIds.length) return;
+      this.$modalSure(`确定将选中的 ${this.selectedIds.length} 个商品上架？`).then(() => {
+        Promise.all(this.selectedIds.map((id) => putOnShellApi(id))).then(() => {
+          this.$message.success('批量上架成功');
+          this.goodHeade();
+          this.getList();
+        });
+      });
+    },
+    handleBatchOff() {
+      if (!this.selectedIds.length) return;
+      this.$modalSure(`确定将选中的 ${this.selectedIds.length} 个商品下架？`).then(() => {
+        Promise.all(this.selectedIds.map((id) => offShellApi(id))).then(() => {
+          this.$message.success('批量下架成功');
+          this.goodHeade();
+          this.getList();
+        });
+      });
+    },
+    handleBatchDelete() {
+      if (!this.selectedIds.length) return;
+      this.$modalSure(`确定将选中的 ${this.selectedIds.length} 个商品删除？`).then(() => {
+        Promise.all(this.selectedIds.map((id) => productDeleteApi(id, { type: 'recycle' }))).then(() => {
+          this.$message.success('批量删除成功');
+          this.goodHeade();
+          this.getList();
+        });
+      });
     },
     //恢复商品
     handleRestore: Debounce(function (id) {

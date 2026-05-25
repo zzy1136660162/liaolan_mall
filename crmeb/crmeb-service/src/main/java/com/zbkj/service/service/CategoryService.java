@@ -55,6 +55,8 @@ public interface CategoryService extends IService<Category> {
      */
     List<Category> getByPIds(List<Integer> idList);
 
+    List<Category> getAllChildCategoriesByPIds(List<Integer> idList);
+
     HashMap<Integer, String> getListInId(List<Integer> cateIdList);
 
     Boolean checkAuth(List<Integer> pathIdList, String uri);

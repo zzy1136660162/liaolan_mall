@@ -22,6 +22,9 @@ import com.zbkj.common.request.CategorySearchRequest;
 import com.zbkj.service.dao.CategoryDao;
 import com.zbkj.service.service.CategoryService;
 import com.zbkj.service.service.SystemAttachmentService;
+import com.zbkj.common.utils.RedisUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -48,11 +52,16 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> implements CategoryService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CategoryServiceImpl.class);
+
     @Resource
     private CategoryDao dao;
 
     @Autowired
     private SystemAttachmentService systemAttachmentService;
+
+    @Autowired
+    private RedisUtil redisUtil;
 
 
     /**
@@ -107,6 +116,26 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         return dao.selectList(lambdaQueryWrapper);
     }
 
+    @Override
+    public List<Category> getAllChildCategoriesByPIds(List<Integer> idList) {
+        if (CollUtil.isEmpty(idList)) {
+            return new ArrayList<>();
+        }
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status", CategoryConstants.CATEGORY_STATUS_NORMAL);
+        queryWrapper.and(wrapper -> {
+            for (int i = 0; i < idList.size(); i++) {
+                Integer pid = idList.get(i);
+                if (i == 0) {
+                    wrapper.like("path", "/" + pid + "/");
+                } else {
+                    wrapper.or().like("path", "/" + pid + "/");
+                }
+            }
+        });
+        return dao.selectList(queryWrapper);
+    }
+
     /**
      * 通过id集合获取列表 id => name
      * @param cateIdList List<Integer> id集合
@@ -154,7 +183,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
     @Override
     public boolean update(CategoryRequest request, Integer id) {
         try{
-            //修改分类信息
             Category category = new Category();
             BeanUtils.copyProperties(request, category);
             category.setId(id);
@@ -163,16 +191,17 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
             category.setUpdateTime(DateUtil.date());
             updateById(category);
 
-            //如状态为关闭，那么所以子集的状态都关闭
             if(!request.getStatus()){
                 updateStatusByPid(id, false);
             }else{
-                //如是开启，则父类的状态为开启
                 updatePidStatusById(id);
             }
 
+            clearCategoryCache();
+            logger.info("分类更新，已清除分类缓存 - 分类ID: {}", id);
             return true;
         }catch (Exception e){
+            logger.error("分类更新失败 - 分类ID: {}", id, e);
             e.printStackTrace();
             return false;
         }
@@ -341,12 +370,14 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
      */
     @Override
     public int delete(Integer id) {
-        //查看是否有子类, 物理删除
         if(getChildCountByPid(id) > 0){
             throw new CrmebException("当前分类下有子类，请先删除子类！");
         }
 
-        return dao.deleteById(id);
+        int result = dao.deleteById(id);
+        clearCategoryCache();
+        logger.info("分类删除，已清除分类缓存 - 分类ID: {}", id);
+        return result;
     }
 
     /**
@@ -418,7 +449,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         Category category = getById(id);
         category.setStatus(!category.getStatus());
         category.setUpdateTime(DateUtil.date());
-        return updateById(category);
+        boolean result = updateById(category);
+        clearCategoryCache();
+        logger.info("分类状态更新，已清除分类缓存 - 分类ID: {}, 新状态: {}", id, category.getStatus());
+        return result;
     }
 
     /**
@@ -427,7 +461,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
      */
     @Override
     public Boolean create(CategoryRequest categoryRequest) {
-        //检测标题是否存在
         if(checkName(categoryRequest.getName(), categoryRequest.getType(),getPathByPId(categoryRequest.getPid())) > 0){
             throw new CrmebException("此分类已存在");
         }
@@ -435,7 +468,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         BeanUtils.copyProperties(categoryRequest, category);
         category.setPath(getPathByPId(category.getPid()));
         category.setExtra(systemAttachmentService.clearPrefix(category.getExtra()));
-        return save(category);
+        Boolean result = save(category);
+        clearCategoryCache();
+        logger.info("分类创建，已清除分类缓存 - 分类ID: {}, 名称: {}", category.getId(), category.getName());
+        return result;
     }
 
     /**
@@ -451,6 +487,20 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, Category> impl
         lambdaQueryWrapper.orderByDesc(Category::getSort);
         lambdaQueryWrapper.orderByAsc(Category::getId);
         return dao.selectList(lambdaQueryWrapper);
+    }
+
+    private void clearCategoryCache() {
+        try {
+            Set<String> keys = redisUtil.keys(Constants.CATEGORY_CHILDREN_CACHE + "*");
+            if (keys != null && !keys.isEmpty()) {
+                for (String key : keys) {
+                    redisUtil.delete(key);
+                }
+                logger.info("已清除所有分类子类缓存 - 缓存数量: {}", keys.size());
+            }
+        } catch (Exception e) {
+            logger.error("清除分类缓存失败", e);
+        }
     }
 }
 

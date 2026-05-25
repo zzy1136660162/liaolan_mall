@@ -1,8 +1,11 @@
 package com.zbkj.front.config;
 
+import com.zbkj.common.constants.UploadConstants;
+import com.zbkj.common.config.CrmebConfig;
 import com.zbkj.common.interceptor.SwaggerInterceptor;
 import com.zbkj.front.filter.ResponseFilter;
 import com.zbkj.front.interceptor.FrontTokenInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -13,6 +16,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.MappedInterceptor;
+
+import java.io.File;
 
 /**
  * token验证拦截器
@@ -40,6 +45,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Bean
     public ResponseFilter responseFilter(){ return new ResponseFilter(); }
 
+    @Autowired
+    private CrmebConfig crmebConfig;
+
     @Value("${swagger.basic.username}")
     private String username;
     @Value("${swagger.basic.password}")
@@ -66,6 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
                 excludePathPatterns("/api/front/search/keyword").
                 excludePathPatterns("/api/front/share").
                 excludePathPatterns("/api/front/article/**").
+                excludePathPatterns("/api/front/contact/**").
                 excludePathPatterns("/api/front/city/**").
                 excludePathPatterns("/api/front/product/hot").
                 excludePathPatterns("/api/front/product/good").
@@ -98,11 +107,12 @@ public class WebConfig implements WebMvcConfigurer {
                 excludePathPatterns("/api/front/copyright/info").
                 excludePathPatterns("/api/front/get/bottom/navigation").
                 excludePathPatterns("/api/front/agreement/**").
-                excludePathPatterns("/api/front/download/**").
                 excludePathPatterns("/api/front/pagediy/**").
                 excludePathPatterns("/api/front/menu/user").
                 excludePathPatterns("/api/front/combination/header").
                 excludePathPatterns("/api/front/combination/detail").
+                excludePathPatterns("/api/front/case/**").
+                excludePathPatterns("/api/front/download/**").
                 excludePathPatterns("/swagger-resources/**", "/webjars/**", "/v2/**", "/swagger-ui.html/**");
     }
 
@@ -114,6 +124,20 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        /** 本地文件上传路径 */
+        String imagePath = crmebConfig.getImagePath();
+        if (imagePath == null || imagePath.isEmpty()) {
+            imagePath = "./";
+        }
+        if (!imagePath.endsWith("/") && !imagePath.endsWith(File.separator)) {
+            imagePath = imagePath + "/";
+        }
+        registry.addResourceHandler(UploadConstants.UPLOAD_FILE_KEYWORD + "/**")
+                .addResourceLocations("file:" + imagePath + UploadConstants.UPLOAD_FILE_KEYWORD + "/");
+
+        registry.addResourceHandler(UploadConstants.UPLOAD_AFTER_FILE_KEYWORD + "/**")
+                .addResourceLocations("file:" + imagePath + UploadConstants.UPLOAD_AFTER_FILE_KEYWORD + "/");
     }
 
     @Bean

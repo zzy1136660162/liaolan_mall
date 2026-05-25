@@ -871,9 +871,10 @@ export default {
           this.getFileList();
           this.onCallback();
         })
-        .catch((res) => {
-          this.onCallback();
+        .catch((err) => {
           loading.close();
+          this.$message.error(err && err.message ? err.message : '上传失败，请重试');
+          this.onCallback();
         });
     },
     // 文件列表

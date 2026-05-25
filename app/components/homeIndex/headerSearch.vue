@@ -40,7 +40,7 @@
 					</navigator>
 				</view>
 			</view>
-			
+
 		</view>
 		<view :style="'height:'+marTop+'px;'"></view>
 	</view>
@@ -156,7 +156,7 @@
 				}, 100)
 			})
 			// #endif
-			
+
 			// #ifdef MP
 			const res = uni.getMenuButtonBoundingClientRect()
 			const statusHeight = res.top //胶囊距离顶部
@@ -173,7 +173,7 @@
 				}
 			})
 			// #endif
-			
+
 			// #ifdef H5
 			this.marTop = 43
 			// #endif
@@ -193,15 +193,29 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$surface: #f9f9ff;
+	$surface-low: #f1f3ff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.ml40 {
 		margin-left: 40rpx;
 	}
-    .sys-head{
-		background: #f5f5f5;
+
+	.sys-head {
+		background: $surface-low;
 	}
+
 	.header {
 		width: 100%;
-		background: #ffffff;
+		background: $white;
 
 		.btn {
 			position: relative;
@@ -231,7 +245,6 @@
 				height: 60rpx;
 			}
 		}
-
 	}
 
 	.swiperTxt {
@@ -247,22 +260,17 @@
 
 	.swiperTxt .text .label {
 		font-size: 20rpx;
-		color: #ff4c48;
+		color: $primary;
 		width: 64rpx;
 		height: 30rpx;
 		border-radius: 40rpx;
 		text-align: center;
 		line-height: 28rpx;
-		border: 2rpx solid #ff4947;
+		border: 2rpx solid rgba($primary, 0.3);
 	}
 
 	.swiperTxt .text .newsTitle {
-		// width: 300rpx;
 		font-size: 24rpx;
-		// text-align: center;
-		/* #ifdef MP */
-		// width: 260rpx !important;
-		/* #endif */
 	}
 
 	.swiperTxt swiper {
@@ -305,21 +313,22 @@
 				height: 58rpx;
 				line-height: 58rpx;
 				padding: 0 20rpx 0 54rpx;
-				background: rgba(0, 0, 0, 0.22);
-				border: 1px solid #E4E4E4;
-				border-radius: 29rpx;
-				color: #fff;
+				background: $surface-low;
+				border: 1px solid $outline-variant;
+				border-radius: 16rpx;
+				color: $on-surface-variant;
 				font-size: 28rpx;
 				position: relative;
 				box-sizing: border-box;
+				transition: background 0.3s $ease, box-shadow 0.3s $ease, border-color 0.3s $ease;
 
 				.iconfont {
-					// position: absolute;
 					left: 14rpx;
 					font-size: 26rpx;
-					//top: 10rpx;
+					color: $primary;
 				}
-				.line1{
+
+				.line1 {
 					display: inline-block;
 					width: 400rpx;
 				}
@@ -327,15 +336,25 @@
 
 			.uninput {
 				/* #ifdef MP */
-				width: 75% ;
+				width: 75%;
 				/* #endif */
 				/* #ifndef MP */
 				width: 100%;
 				/* #endif */
 			}
 		}
+
+		&.scrolled .serch-wrapper {
+			.input,
+			.uninput {
+				background: $white;
+				box-shadow: 0 2rpx 12rpx rgba(0, 61, 166, 0.08);
+				border-color: rgba(195, 198, 215, 0.5);
+			}
+		}
 	}
-	.maxInput{
+
+	.maxInput {
 		width: 100% !important;
 	}
 </style>

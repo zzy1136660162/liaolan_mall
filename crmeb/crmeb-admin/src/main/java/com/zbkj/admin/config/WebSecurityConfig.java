@@ -120,9 +120,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/"+ UploadConstants.UPLOAD_FILE_KEYWORD +"/**").permitAll()
             .antMatchers("/"+ UploadConstants.DOWNLOAD_FILE_KEYWORD +"/**").permitAll()
             .antMatchers("/"+ UploadConstants.UPLOAD_AFTER_FILE_KEYWORD +"/**").permitAll()
-                // 放行图片、文件上传
-            .antMatchers("/api/admin/upload/image").permitAll()
-            .antMatchers("/api/admin/upload/file").permitAll()
 //            .antMatchers("/wx/user/*/login","/citylife/nocheck/**").anonymous()
             .antMatchers(
                     HttpMethod.GET,

@@ -203,6 +203,9 @@ public class StoreOrderDetailInfoResponse implements Serializable {
     @ApiModelProperty(value = "订单详情")
     private List<OrderInfoResponse> orderInfoList;
 
+    @ApiModelProperty(value = "履约扩展信息")
+    private OrderDeliveryExtendResponse deliveryExtend;
+
 //    @ApiModelProperty(value = "订单ID")
 //    private Integer id;
 //

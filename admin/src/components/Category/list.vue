@@ -55,6 +55,11 @@
             <el-table-column prop="name" label="名称" min-width="240">
               <template slot-scope="scope"> {{ scope.row.name }} | {{ scope.row.id }} </template>
             </el-table-column>
+            <el-table-column label="描述/用途" min-width="200" v-if="biztype.value === 1">
+              <template slot-scope="scope">
+                <span class="description-text">{{ scope.row.description || '-' }}</span>
+              </template>
+            </el-table-column>
             <template v-if="!selectModel">
               <el-table-column label="类型" min-width="150">
                 <template slot-scope="scope">
@@ -99,7 +104,11 @@
 
               <el-table-column label="操作" width="190" fixed="right">
                 <template slot-scope="scope">
-                  <template v-if="(biztype.value === 1 && scope.row.pid === 0) || biztype.value === 5">
+                  <template v-if="biztype.value === 1 && scope.row.pid !== undefined">
+                    <a @click="handleAddMenu(scope.row)" v-if="getCategoryLevel(scope.row) < 4">添加子目录</a>
+                    <el-divider direction="vertical" v-if="getCategoryLevel(scope.row) < 4"></el-divider>
+                  </template>
+                  <template v-if="biztype.value === 5">
                     <a @click="handleAddMenu(scope.row)">添加子目录</a>
                     <el-divider direction="vertical"></el-divider>
                   </template>
@@ -223,7 +232,12 @@ export default {
     // }
   },
   methods: {
-    checkPermi, //权限控制
+    checkPermi,
+    getCategoryLevel(row) {
+      if (!row.path) return 1;
+      const pathParts = row.path.split('/').filter(p => p !== '' && p !== '0');
+      return pathParts.length + 1;
+    },
     //重置
     handleReset() {
       this.listPram.status = -1;
@@ -358,5 +372,9 @@ export default {
   justify-content: space-between;
   font-size: 14px;
   padding-right: 8px;
+}
+.description-text {
+  color: #909399;
+  font-size: 12px;
 }
 </style>

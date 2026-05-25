@@ -74,7 +74,7 @@
 				number: this.dataConfig.number.tabVal,
 				isMany: this.dataConfig.tabConfig.tabVal,
 				docConfig: 0,
-				dotColor: '#E93323',
+				dotColor: '#003da6',
 				menuList: [],
 				active: 0,
 				navHigh: 0
@@ -194,6 +194,19 @@
 </script>
 
 <style lang="scss" scoped>
+	$primary: #003da6;
+	$primary-container: #0052d9;
+	$surface: #f9f9ff;
+	$surface-low: #f1f3ff;
+	$surface-lowest: #ffffff;
+	$outline-variant: #c3c6d7;
+	$on-surface: #181c23;
+	$on-surface-variant: #434654;
+	$white: #ffffff;
+	$r-sm: 8rpx;
+	$r-md: 14rpx;
+	$ease: cubic-bezier(0.22, 1, 0.36, 1);
+
 	.dot {
 		width: 100%;
 		margin-top: 30rpx;
@@ -202,8 +215,8 @@
 			width: 50rpx;
 			height: 36rpx;
 			line-height: 36rpx;
-			background-color: rgba(0, 0, 0, 0.8);
-			color: #fff;
+			background-color: $primary;
+			color: $white;
 			border-radius: 16rpx;
 			font-size: 24rpx;
 			text-align: center;
@@ -212,9 +225,10 @@
 		.dot-item {
 			width: 10rpx;
 			height: 10rpx;
-			background: rgba(0, 0, 0, .4);
+			background: $outline-variant;
 			border-radius: 50%;
 			margin: 0 4px;
+			transition: all 0.3s $ease;
 
 			&.line_dot-item {
 				width: 20rpx;
@@ -230,16 +244,25 @@
 			text-align: center;
 			font-size: 24rpx;
 			display: inline-block;
+			color: $on-surface-variant;
+			transition: opacity 0.2s $ease;
+
+			&:active {
+				opacity: 0.7;
+			}
 
 			.pictrue {
 				width: 90rpx;
 				height: 90rpx;
 				margin: 0 auto;
+				background-color: $surface-low;
+				border-radius: $r-md;
+				overflow: hidden;
 
 				image {
 					width: 100%;
 					height: 100%;
-					border-radius: 50%;
+					border-radius: $r-md;
 				}
 
 				&.on {
@@ -251,6 +274,8 @@
 
 			.menu-txt {
 				margin-top: 15rpx;
+				color: $on-surface-variant;
+				font-weight: 500;
 			}
 		}
 	}
@@ -259,6 +284,7 @@
 		z-index: 20;
 		position: relative;
 		overflow: hidden;
+		background-color: $surface-lowest;
 
 		.menu {
 			display: grid;
@@ -267,15 +293,25 @@
 			padding: 0 20rpx;
 
 			.item {
+				color: $on-surface-variant;
+				transition: opacity 0.2s $ease;
+
+				&:active {
+					opacity: 0.7;
+				}
+
 				.pictrue {
 					width: 90rpx;
 					height: 90rpx;
 					margin: 0 auto;
+					background-color: $surface-low;
+					border-radius: $r-md;
+					overflow: hidden;
 
 					image {
 						width: 100%;
 						height: 100%;
-						border-radius: 50%;
+						border-radius: $r-md;
 					}
 
 					&.on {
@@ -289,6 +325,8 @@
 					text-align: center;
 					font-size: 12px;
 					margin-top: 14rpx;
+					color: $on-surface-variant;
+					font-weight: 500;
 				}
 			}
 		}

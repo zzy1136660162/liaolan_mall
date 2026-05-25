@@ -42,4 +42,13 @@ public class ProductRequest implements Serializable {
 
     @ApiModelProperty(value = "是否新品")
     private Boolean news;
+
+    @ApiModelProperty(value = "电压等级筛选")
+    private String voltageLevel;
+
+    @ApiModelProperty(value = "导体材质筛选")
+    private String conductorMaterial;
+
+    @ApiModelProperty(value = "阻燃等级筛选")
+    private String flameRetardantGrade;
 }
