@@ -260,32 +260,10 @@ export function getImageDomain() {
 }
 
 /**
- * 获取联系我们信息
- */
-export function getContactInfo() {
-  return request.get('contact/info', {}, { noAuth: true });
-}
-
-/**
- * 提交联系我们留言
- */
-export function saveContactMessage(data) {
-  return request.post('contact/message', data, { noAuth: true });
-}
-
-/**
  * 商品排行榜
 */
 export function productRank(){
   return request.get('product/leaderboard',{},{noAuth:true});
-}
-
-/**
- * 首页推荐商品（获取上架商品列表）
- * @param object data
- */
-export function getProducts(data){
-  return request.get('products', data, {noAuth: true});
 }
 
 /**
@@ -329,43 +307,4 @@ export function getCategoryTwo(id)
 export function getConfigCopyright(id)
 {
   return request.get(`config/get/copyright`,{},{ noAuth : true},{},true);
-}
-
-/**
- * 获取案例列表
- * @param object data
- */
-export function getCaseList(data){
-  return request.get('case/list', data, {noAuth: true});
-}
-
-/**
- * 获取案例详情
- * @param int id
- */
-export function getCaseDetails(id) {
-  return request.get('case/info', { id: id }, { noAuth: true });
-}
-
-/**
- * 获取案例行业分类列表
- */
-export function getCaseIndustryCategories(){
-  return request.get('case/industry/categories', {}, {noAuth: true});
-}
-
-export function getDownloadCategoryList(){
-  return request.get('download/material/category/list', {}, {noAuth: true});
-}
-
-export function getDownloadMaterialList(data){
-  return request.get('download/material/list', data, {noAuth: true});
-}
-
-export function getDownloadMaterialFile(materialId, params = {}){
-  return request.get(`download/material/file/${materialId}`, params, {noAuth: true});
-}
-
-export function saveDownloadMaterialRecord(data){
-  return request.post('download/material/record', data, {noAuth: true});
 }

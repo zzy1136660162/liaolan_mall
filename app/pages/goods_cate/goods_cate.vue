@@ -1,11 +1,11 @@
 <template>
 	<view class="page" :data-theme="theme" :style="{height:winHeight + 'px'}">
 		<stitchCate v-show="currentPage == 'one'"></stitchCate>
-		<tab-bar v-if="showTabBar"></tab-bar>
+		<pageFooter v-if="footerShow"></pageFooter>
 	</view>
 </template>
 <script>
-	import tabBar from '@/components/tab-bar/index.vue';
+	import pageFooter from '@/components/pageFooter/index.vue'
 	import stitchCate from './components/stitch_cate';
 	import {getShare} from '@/api/public.js';
 	import {mapGetters} from 'vuex';
@@ -13,7 +13,7 @@
 	export default {
 		data() {
 			return {
-				showTabBar:true,
+				footerShow:true,
 				currentPage:'one',
 				theme:app.globalData.theme,
 				showSlide:true,
@@ -35,11 +35,13 @@
 					break;
 				case '3':
 					that.$set(that,'currentPage','three');
-					this.showTabBar=false
+					uni.hideTabBar()
+					this.footerShow=false
 					break;
 				case '4':
 					that.$set(that,'currentPage','four');
-					this.showTabBar=false
+					uni.hideTabBar()
+					this.footerShow=false
 					break;
 			}
 			uni.getSystemInfo({
@@ -58,7 +60,8 @@
 				case 'two':
 					break;
 				case 'three':
-					this.showTabBar=false
+					uni.hideTabBar()
+					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classThree.getCartNum();
@@ -67,7 +70,8 @@
 					},500)
 					break;
 				case 'four':
-					this.showTabBar=false
+					uni.hideTabBar()
+					this.footerShow=false
 					setTimeout(()=>{
 						if(this.isLogin){
 							this.$refs.classFour.getCartNum();
@@ -78,7 +82,7 @@
 			}
 		},
 		components:{
-			stitchCate,tabBar
+			stitchCate,pageFooter
 		},
 		methods:{
 			shareApi: function() {
