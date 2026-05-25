@@ -3,7 +3,7 @@
     <view class="page-container">
       <!-- Navbar -->
       <liaolanNavbar
-          title="辽缆"
+          title="沈阳辽缆电线电缆有限公司"
           @leftClick="handleMenuClick"
           @rightClick="handleSearchClick"
       />
