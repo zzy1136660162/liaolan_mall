@@ -49,9 +49,6 @@ public class User implements Serializable {
     @ApiModelProperty(value = "真实姓名")
     private String realName;
 
-    @ApiModelProperty(value = "公司名称")
-    private String company;
-
     @ApiModelProperty(value = "生日")
     private String birthday;
 
