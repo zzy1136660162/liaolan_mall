@@ -12,14 +12,10 @@
 					<text class="switch-icon" v-if="is_switch">☷</text>
 					<text class="switch-icon" v-else>☰</text>
 				</view>
-				<view class='test-btn' @click='testNavigate'>测试</view>
+				<view class='test-btn' @click='testNavigate'>搜索</view>
 			</view>
 
 			<view class="sort-bar">
-				<view class='sort-tab' :class='{on: title}' @click='set_where(1)'>
-					<text v-if="title">{{title}}</text>
-					<text v-else>默认</text>
-				</view>
 				<view class='sort-tab' @click='set_where(2)'>
 					<text>价格</text>
 					<view class="arrows">
@@ -42,6 +38,10 @@
 					<view class="filter-dot" v-if="hasActiveFilter"></view>
 				</view>
 			</view>
+			<view class="category-bar" v-if="title">
+				<text class="category-name">{{title}}</text>
+			</view>
+			<view class="category-bar category-bar-placeholder" v-else></view>
 
 			<view class="filter-panel" :class="{show: showFilter}">
 				<view class="filter-header">
@@ -90,7 +90,7 @@
 				</view>
 			</view>
 
-			<view class="main-content" :style="{paddingTop: showFilter ? '560rpx' : '176rpx'}">
+			<view class="main-content" :style="{paddingTop: showFilter ? '624rpx' : '236rpx'}">
 				<view v-if="productList.length > 0" class="card-list"
 					:class="[is_switch ? 'grid-mode' : 'list-mode']">
 					<view class="card-item"
@@ -436,8 +436,22 @@ $ease-b: cubic-bezier(0.34, 1.56, 0.64, 1);
 	}
 }
 
-.filter-panel {
+.category-bar {
 	position: fixed; top: 172rpx; left: 0; right: 0; z-index: 97;
+	height: 64rpx; padding: 0 28rpx;
+	display: flex; align-items: center; justify-content: center;
+	background: $white;
+	box-shadow: 0 1rpx 0 $line;
+}
+.category-bar-placeholder {
+	visibility: hidden;
+}
+.category-name {
+	font-size: 26rpx; font-weight: 600; color: $dark;
+}
+
+.filter-panel {
+	position: fixed; top: 236rpx; left: 0; right: 0; z-index: 97;
 	background: $white; padding: 28rpx; display: none;
 	box-shadow: 0 12rpx 32rpx rgba(0,0,0,0.08);
 	&.show { display: block; animation: panelIn 350ms $ease; }
