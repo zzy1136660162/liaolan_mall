@@ -167,7 +167,7 @@ export default {
       currentNavIndex: -1,
       heroImages: [
         {
-          image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBsPyFf-hVVDObopFwfy0mffLQ4pFJbB0MPmzhTUli4K9ycwL-WXaEiTKJjTyil83D-S1gCm7ar5hJijy739EO_wYbU_M9NwPv_nvihzaz89Wr6mH7f3C8nWFNIdOuAF4xgMqCns6AH1DrJIiwXXMYbE-y-wlgFvXHFpaC-CPIYzwkumLNNTA6p6sQq24HK1YQA7SeInRx2W61rTEpAD8SBcQQdaGtAprzlq_P4PDpJ3V7N2zJLqgfTRJGrXCUeiFLKjGw7VGiiVSA',
+          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260525102547530_672488751386.png',
           title: '铸就工业脊梁',
           description: '高品质特种电缆研发与制造，为全球重工业提供稳定可靠的电力传输解决方案。'
         }
@@ -200,7 +200,7 @@ export default {
           name: item.storeName,
           image: item.image,
           price: item.price,
-          spec: item.unitName || '',
+          spec: item.storeInfo || '',
           tag: this.getActivityTag(item.activity)
         }));
       });
