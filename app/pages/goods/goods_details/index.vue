@@ -254,19 +254,11 @@
 						<text>联系客服</text>
 					</button>
 				</template>
-				<view class="item skeleton-rect" @click="goContactPage">
-					<view class="iconfont icon-bianji"></view>
-					<view>咨询</view>
-				</view>
 				<!-- #endif -->
 				<!-- #ifndef MP -->
 				<view class="item skeleton-rect" @click="onClickService">
 					<view class="iconfont icon-kefu"></view>
 					<view>客服</view>
-				</view>
-				<view class="item skeleton-rect" @click="goContactPage">
-					<view class="iconfont icon-bianji"></view>
-					<view>咨询</view>
 				</view>
 				<!-- #endif -->
 				<block v-if="type === 'normal'">
@@ -802,11 +794,6 @@
 					location.href = this.chatUrl;
 					// #endif
 				}
-			},
-			goContactPage() {
-				uni.navigateTo({
-					url: `/pages/contact/index?sourcePage=product_detail`
-				})
 			},
 			goActivity: function(e) {
 				let item = e;

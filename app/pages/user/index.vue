@@ -118,10 +118,6 @@
 									</button>
 								</template>
 								<!-- #endif -->
-								<view class="item" @click="goContactPage">
-									<image :src="servicePic"></image>
-									<text>联系我们</text>
-								</view>
 							</view>
 						</view>
 						<image :src="copyImage" alt="" class='support'>
@@ -368,15 +364,6 @@
 				let chatUrlArr = this.chatUrl.split('?')
 				uni.navigateTo({
 					url:`/pages/users/web_page/index?webUel=${chatUrlArr[0]}&title=客服&${chatUrlArr[1]}`
-				})
-			},
-			goContactPage() {
-				goPage().then(() => {
-					uni.navigateTo({
-						animationType: animationType.type,
-						animationDuration: animationType.duration,
-						url: '/pages/contact/index?sourcePage=user_center'
-					})
 				})
 			},
 			getOrderData() {
