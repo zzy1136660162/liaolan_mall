@@ -58,6 +58,9 @@ public class IndexProductResponse {
     @ApiModelProperty(value = "单位名")
     private String unitName;
 
+    @ApiModelProperty(value = "商品简介")
+    private String storeInfo;
+
     @ApiModelProperty(value = "活动显示排序0=默认，1=秒杀，2=砍价，3=拼团")
     private String activity;
 

@@ -52,7 +52,8 @@ public class StoreProduct implements Serializable {
     private String storeName;
 
     @ApiModelProperty(value = "商品简介")
-    private String storeInfo = "";
+    @TableField("store_info")
+    private String storeInfo;
 
     @ApiModelProperty(value = "关键字")
     private String keyword;
