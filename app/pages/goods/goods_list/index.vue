@@ -438,7 +438,7 @@ $ease-b: cubic-bezier(0.34, 1.56, 0.64, 1);
 
 .category-bar {
 	position: fixed; top: 172rpx; left: 0; right: 0; z-index: 97;
-	height: 64rpx; padding: 0 28rpx;
+	min-height: 64rpx; padding: 0 28rpx;
 	display: flex; align-items: center; justify-content: center;
 	background: $white;
 	box-shadow: 0 1rpx 0 $line;
@@ -447,7 +447,13 @@ $ease-b: cubic-bezier(0.34, 1.56, 0.64, 1);
 	visibility: hidden;
 }
 .category-name {
-	font-size: 26rpx; font-weight: 600; color: $dark;
+	font-size: 24rpx; font-weight: 600; color: $dark;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding: 0 16rpx;
+	text-align: center;
 }
 
 .filter-panel {
