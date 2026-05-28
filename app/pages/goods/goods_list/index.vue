@@ -5,14 +5,17 @@
 				<view class='search-box'>
 					<text class="search-icon">⌕</text>
 					<input placeholder='搜索商品名称' placeholder-class='search-placeholder'
-						confirm-type='search' :value='where.keyword' @confirm="searchSubmit"
+						confirm-type='search' v-model='where.keyword' @confirm="doSearch"
 						maxlength="20" />
+					<view class="search-clear" v-if="where.keyword" @click="clearSearch">
+						<text class="clear-icon">✕</text>
+					</view>
 				</view>
 				<view class='view-switch' @click='Changswitch'>
 					<text class="switch-icon" v-if="is_switch">☷</text>
 					<text class="switch-icon" v-else>☰</text>
 				</view>
-				<view class='test-btn' @click='testNavigate'>搜索</view>
+				<view class='search-btn' @click='doSearch'>搜索</view>
 			</view>
 
 			<view class="sort-bar">
@@ -206,13 +209,22 @@
 			goHome() {
 				uni.switchTab({ url: '/pages/index/index' });
 			},
-			testNavigate() {
-				console.log('testNavigate called');
-				uni.navigateTo({
-					url: '/pages/goods/goods_details/index?id=1',
-					success: () => { console.log('test navigateTo success'); },
-					fail: (err) => { console.error('test navigateTo fail:', err); }
-				});
+			doSearch() {
+				const keyword = (this.where.keyword || '').trim();
+				if (!keyword) {
+					uni.showToast({ title: '请输入搜索关键词', icon: 'none', duration: 1500 });
+					return;
+				}
+				this.title = '';
+				this.loadend = false;
+				this.$set(this.where, 'page', 1);
+				this.get_product_list(true);
+			},
+			clearSearch() {
+				this.$set(this.where, 'keyword', '');
+				this.loadend = false;
+				this.$set(this.where, 'page', 1);
+				this.get_product_list(true);
 			},
 			godDetail(item) {
 				console.log('godDetail called', item);
@@ -226,12 +238,6 @@
 			},
 			Changswitch() {
 				this.is_switch = !this.is_switch;
-			},
-			searchSubmit(e) {
-				this.$set(this.where, 'keyword', e.detail.value);
-				this.loadend = false;
-				this.$set(this.where, 'page', 1);
-				this.get_product_list(true);
 			},
 			set_where(e) {
 				switch (e) {
@@ -310,8 +316,6 @@
 					that.$set(that.where, 'page', that.where.page + 1);
 					if (that.productList.length === 0 && isPage === true) {
 						that.loadTitle = '暂无商品';
-					} else if (that.productList.length === 0) {
-						this.get_host_product();
 					}
 				}).catch(() => {
 					that.loading = false;
@@ -385,6 +389,15 @@ $ease-b: cubic-bezier(0.34, 1.56, 0.64, 1);
 	&:focus-within { box-shadow: 0 0 0 4rpx rgba($blue, 0.1); }
 	.search-icon { font-size: 28rpx; color: $light3; flex-shrink: 0; }
 	input { flex: 1; height: 100%; font-size: 26rpx; color: $dark; }
+	.search-clear {
+		width: 36rpx; height: 36rpx;
+		display: flex; align-items: center; justify-content: center;
+		border-radius: 50%; background: rgba($light3, 0.3);
+		flex-shrink: 0;
+		transition: all 200ms $ease;
+		&:active { transform: scale(0.85); background: rgba($light3, 0.5); }
+		.clear-icon { font-size: 18rpx; color: $white; line-height: 1; }
+	}
 }
 .search-placeholder { color: $light3; font-size: 24rpx; }
 .view-switch {
@@ -395,9 +408,12 @@ $ease-b: cubic-bezier(0.34, 1.56, 0.64, 1);
 	&:active { background: $input-bg; transform: scale(0.9); }
 	.switch-icon { font-size: 30rpx; color: $blue; line-height: 1; }
 }
-.test-btn {
-	margin-left: 8rpx; padding: 0 16rpx; height: 48rpx; line-height: 48rpx;
-	background: $blue; color: #fff; font-size: 22rpx; border-radius: $r-sm;
+.search-btn {
+	margin-left: 8rpx; padding: 0 24rpx; height: 60rpx; line-height: 60rpx;
+	background: $blue; color: #fff; font-size: 24rpx; font-weight: 600;
+	border-radius: $r-md;
+	transition: all 200ms $ease;
+	&:active { transform: scale(0.95); opacity: 0.9; }
 }
 
 .sort-bar {

@@ -85,6 +85,7 @@ export default {
       this.page = 1;
       this.productList = [];
       this.loadEnd = false;
+      this.loading = false;
       this.getProductList();
     },
     getProductList() {

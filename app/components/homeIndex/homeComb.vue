@@ -236,7 +236,9 @@
 		watch: {
 			banner: {
 				handler(val) {
-					this.bgColor = val[0].img;
+					if (val && val.length > 0) {
+						this.bgColor = val[0].img;
+					}
 				},
 				immediate: true
 			},
@@ -297,8 +299,7 @@
 			},
 			//分类列表
 			tabList() {
-				//type=0微页面，1分类，2首页
-				let tabList = this.dataConfig.listConfig.list;
+				let tabList = [...this.dataConfig.listConfig.list];
 				tabList.unshift({
 					title: '首页',
 					type: 2,
