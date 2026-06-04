@@ -52,8 +52,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$primary-color: #003da6;
-$primary-container: #0052d9;
+$primary-color: #0f5de3;
+$primary-container: #0f5de3;
 $surface-container-lowest: #ffffff;
 $outline-variant: #c3c6d7;
 

@@ -344,7 +344,7 @@ export default {
 /* 用户信息头部 */
 .user-header {
   position: relative;
-  background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
+  background: linear-gradient(135deg, #0f5de3 0%, #0f5de3 100%);
   padding: 120rpx 32rpx 48rpx 32rpx;
   overflow: hidden;
 }
@@ -499,7 +499,7 @@ export default {
 .header-line {
   width: 4rpx;
   height: 32rpx;
-  background: #003da6;
+  background: #396ab3;
   border-radius: 2rpx;
   margin-right: 16rpx;
 }
@@ -553,7 +553,7 @@ export default {
 
 .icon-box .iconfont {
   font-size: 48rpx;
-  color: #003da6;
+  color: #0f5de3;
 }
 
 .badge {
@@ -616,7 +616,7 @@ export default {
 
 .service-icon .iconfont {
   font-size: 32rpx;
-  color: #003da6;
+  color: #396ab3;
 }
 
 .service-text {
@@ -640,7 +640,7 @@ export default {
 .login-btn {
   width: 100%;
   height: 96rpx;
-  background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
+  background: linear-gradient(135deg, #0f5de3 0%, #0f5de3 100%);
   border: none;
   border-radius: 16rpx;
   font-size: 32rpx;

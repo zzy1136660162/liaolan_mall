@@ -1,5 +1,10 @@
 <template>
   <view class="liaolan-home">
+    <!-- 大气背景层 -->
+    <view class="bg-mesh"></view>
+    <view class="bg-blob bg-blob-1"></view>
+    <view class="bg-blob bg-blob-2"></view>
+
     <view class="page-container">
       <!-- Navbar -->
       <liaolanNavbar
@@ -19,19 +24,31 @@
               placeholder-class="search-placeholder"
               @focus="handleSearchFocus"
           />
+          <view class="search-action">
+            <text>搜索</text>
+          </view>
         </view>
       </view>
 
       <!-- Hero Section -->
       <view class="hero-section">
-        <swiper class="hero-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" indicator-color="rgba(255,255,255,0.5)" indicator-active-color="#ffffff">
+        <swiper class="hero-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff">
           <swiper-item v-for="(item, index) in heroImages" :key="index">
             <view class="hero-slide">
               <image class="hero-image" :src="item.image" mode="aspectFill"></image>
               <view class="hero-overlay"></view>
+              <view class="hero-deco hero-deco-1"></view>
+              <view class="hero-deco hero-deco-2"></view>
               <view class="hero-content">
+                <view class="hero-badge">
+                  <text>工业脊梁 · 品质之选</text>
+                </view>
                 <h2 class="hero-title">{{ item.title }}</h2>
                 <p class="hero-desc">{{ item.description }}</p>
+                <view class="hero-btn">
+                  <text>了解更多</text>
+                  <text class="iconfont icon-xiangyou"></text>
+                </view>
               </view>
             </view>
           </swiper-item>
@@ -47,7 +64,7 @@
               :key="index"
               @click="handleNavClick(item.path)"
           >
-            <view class="quick-nav-icon" :class="{ active: currentNavIndex === index }">
+            <view class="quick-nav-icon">
               <text class="iconfont" :class="item.icon"></text>
             </view>
             <text class="quick-nav-label">{{ item.label }}</text>
@@ -79,10 +96,13 @@
         <view class="section-header">
           <view class="section-title-wrapper">
             <view class="section-title-bar"></view>
-            <h3 class="section-title">推荐产品</h3>
+            <view class="section-title-group">
+              <h3 class="section-title">推荐产品</h3>
+              <text class="section-subtitle">精选优质电缆 工业首选</text>
+            </view>
           </view>
           <view class="section-more" @click="goToProducts">
-            <text>全部</text>
+            <text>查看全部</text>
             <text class="iconfont icon-xiangyou"></text>
           </view>
         </view>
@@ -95,11 +115,21 @@
           >
             <view class="product-image-wrapper">
               <image class="product-image" :src="product.image" mode="aspectFill"></image>
+              <view class="product-shine"></view>
               <view class="product-tag" v-if="product.tag">{{ product.tag }}</view>
             </view>
             <view class="product-info">
               <h4 class="product-name">{{ product.name }}</h4>
               <p class="product-spec">{{ product.spec }}</p>
+              <view class="product-bottom">
+                <view class="product-price">
+                  <text class="price-symbol">¥</text>
+                  <text class="price-value">{{ product.price || '咨询' }}</text>
+                </view>
+                <view class="product-arrow">
+                  <text class="iconfont icon-xiangyou"></text>
+                </view>
+              </view>
             </view>
           </view>
         </view>
@@ -110,7 +140,10 @@
         <view class="section-header">
           <view class="section-title-wrapper">
             <view class="section-title-bar"></view>
-            <h3 class="section-title">联系我们</h3>
+            <view class="section-title-group">
+              <h3 class="section-title">联系我们</h3>
+              <text class="section-subtitle">全国服务热线 期待与您合作</text>
+            </view>
           </view>
         </view>
         <view class="contact-content">
@@ -123,8 +156,9 @@
               <p class="contact-value">辽宁省沈阳市铁西区工业南路88号</p>
             </view>
           </view>
+          <view class="contact-divider"></view>
           <view class="contact-item">
-            <view class="contact-icon">
+            <view class="contact-icon contact-icon-accent">
               <text class="iconfont icon-dianhua"></text>
             </view>
             <view class="contact-info">
@@ -132,14 +166,18 @@
               <p class="contact-phone">400-888-9999</p>
             </view>
             <view class="contact-call-btn" @click="handleCall">
-              <text>拨打</text>
+              <text class="iconfont icon-dianhua"></text>
+              <text>立即拨打</text>
             </view>
           </view>
         </view>
         <view class="map-placeholder">
           <image class="map-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoZLgVC9rxGbggTtcYRnCHOY4yoVfvE1jNe29uz6K1uRY8K6_rYpDhDjHn49SyQovc8nCLCXYdwzoilj2ynuo327_mfgKal4oqiwQci2Y8Ki2DDZKvjBjOmV0Ua--EsxvmY84e-Ox-_C6Aw_x1u8BBTiqWTmzkQ2Mc6FK4VVuP-9FKj-ARFdtPwdUgx77y-X-cTAmDrX9i_pj2RWN3UkV2DL_BuHLA4qVdDaoBzrpumXLK-MQyOP-br97BySYaqmaLYndZHwsfQkM" mode="aspectFill"></image>
           <view class="map-overlay">
-            <view class="map-label">查看地图</view>
+            <view class="map-card">
+              <text class="iconfont icon-ic_location4"></text>
+              <text class="map-label">查看地图导航</text>
+            </view>
           </view>
         </view>
       </view>
@@ -167,7 +205,7 @@ export default {
       currentNavIndex: -1,
       heroImages: [
         {
-          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260525102547530_672488751386.png',
+          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
           title: '铸就工业脊梁',
           description: '高品质特种电缆研发与制造，为全球重工业提供稳定可靠的电力传输解决方案。'
         }
@@ -262,126 +300,159 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #003da6;
-$primary-container: #0052d9;
-$on-primary-container: #cbd6ff;
-$background: #f9f9ff;
-$surface-container: #ebedf9;
-$surface-container-high: #e5e8f3;
-$surface-container-lowest: #ffffff;
-$on-surface: #181c23;
-$secondary: #5c5f60;
-$outline-variant: #c3c6d7;
+// ========== 主题色：明亮蓝色系 ==========
+$primary: #0f5de3;          // 品牌主蓝
+$primary-light: #3a7bff;    // 浅蓝
+$primary-deep: #0947b8;     // 深蓝
+$primary-soft: #eaf1ff;     // 极浅蓝（卡片底/背景）
+$primary-fade: #f4f8ff;     // 淡蓝（背景）
+$primary-glow: #6ea3ff;     // 蓝色高光
 
+$on-primary: #ffffff;
+$on-surface: #0e1729;
+$on-surface-muted: #5b6478;
+$outline: #dfe5f2;
+$outline-light: #ecf0fa;
+
+$bg-base: #f4f8ff;          // 全局背景（极淡蓝）
+$surface: #ffffff;
+$surface-2: #f7faff;
+
+$accent-cyan: #36c6ff;      // 点缀青蓝
+$accent-violet: #8a9bff;    // 辅助淡紫蓝
+
+// ========== 页面容器 ==========
 .liaolan-home {
-  background-color: $background;
+  position: relative;
   min-height: 100vh;
+  background: linear-gradient(180deg, #eaf2ff 0%, #f4f8ff 40%, #ffffff 100%);
+  overflow: hidden;
 }
 
-.page-container {
-  max-width: 750px;
-  margin: 0 auto;
-  padding-bottom: 120rpx;
-}
-
-// Top AppBar
-.top-appbar {
+// 背景网格 Mesh 渐变
+.bg-mesh {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
-  background-color: $surface-container-lowest;
-  border-bottom: 1px solid $outline-variant;
-  height: 88rpx;
+  height: 600rpx;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(58, 123, 255, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(54, 198, 255, 0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(138, 155, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.top-appbar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 88rpx;
-  padding: 0 32rpx;
-}
-
-.top-appbar-left,
-.top-appbar-right {
-  width: 64rpx;
-  height: 64rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.bg-blob {
+  position: fixed;
   border-radius: 50%;
-  transition: background-color 0.3s;
-
-  &:active {
-    background-color: $surface-container;
-  }
-
-  .iconfont {
-    font-size: 48rpx;
-    color: $primary-color;
-  }
+  filter: blur(80rpx);
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-blob-1 {
+  width: 360rpx;
+  height: 360rpx;
+  top: -120rpx;
+  right: -100rpx;
+  background: radial-gradient(circle, rgba(58, 123, 255, 0.35) 0%, transparent 70%);
+}
+.bg-blob-2 {
+  width: 320rpx;
+  height: 320rpx;
+  top: 300rpx;
+  left: -120rpx;
+  background: radial-gradient(circle, rgba(54, 198, 255, 0.25) 0%, transparent 70%);
 }
 
-.top-appbar-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: $primary-color;
+.page-container {
+  position: relative;
+  z-index: 1;
+  max-width: 750rpx;
+  margin: 0 auto;
+  padding-bottom: 140rpx;
 }
 
-// Search Bar
+// ========== Search Bar ==========
 .search-bar {
-  padding: 24rpx 32rpx;
+  padding: 24rpx 32rpx 8rpx;
   margin-top: 148rpx;
 }
 
 .search-input-wrapper {
   position: relative;
   width: 100%;
-  height: 80rpx;
-  background-color: $surface-container;
-  border-radius: 40rpx;
+  height: 88rpx;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20rpx);
+  border-radius: 44rpx;
   display: flex;
   align-items: center;
-  padding: 0 32rpx;
+  padding: 0 12rpx 0 32rpx;
+  box-shadow:
+    0 8rpx 24rpx rgba(15, 93, 227, 0.08),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.05),
+    inset 0 0 0 1rpx rgba(255, 255, 255, 0.6);
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
 }
 
 .search-icon {
   font-size: 36rpx;
-  color: $secondary;
+  color: $primary;
   margin-right: 16rpx;
 }
 
 .search-input {
   flex: 1;
-  height: 80rpx;
+  height: 88rpx;
   font-size: 28rpx;
   color: $on-surface;
 }
 
 .search-placeholder {
-  color: $secondary;
+  color: #98a2b8;
   font-size: 28rpx;
 }
 
-// Hero Section
+.search-action {
+  height: 64rpx;
+  padding: 0 28rpx;
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(15, 93, 227, 0.28);
+
+  text {
+    font-size: 26rpx;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 2rpx;
+  }
+}
+
+// ========== Hero Section ==========
 .hero-section {
-  padding: 0 32rpx;
-  margin-bottom: 48rpx;
+  padding: 16rpx 32rpx 0;
+  margin-bottom: 40rpx;
 }
 
 .hero-swiper {
   width: 100%;
-  height: 400rpx;
-  border-radius: 24rpx;
+  height: 440rpx;
+  border-radius: 32rpx;
   overflow: hidden;
+  box-shadow:
+    0 24rpx 48rpx rgba(15, 93, 227, 0.18),
+    0 8rpx 16rpx rgba(15, 93, 227, 0.08);
 }
 
 .hero-slide {
   position: relative;
   width: 100%;
-  height: 400rpx;
+  height: 440rpx;
 }
 
 .hero-image {
@@ -395,7 +466,30 @@ $outline-variant: #c3c6d7;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+  background:
+    linear-gradient(135deg, rgba(15, 71, 184, 0.55) 0%, rgba(15, 93, 227, 0.25) 50%, transparent 100%),
+    linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.hero-deco {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40rpx);
+  pointer-events: none;
+}
+.hero-deco-1 {
+  width: 220rpx;
+  height: 220rpx;
+  top: -60rpx;
+  right: -60rpx;
+  background: radial-gradient(circle, rgba(54, 198, 255, 0.4) 0%, transparent 70%);
+}
+.hero-deco-2 {
+  width: 180rpx;
+  height: 180rpx;
+  bottom: 100rpx;
+  left: -40rpx;
+  background: radial-gradient(circle, rgba(138, 155, 255, 0.3) 0%, transparent 70%);
 }
 
 .hero-content {
@@ -403,33 +497,84 @@ $outline-variant: #c3c6d7;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 48rpx;
+  padding: 40rpx 44rpx 48rpx;
+  z-index: 2;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 8rpx 20rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1rpx solid rgba(255, 255, 255, 0.35);
+  border-radius: 999rpx;
+  margin-bottom: 20rpx;
+  backdrop-filter: blur(20rpx);
+
+  text {
+    font-size: 22rpx;
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 1rpx;
+  }
 }
 
 .hero-title {
-  font-size: 48rpx;
-  font-weight: 600;
+  font-size: 56rpx;
+  font-weight: 700;
   color: #ffffff;
   margin-bottom: 16rpx;
+  line-height: 1.2;
+  letter-spacing: 1rpx;
+  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
 }
 
 .hero-desc {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.5;
-  max-width: 600rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.6;
+  max-width: 580rpx;
+  margin-bottom: 28rpx;
 }
 
-// Quick Navigation
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 14rpx 28rpx;
+  background: #ffffff;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+
+  text {
+    font-size: 26rpx;
+    color: $primary;
+    font-weight: 600;
+  }
+
+  .iconfont {
+    font-size: 22rpx;
+    color: $primary;
+  }
+}
+
+// ========== Quick Navigation ==========
 .quick-nav {
   padding: 0 32rpx;
-  margin-bottom: 48rpx;
+  margin-bottom: 40rpx;
 }
 
 .quick-nav-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24rpx;
+  gap: 20rpx;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20rpx);
+  border-radius: 28rpx;
+  padding: 32rpx 16rpx;
+  box-shadow:
+    0 12rpx 32rpx rgba(15, 93, 227, 0.06),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
+  border: 1rpx solid rgba(255, 255, 255, 0.8);
 }
 
 .quick-nav-item {
@@ -437,31 +582,61 @@ $outline-variant: #c3c6d7;
   flex-direction: column;
   align-items: center;
   gap: 16rpx;
+  transition: transform 0.3s ease;
+
+  &:active {
+    transform: scale(0.94);
+  }
 }
 
 .quick-nav-icon {
-  width: 96rpx;
-  height: 96rpx;
-  background-color: $surface-container-high;
-  border-radius: 24rpx;
+  width: 104rpx;
+  height: 104rpx;
+  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
+  border-radius: 28rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s;
+  position: relative;
+  box-shadow:
+    0 8rpx 20rpx rgba(15, 93, 227, 0.08),
+    inset 0 0 0 1rpx rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -3rpx;
+    left: -3rpx;
+    right: -3rpx;
+    bottom: -3rpx;
+    border-radius: 31rpx;
+    background: linear-gradient(135deg, $primary 0%, $accent-cyan 100%);
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s;
+  }
 
   &.active,
   &:active {
-    background-color: $primary-container;
+    background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+    transform: translateY(-2rpx);
+    box-shadow: 0 12rpx 24rpx rgba(15, 93, 227, 0.28);
+
+    &::after {
+      opacity: 1;
+    }
 
     .iconfont {
-      color: $on-primary-container;
+      color: #ffffff;
+      transform: scale(1.08);
     }
   }
 
   .iconfont {
     font-size: 48rpx;
-    color: $primary-color;
-    transition: color 0.3s;
+    color: $primary;
+    transition: all 0.3s;
   }
 }
 
@@ -469,9 +644,10 @@ $outline-variant: #c3c6d7;
   font-size: 24rpx;
   color: $on-surface;
   font-weight: 500;
+  letter-spacing: 0.5rpx;
 }
 
-// News Section
+// ========== News Section ==========
 .news-section {
   padding: 0 32rpx;
   margin-bottom: 48rpx;
@@ -480,26 +656,29 @@ $outline-variant: #c3c6d7;
 .news-wrapper {
   display: flex;
   align-items: center;
-  background-color: $surface-container-lowest;
-  border: 1px solid $outline-variant;
-  border-radius: 16rpx;
-  padding: 24rpx;
-  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.02);
+  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  border-radius: 20rpx;
+  padding: 22rpx 24rpx;
+  box-shadow:
+    0 8rpx 24rpx rgba(15, 93, 227, 0.06),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
 }
 
 .news-icon {
   width: 64rpx;
   height: 64rpx;
-  background-color: $surface-container-high;
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 24rpx;
+  margin-right: 20rpx;
+  box-shadow: 0 6rpx 14rpx rgba(15, 93, 227, 0.28);
 
   .iconfont {
-    font-size: 32rpx;
-    color: $primary-color;
+    font-size: 30rpx;
+    color: #ffffff;
   }
 }
 
@@ -514,37 +693,40 @@ $outline-variant: #c3c6d7;
 }
 
 .news-text {
-  font-size: 28rpx;
+  font-size: 26rpx;
   color: $on-surface;
   line-height: 40rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .news-tag {
-  padding: 0 16rpx;
-  border-left: 1px solid $outline-variant;
-  margin-left: 24rpx;
+  padding: 0 18rpx;
+  margin-left: 20rpx;
+  background: linear-gradient(135deg, rgba(15, 93, 227, 0.1) 0%, rgba(54, 198, 255, 0.1) 100%);
+  border-radius: 999rpx;
+  height: 36rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   text {
     font-size: 20rpx;
-    color: $secondary;
-    font-weight: 500;
+    color: $primary;
+    font-weight: 600;
+    letter-spacing: 1rpx;
   }
 }
 
-// Products Section
-.products-section {
-  padding: 0 32rpx;
-  margin-bottom: 48rpx;
-}
-
+// ========== Section Common ==========
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32rpx;
+  margin-bottom: 28rpx;
+  padding: 0 4rpx;
 }
 
 .section-title-wrapper {
@@ -554,28 +736,59 @@ $outline-variant: #c3c6d7;
 }
 
 .section-title-bar {
-  width: 4rpx;
-  height: 40rpx;
-  background-color: $primary-color;
-  border-radius: 4rpx;
+  width: 6rpx;
+  height: 44rpx;
+  background: linear-gradient(180deg, $primary 0%, $accent-cyan 100%);
+  border-radius: 6rpx;
+  box-shadow: 0 4rpx 8rpx rgba(15, 93, 227, 0.25);
+}
+
+.section-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
 }
 
 .section-title {
   font-size: 40rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: $on-surface;
+  letter-spacing: 0.5rpx;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-size: 22rpx;
+  color: $on-surface-muted;
+  letter-spacing: 0.5rpx;
 }
 
 .section-more {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  font-size: 24rpx;
-  color: $secondary;
+  gap: 6rpx;
+  padding: 10rpx 20rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 999rpx;
+  border: 1rpx solid $outline-light;
+  box-shadow: 0 4rpx 10rpx rgba(15, 93, 227, 0.04);
+
+  text {
+    font-size: 24rpx;
+    color: $primary;
+    font-weight: 500;
+  }
 
   .iconfont {
-    font-size: 28rpx;
+    font-size: 22rpx;
+    color: $primary;
   }
+}
+
+// ========== Products Section ==========
+.products-section {
+  padding: 0 32rpx;
+  margin-bottom: 48rpx;
 }
 
 .products-grid {
@@ -585,14 +798,20 @@ $outline-variant: #c3c6d7;
 }
 
 .product-card {
-  background-color: $surface-container-lowest;
-  border: 1px solid $outline-variant;
-  border-radius: 16rpx;
+  background: #ffffff;
+  border-radius: 24rpx;
   overflow: hidden;
-  transition: box-shadow 0.3s;
+  box-shadow:
+    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &:active {
-    box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+    transform: translateY(-4rpx);
+    box-shadow:
+      0 20rpx 40rpx rgba(15, 93, 227, 0.14),
+      0 4rpx 8rpx rgba(15, 93, 227, 0.06);
   }
 }
 
@@ -600,7 +819,8 @@ $outline-variant: #c3c6d7;
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background-color: $surface-container-high;
+  background: linear-gradient(135deg, $primary-fade 0%, $primary-soft 100%);
+  overflow: hidden;
 }
 
 .product-image {
@@ -608,131 +828,224 @@ $outline-variant: #c3c6d7;
   height: 100%;
 }
 
+.product-shine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
+  pointer-events: none;
+}
+
 .product-tag {
   position: absolute;
   top: 16rpx;
   left: 16rpx;
-  padding: 8rpx 16rpx;
-  background-color: $primary-container;
-  color: $on-primary-container;
+  padding: 8rpx 18rpx;
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  color: #ffffff;
   font-size: 20rpx;
-  font-weight: 500;
-  border-radius: 8rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  box-shadow: 0 6rpx 14rpx rgba(15, 93, 227, 0.3);
+  letter-spacing: 1rpx;
 }
 
 .product-info {
-  padding: 24rpx;
+  padding: 24rpx 24rpx 22rpx;
 }
 
 .product-name {
-  font-size: 32rpx;
+  font-size: 30rpx;
   font-weight: 600;
   color: $on-surface;
   margin-bottom: 8rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  letter-spacing: 0.5rpx;
 }
 
 .product-spec {
-  font-size: 24rpx;
-  color: $secondary;
+  font-size: 22rpx;
+  color: $on-surface-muted;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  margin-bottom: 18rpx;
+  line-height: 1.4;
 }
 
-// Contact Section
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16rpx;
+  border-top: 1rpx dashed $outline-light;
+}
+
+.product-price {
+  display: flex;
+  align-items: baseline;
+  gap: 2rpx;
+  color: $primary;
+}
+
+.price-symbol {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.price-value {
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 0.5rpx;
+}
+
+.product-arrow {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  background: $primary-soft;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .iconfont {
+    font-size: 22rpx;
+    color: $primary;
+  }
+}
+
+// ========== Contact Section ==========
 .contact-section {
   padding: 0 32rpx;
   margin-bottom: 48rpx;
 }
 
 .contact-content {
-  background-color: $surface-container-lowest;
-  border: 1px solid $outline-variant;
-  border-radius: 16rpx;
+  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  border-radius: 24rpx;
   padding: 32rpx;
   margin-bottom: 24rpx;
+  box-shadow:
+    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
 }
 
 .contact-item {
   display: flex;
-  align-items: flex-start;
-  gap: 24rpx;
-  margin-bottom: 32rpx;
+  align-items: center;
+  gap: 20rpx;
+}
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+.contact-divider {
+  height: 1rpx;
+  background: linear-gradient(90deg, transparent 0%, $outline 50%, transparent 100%);
+  margin: 28rpx 0;
 }
 
 .contact-icon {
-  width: 64rpx;
-  height: 64rpx;
-  background-color: $surface-container-high;
-  border-radius: 50%;
+  width: 72rpx;
+  height: 72rpx;
+  background: linear-gradient(135deg, $primary-soft 0%, #ffffff 100%);
+  border-radius: 20rpx;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.9);
 
   .iconfont {
-    font-size: 28rpx;
-    color: $primary-color;
+    font-size: 32rpx;
+    color: $primary;
+  }
+}
+
+.contact-icon-accent {
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  box-shadow: 0 8rpx 18rpx rgba(15, 93, 227, 0.28);
+
+  .iconfont {
+    color: #ffffff;
   }
 }
 
 .contact-info {
   flex: 1;
+  min-width: 0;
 }
 
 .contact-label {
-  font-size: 28rpx;
+  font-size: 24rpx;
   font-weight: 500;
-  color: $on-surface;
+  color: $on-surface-muted;
   margin-bottom: 8rpx;
+  letter-spacing: 0.5rpx;
 }
 
 .contact-value {
-  font-size: 24rpx;
-  color: $secondary;
+  font-size: 26rpx;
+  color: $on-surface;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .contact-phone {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: $primary-color;
-  margin-top: 8rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: $primary;
+  letter-spacing: 1rpx;
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .contact-call-btn {
-  padding: 16rpx 32rpx;
-  background-color: $primary-color;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 18rpx 28rpx;
+  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
   color: #ffffff;
-  font-size: 28rpx;
-  font-weight: 500;
-  border-radius: 16rpx;
-  transition: background-color 0.3s;
+  font-size: 26rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 20rpx rgba(15, 93, 227, 0.32);
+  transition: all 0.3s;
+  flex-shrink: 0;
+
+  .iconfont {
+    font-size: 24rpx;
+    color: #ffffff;
+  }
 
   &:active {
-    background-color: darken($primary-color, 10%);
+    transform: scale(0.96);
+    box-shadow: 0 4rpx 10rpx rgba(15, 93, 227, 0.24);
   }
 }
 
 .map-placeholder {
   position: relative;
   width: 100%;
-  height: 256rpx;
-  background-color: $surface-container;
-  border-radius: 16rpx;
+  height: 280rpx;
+  background: $primary-soft;
+  border-radius: 24rpx;
   overflow: hidden;
+  box-shadow:
+    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
+    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
 }
 
 .map-image {
   width: 100%;
   height: 100%;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 .map-overlay {
@@ -744,22 +1057,35 @@ $outline-variant: #c3c6d7;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(249, 249, 255, 0.9);
-  backdrop-filter: blur(4rpx);
+  background: linear-gradient(135deg, rgba(15, 93, 227, 0.15) 0%, rgba(54, 198, 255, 0.1) 100%);
+  backdrop-filter: blur(2rpx);
+}
+
+.map-card {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 18rpx 32rpx;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1rpx solid rgba(255, 255, 255, 0.9);
+  border-radius: 999rpx;
+  box-shadow: 0 10rpx 24rpx rgba(15, 93, 227, 0.18);
+
+  .iconfont {
+    font-size: 26rpx;
+    color: $primary;
+  }
 }
 
 .map-label {
-  padding: 12rpx 24rpx;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid $outline-variant;
-  border-radius: 8rpx;
-  font-size: 24rpx;
-  color: $on-surface;
-  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+  font-size: 26rpx;
+  color: $primary;
+  font-weight: 600;
+  letter-spacing: 0.5rpx;
 }
 
-// Bottom Padding
+// ========== Bottom Padding ==========
 .bottom-padding {
-  height: 120rpx;
+  height: 140rpx;
 }
 </style>

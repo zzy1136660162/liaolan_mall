@@ -120,7 +120,7 @@ export default {
 }
 
 .tab-item-active {
-	background-color: #0052d9;
+	background-color: #0f5de3;
 }
 
 .tab-icon {

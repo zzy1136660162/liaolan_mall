@@ -244,7 +244,7 @@ export default {
   &.active {
     background-color: #dbe1ff;
     border-color: #dbe1ff;
-    color: #00174b;
+    color: #0f5de3;
   }
 }
 
@@ -265,7 +265,7 @@ export default {
 .header-bar {
   width: 4px;
   height: 24px;
-  background-color: #003da6;
+  background-color: #0f5de3;
   border-radius: 2px;
   margin-right: 8px;
 }
@@ -318,7 +318,7 @@ export default {
 
 .tag-primary {
   background-color: #dbe1ff;
-  color: #00174b;
+  color: #0f5de3;
   font-size: 10px;
   padding: 4px 8px;
   border-radius: 4px;
@@ -370,7 +370,7 @@ export default {
 .btn-detail {
   width: 100%;
   height: 44px;
-  background-color: #003da6;
+  background-color: #0f5de3;
   color: #ffffff;
   font-size: 16px;
   border-radius: 8px;
@@ -381,7 +381,7 @@ export default {
   
   &:active {
     transform: scale(0.98);
-    background-color: #002d7a;
+    background-color: #0c4db8;
   }
 }
 

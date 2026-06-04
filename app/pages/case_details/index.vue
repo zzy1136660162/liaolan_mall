@@ -336,7 +336,7 @@ export default {
 .title-bar {
   width: 4px;
   height: 20px;
-  background-color: #003da6;
+  background-color: #0f5de3;
   border-radius: 2px;
   margin-right: 8px;
 }
@@ -409,14 +409,14 @@ export default {
   gap: 8px;
   width: 100%;
   height: 44px;
-  background-color: #003da6;
+  background-color: #0f5de3;
   color: #ffffff;
   font-size: 16px;
   border-radius: 8px;
   transition: all 0.2s;
   
   &:active {
-    background-color: #002d7a;
+    background-color: #0c4db8;
   }
 }
 
