@@ -8,8 +8,10 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 //移动端商城API
-let domain = 'http://127.0.0.1:20510'
+// let domain = 'http://127.0.0.1:20510'
 // let domain = 'https://apif.java.crmeb.net'
+let domain = 'http://101.126.90.255:20410'
+
 
 module.exports = {
 	// 请求域名 格式： https://您的域名
