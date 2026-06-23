@@ -131,24 +131,7 @@
     </view>
 
     <!-- Bottom Navigation Bar -->
-    <view class="bottom-nav">
-      <view class="nav-item nav-item-active" @click="goToHome">
-        <text class="iconfont icon-shouye1"></text>
-        <text class="nav-label">首页</text>
-      </view>
-      <view class="nav-item" @click="goToShop">
-        <text class="iconfont icon-gouwuche"></text>
-        <text class="nav-label">商城</text>
-      </view>
-      <view class="nav-item" @click="goToCases">
-        <text class="iconfont icon-tupian"></text>
-        <text class="nav-label">案例</text>
-      </view>
-      <view class="nav-item" @click="goToProfile">
-        <text class="iconfont icon-wode"></text>
-        <text class="nav-label">我的</text>
-      </view>
-    </view>
+    <tab-bar></tab-bar>
 
     <!-- FAB: Contact Button -->
     <view class="fab-button" @click="handleContact">
@@ -158,9 +141,12 @@
 </template>
 
 <script>
-import { getNewsList } from '@/api/api.js';
+import tabBar from '@/components/tab-bar/index.vue';
 
 export default {
+  components: {
+    tabBar
+  },
   data() {
     return {
       newsList: [
@@ -187,9 +173,6 @@ export default {
   methods: {
     fetchNews() {
       // 可调用API获取新闻列表
-      // getNewsList().then(res => {
-      //   this.newsList = res.data || [];
-      // });
     },
     handleMenuClick() {
       uni.showToast({
@@ -225,24 +208,6 @@ export default {
     goToNewsDetail(id) {
       uni.navigateTo({
         url: `/pages/news/news_detail/index?id=${id}`
-      });
-    },
-    goToHome() {
-      // Already on home page
-    },
-    goToShop() {
-      uni.switchTab({
-        url: '/pages/goods_cate/goods_cate'
-      });
-    },
-    goToCases() {
-      uni.navigateTo({
-        url: '/pages/cases/index'
-      });
-    },
-    goToProfile() {
-      uni.navigateTo({
-        url: '/pages/user/index'
       });
     },
     handleContact() {
@@ -300,7 +265,7 @@ $on-error-container: #93000a;
   right: 0;
   z-index: 50;
   height: 128rpx;
-  padding: 20rpx 32rpx 0;
+  padding: 40rpx 32rpx 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -342,7 +307,7 @@ $on-error-container: #93000a;
 }
 
 .page-container {
-  padding-top: 148rpx;
+  padding-top: 188rpx;
   padding-bottom: 200rpx;
 }
 
@@ -725,63 +690,6 @@ $on-error-container: #93000a;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-    }
-  }
-}
-
-// ========== Bottom Navigation Bar ==========
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  height: 160rpx;
-  padding-bottom: env(safe-area-inset-bottom);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: rgba($surface, 0.85);
-  backdrop-filter: blur(40rpx);
-  -webkit-backdrop-filter: blur(40rpx);
-  box-shadow: 0 -10rpx 40rpx rgba($primary, 0.1);
-
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8rpx;
-    padding: 16rpx 32rpx;
-    border-radius: 24rpx;
-    transition: all 0.3s;
-
-    &:active {
-      transform: scale(0.9);
-    }
-
-    .iconfont {
-      font-size: 48rpx;
-      color: $on-surface-variant;
-    }
-
-    .nav-label {
-      font-size: 22rpx;
-      font-weight: 500;
-      color: $on-surface-variant;
-      letter-spacing: 1rpx;
-    }
-  }
-
-  .nav-item-active {
-    background: rgba($primary, 0.1);
-
-    .iconfont {
-      color: $primary;
-    }
-
-    .nav-label {
-      color: $primary;
     }
   }
 }

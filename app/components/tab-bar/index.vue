@@ -1,6 +1,6 @@
 <template>
 	<view class="tab-bar-wrapper">
-		<view class="tab-bar safe-area-bottom">
+		<view class="tab-bar">
 			<view
 				v-for="(item, index) in tabList"
 				:key="index"
@@ -8,11 +8,7 @@
 				:class="{ 'tab-item-active': currentPath === item.pagePath }"
 				@tap="switchTab(item)"
 			>
-				<image
-					class="tab-icon"
-					:src="currentPath === item.pagePath ? item.selectedIconPath : item.iconPath"
-					mode="aspectFit"
-				/>
+				<text class="iconfont" :class="item.icon"></text>
 				<text class="tab-text">{{ item.text }}</text>
 			</view>
 		</view>
@@ -29,26 +25,22 @@ export default {
 				{
 					text: '首页',
 					pagePath: '/pages/liaolan_index/index',
-					iconPath: '/static/tabBar/index.png',
-					selectedIconPath: '/static/tabBar/indexd.png'
+					icon: 'icon-shouye1'
 				},
 				{
 					text: '商城',
 					pagePath: '/pages/goods_cate/goods_cate',
-					iconPath: '/static/tabBar/mall.png',
-					selectedIconPath: '/static/tabBar/malld.png'
+					icon: 'icon-gouwuche'
 				},
 				{
 					text: '案例',
 					pagePath: '/pages/case/case_list/index',
-					iconPath: '/static/tabBar/case.png',
-					selectedIconPath: '/static/tabBar/cased.png'
+					icon: 'icon-fenlei'
 				},
 				{
 					text: '我的',
 					pagePath: '/pages/liaolan_me/index',
-					iconPath: '/static/tabBar/my.png',
-					selectedIconPath: '/static/tabBar/myd.png'
+					icon: 'icon-yonghu'
 				}
 			]
 		};
@@ -95,17 +87,19 @@ export default {
 	left: 0;
 	right: 0;
 	z-index: 1000;
-	background-color: #ffffff;
+	background: rgba(249, 249, 252, 0.8);
+	backdrop-filter: blur(40rpx);
+	-webkit-backdrop-filter: blur(40rpx);
+	box-shadow: 0 -20rpx 40rpx -10rpx rgba(0, 153, 255, 0.15);
 }
 
 .tab-bar {
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
-	height: 150rpx;
+	height: 160rpx;
+	padding: 0 24rpx;
 	padding-bottom: env(safe-area-inset-bottom);
-	background-color: #ffffff;
-	border-top: 1rpx solid #e5e5e5;
 }
 
 .tab-item {
@@ -113,35 +107,37 @@ export default {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding: 11rpx 19rpx;
-	border-radius: 20rpx;
-	transition: all 0.3s ease;
-	background-color: transparent;
+	gap: 4rpx;
+	padding: 8rpx 32rpx;
+	border-radius: 24rpx;
+	transition: all 0.2s;
+}
+
+.tab-item:active {
+	transform: scale(0.9);
+}
+
+.tab-item .iconfont {
+	font-size: 44rpx;
+	color: #3f4753;
+}
+
+.tab-item .tab-text {
+	font-size: 22rpx;
+	font-weight: 500;
+	color: #3f4753;
+	letter-spacing: 1rpx;
 }
 
 .tab-item-active {
-	background-color: #0f5de3;
+	background: rgba(0, 97, 165, 0.1);
 }
 
-.tab-icon {
-	width: 48rpx;
-	height: 48rpx;
-	margin-bottom: 4rpx;
-}
-
-.tab-text {
-	font-size: 22rpx;
-	font-weight: 400;
-	color: #666666 !important;
-	line-height: 1;
+.tab-item-active .iconfont {
+	color: #0061a5;
 }
 
 .tab-item-active .tab-text {
-	color: #ffffff !important;
-}
-
-.safe-area-bottom {
-	padding-bottom: constant(safe-area-inset-bottom);
-	padding-bottom: env(safe-area-inset-bottom);
+	color: #0061a5;
 }
 </style>
