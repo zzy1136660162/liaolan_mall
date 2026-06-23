@@ -19,7 +19,7 @@ spring:
     username: root
     password: Gesoft9919.
   redis:
-    host: 101.126.90.255 #地址
+    host: 167.88.180.246 #地址
     port: 6379 #端口
     password: Gesoft9919.
     timeout: 10000 # 连接超时时间（毫秒）

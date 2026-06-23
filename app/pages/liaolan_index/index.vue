@@ -1,182 +1,126 @@
 <template>
   <view class="liaolan-home">
-    <!-- 大气背景层 -->
-    <view class="bg-mesh"></view>
-    <view class="bg-blob bg-blob-1"></view>
-    <view class="bg-blob bg-blob-2"></view>
+    <!-- Top Navigation -->
+    <view class="top-nav">
+      <view class="nav-left" @click="handleMenuClick">
+        <text class="iconfont icon-caidan"></text>
+      </view>
+      <view class="nav-title">沈阳辽缆电线电缆有限公司</view>
+      <view class="nav-right" @click="handleSearchClick">
+        <text class="iconfont icon-sousuo"></text>
+      </view>
+    </view>
 
     <view class="page-container">
-      <!-- Navbar -->
-      <liaolanNavbar
-          title="沈阳辽缆电线电缆有限公司"
-          @leftClick="handleMenuClick"
-          @rightClick="handleSearchClick"
-      />
-
-      <!-- Search Bar (Mobile) -->
-      <view class="search-bar">
-        <view class="search-input-wrapper">
-          <text class="iconfont icon-sousuo search-icon"></text>
-          <input
-              class="search-input"
-              type="text"
-              placeholder="输入关键词搜索产品"
-              placeholder-class="search-placeholder"
-              @focus="handleSearchFocus"
-          />
-          <view class="search-action">
-            <text>搜索</text>
-          </view>
-        </view>
-      </view>
-
       <!-- Hero Section -->
       <view class="hero-section">
-        <swiper class="hero-swiper" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="500" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff">
-          <swiper-item v-for="(item, index) in heroImages" :key="index">
-            <view class="hero-slide">
-              <image class="hero-image" :src="item.image" mode="aspectFill"></image>
-              <view class="hero-overlay"></view>
-              <view class="hero-deco hero-deco-1"></view>
-              <view class="hero-deco hero-deco-2"></view>
-              <view class="hero-content">
-                <view class="hero-badge">
-                  <text>工业脊梁 · 品质之选</text>
-                </view>
-                <h2 class="hero-title">{{ item.title }}</h2>
-                <p class="hero-desc">{{ item.description }}</p>
-                <view class="hero-btn">
-                  <text>了解更多</text>
-                  <text class="iconfont icon-xiangyou"></text>
-                </view>
-              </view>
+        <image class="hero-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg" mode="aspectFill"></image>
+        <view class="hero-overlay"></view>
+        <view class="hero-content">
+          <view class="hero-badge">
+            <text>SINCE 2005</text>
+          </view>
+          <h2 class="hero-title">连接世界<br>品质辽缆</h2>
+          <p class="hero-desc">源自沈阳，专注高性能电线电缆研发与制造，为现代基建提供强韧动力。</p>
+          <view class="hero-btns">
+            <view class="hero-btn-primary" @click="goToAbout">
+              <text>了解品牌</text>
             </view>
-          </swiper-item>
-        </swiper>
-      </view>
-
-      <!-- Quick Navigation -->
-      <view class="quick-nav">
-        <view class="quick-nav-grid">
-          <view
-              class="quick-nav-item"
-              v-for="(item, index) in quickNavs"
-              :key="index"
-              @click="handleNavClick(item.path)"
-          >
-            <view class="quick-nav-icon">
-              <text class="iconfont" :class="item.icon"></text>
+            <view class="hero-btn-secondary" @click="goToTech">
+              <text>核心技术</text>
             </view>
-            <text class="quick-nav-label">{{ item.label }}</text>
           </view>
         </view>
       </view>
 
-      <!-- News Scroll -->
+      <!-- Product Categories: Bento Grid -->
+      <view class="categories-section">
+        <view class="section-header">
+          <view class="section-title-group">
+            <h3 class="section-title">产品中心</h3>
+            <text class="section-subtitle">满足各类严苛工况的专业方案</text>
+          </view>
+          <text class="section-more" @click="goToProducts">查看全部</text>
+        </view>
+        <view class="bento-grid">
+          <!-- High Voltage - Full Width -->
+          <view class="bento-item bento-large" @click="goToProductCate('high_voltage')">
+            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175706254_675021430310.png" mode="aspectFill"></image>
+            <view class="bento-overlay"></view>
+            <view class="bento-content">
+              <view class="bento-tag">
+                <text>HIGH VOLTAGE</text>
+              </view>
+              <h4 class="bento-name">高压电力电缆</h4>
+              <view class="bento-arrow">
+                <text class="iconfont icon-xiangyou"></text>
+              </view>
+            </view>
+          </view>
+          <!-- Control Cable -->
+          <view class="bento-item" @click="goToProductCate('control')">
+            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175803168_675021487225.png" mode="aspectFill"></image>
+            <view class="bento-overlay"></view>
+            <view class="bento-content">
+              <view class="bento-tag bento-tag-yellow">
+                <text>CONTROL</text>
+              </view>
+              <h4 class="bento-name">精密控制电缆</h4>
+              <view class="bento-icon">
+                <text class="iconfont icon-shezhi"></text>
+              </view>
+            </view>
+          </view>
+          <!-- Fire Resistant -->
+          <view class="bento-item" @click="goToProductCate('fireproof')">
+            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175829410_675021513468.png" mode="aspectFill"></image>
+            <view class="bento-overlay"></view>
+            <view class="bento-content">
+              <view class="bento-tag bento-tag-red">
+                <text>FIREPROOF</text>
+              </view>
+              <h4 class="bento-name">特种防火电缆</h4>
+              <view class="bento-icon">
+                <text class="iconfont icon-huoyan"></text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Strength Stats -->
+      <view class="stats-section">
+        <view class="stats-item">
+          <view class="stats-value">30+</view>
+          <view class="stats-label">行业经验</view>
+        </view>
+        <view class="stats-divider"></view>
+        <view class="stats-item">
+          <view class="stats-value">100k</view>
+          <view class="stats-label">年产值</view>
+        </view>
+        <view class="stats-divider"></view>
+        <view class="stats-item">
+          <view class="stats-value">500+</view>
+          <view class="stats-label">核心工程</view>
+        </view>
+      </view>
+
+      <!-- Enterprise News -->
       <view class="news-section">
-        <view class="news-wrapper">
-          <view class="news-icon">
-            <text class="iconfont icon-laba"></text>
-          </view>
-          <view class="news-content">
-            <swiper class="news-swiper" :vertical="true" :autoplay="true" :interval="3000" :circular="true" :display-items-count="1">
-              <swiper-item v-for="(item, index) in newsList" :key="index">
-                <text class="news-text">{{ item }}</text>
-              </swiper-item>
-            </swiper>
-          </view>
-          <view class="news-tag">
-            <text>最新</text>
-          </view>
-        </view>
-      </view>
-
-      <!-- Featured Products -->
-      <view class="products-section">
         <view class="section-header">
-          <view class="section-title-wrapper">
-            <view class="section-title-bar"></view>
-            <view class="section-title-group">
-              <h3 class="section-title">推荐产品</h3>
-              <text class="section-subtitle">精选优质电缆 工业首选</text>
-            </view>
-          </view>
-          <view class="section-more" @click="goToProducts">
-            <text>查看全部</text>
-            <text class="iconfont icon-xiangyou"></text>
-          </view>
+          <h3 class="section-title">企业动态</h3>
+          <text class="iconfont icon-shezhi news-filter"></text>
         </view>
-        <view class="products-grid">
-          <view
-              class="product-card"
-              v-for="(product, index) in products"
-              :key="index"
-              @click="goToProductDetail(product.id)"
-          >
-            <view class="product-image-wrapper">
-              <image class="product-image" :src="product.image" mode="aspectFill"></image>
-              <view class="product-shine"></view>
-              <view class="product-tag" v-if="product.tag">{{ product.tag }}</view>
+        <view class="news-list">
+          <view class="news-item" v-for="(item, index) in newsList" :key="index" @click="goToNewsDetail(item.id)">
+            <view class="news-image">
+              <image :src="item.image" mode="aspectFill"></image>
             </view>
-            <view class="product-info">
-              <h4 class="product-name">{{ product.name }}</h4>
-              <p class="product-spec">{{ product.spec }}</p>
-              <view class="product-bottom">
-                <view class="product-price">
-                  <text class="price-symbol">¥</text>
-                  <text class="price-value">{{ product.price || '咨询' }}</text>
-                </view>
-                <view class="product-arrow">
-                  <text class="iconfont icon-xiangyou"></text>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- Contact Us -->
-      <view class="contact-section">
-        <view class="section-header">
-          <view class="section-title-wrapper">
-            <view class="section-title-bar"></view>
-            <view class="section-title-group">
-              <h3 class="section-title">联系我们</h3>
-              <text class="section-subtitle">全国服务热线 期待与您合作</text>
-            </view>
-          </view>
-        </view>
-        <view class="contact-content">
-          <view class="contact-item">
-            <view class="contact-icon">
-              <text class="iconfont icon-ic_location4"></text>
-            </view>
-            <view class="contact-info">
-              <h4 class="contact-label">总部地址</h4>
-              <p class="contact-value">辽宁省沈阳市铁西区工业南路88号</p>
-            </view>
-          </view>
-          <view class="contact-divider"></view>
-          <view class="contact-item">
-            <view class="contact-icon contact-icon-accent">
-              <text class="iconfont icon-dianhua"></text>
-            </view>
-            <view class="contact-info">
-              <h4 class="contact-label">全国销售热线</h4>
-              <p class="contact-phone">400-888-9999</p>
-            </view>
-            <view class="contact-call-btn" @click="handleCall">
-              <text class="iconfont icon-dianhua"></text>
-              <text>立即拨打</text>
-            </view>
-          </view>
-        </view>
-        <view class="map-placeholder">
-          <image class="map-image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoZLgVC9rxGbggTtcYRnCHOY4yoVfvE1jNe29uz6K1uRY8K6_rYpDhDjHn49SyQovc8nCLCXYdwzoilj2ynuo327_mfgKal4oqiwQci2Y8Ki2DDZKvjBjOmV0Ua--EsxvmY84e-Ox-_C6Aw_x1u8BBTiqWTmzkQ2Mc6FK4VVuP-9FKj-ARFdtPwdUgx77y-X-cTAmDrX9i_pj2RWN3UkV2DL_BuHLA4qVdDaoBzrpumXLK-MQyOP-br97BySYaqmaLYndZHwsfQkM" mode="aspectFill"></image>
-          <view class="map-overlay">
-            <view class="map-card">
-              <text class="iconfont icon-ic_location4"></text>
-              <text class="map-label">查看地图导航</text>
+            <view class="news-info">
+              <text class="news-date">{{ item.date }}</text>
+              <h5 class="news-title">{{ item.title }}</h5>
+              <p class="news-summary">{{ item.summary }}</p>
             </view>
           </view>
         </view>
@@ -185,67 +129,67 @@
       <!-- Bottom Padding -->
       <view class="bottom-padding"></view>
     </view>
-    <!-- Tab Bar -->
-    <tab-bar></tab-bar>
+
+    <!-- Bottom Navigation Bar -->
+    <view class="bottom-nav">
+      <view class="nav-item nav-item-active" @click="goToHome">
+        <text class="iconfont icon-shouye1"></text>
+        <text class="nav-label">首页</text>
+      </view>
+      <view class="nav-item" @click="goToShop">
+        <text class="iconfont icon-gouwuche"></text>
+        <text class="nav-label">商城</text>
+      </view>
+      <view class="nav-item" @click="goToCases">
+        <text class="iconfont icon-tupian"></text>
+        <text class="nav-label">案例</text>
+      </view>
+      <view class="nav-item" @click="goToProfile">
+        <text class="iconfont icon-wode"></text>
+        <text class="nav-label">我的</text>
+      </view>
+    </view>
+
+    <!-- FAB: Contact Button -->
+    <view class="fab-button" @click="handleContact">
+      <text class="iconfont icon-kefu"></text>
+    </view>
   </view>
 </template>
 
 <script>
-import liaolanNavbar from '@/components/liaolanNavbar/index.vue';
-import tabBar from '@/components/tab-bar/index.vue';
-import { getProducts } from '@/api/api.js';
+import { getNewsList } from '@/api/api.js';
 
 export default {
-  components: {
-    liaolanNavbar,
-    tabBar
-  },
   data() {
     return {
-      currentNavIndex: -1,
-      heroImages: [
-        {
-          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
-          title: '铸就工业脊梁',
-          description: '高品质特种电缆研发与制造，为全球重工业提供稳定可靠的电力传输解决方案。'
-        }
-      ],
-      quickNavs: [
-        { label: '产品', icon: 'icon-shangpin', path: '/pages/goods_cate/goods_cate' },
-        { label: '新闻', icon: 'icon-tuwen', path: '/pages/news/news_list/index' },
-        { label: '下载', icon: 'icon-xiazai5', path: '/pages/downloads/index' },
-        { label: '关于', icon: 'icon-shuoming', path: '/pages/about/index' }
-      ],
       newsList: [
-        '辽缆集团入围2024国家电网重点采购目录',
-        '公司荣获国家级高新技术企业认定',
-        '新产品KVV系列控制电缆正式投产'
-      ],
-      products: [],
-      imgHost: ''
+        {
+          id: 1,
+          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
+          date: '2024.11.20',
+          title: '沈阳辽缆荣获省级"专精特新"企业称号',
+          summary: '公司在高性能特种电缆研发领域取得新突破...'
+        },
+        {
+          id: 2,
+          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
+          date: '2024.11.15',
+          title: '参与沈阳市轨道交通10号线供电系统建设',
+          summary: '辽缆牌电力电缆成功通过极端工况测试...'
+        }
+      ]
     };
   },
   onLoad() {
-    this.imgHost = this.$Cache.get('imgHost') || '';
-    this.fetchProducts();
+    this.fetchNews();
   },
   methods: {
-    fetchProducts() {
-      getProducts({ page: 1, limit: 2 }).then(res => {
-        const list = (res.data && res.data.list) ? res.data.list : [];
-        this.products = list.map(item => ({
-          id: item.id,
-          name: item.storeName,
-          image: item.image,
-          price: item.price,
-          spec: item.storeInfo || '',
-          tag: this.getActivityTag(item.activity)
-        }));
-      });
-    },
-    getActivityTag(activity) {
-      const activityMap = { '1': '秒杀', '2': '砍价', '3': '拼团' };
-      return activityMap[activity] || '';
+    fetchNews() {
+      // 可调用API获取新闻列表
+      // getNewsList().then(res => {
+      //   this.newsList = res.data || [];
+      // });
     },
     handleMenuClick() {
       uni.showToast({
@@ -258,41 +202,52 @@ export default {
         url: '/pages/goods/goods_search/index'
       });
     },
-    handleSearchFocus() {
+    goToAbout() {
       uni.navigateTo({
-        url: '/pages/goods/goods_search/index'
+        url: '/pages/about/index'
       });
     },
-    handleNavClick(path) {
-      if (path.includes('goods_cate')) {
-        uni.switchTab({
-          url: path
-        });
-      } else {
-        uni.navigateTo({
-          url: path
-        });
-      }
+    goToTech() {
+      uni.navigateTo({
+        url: '/pages/tech/index'
+      });
     },
     goToProducts() {
-      uni.navigateTo({
-        url: '/pages/goods/goods_list/index'
+      uni.switchTab({
+        url: '/pages/goods_cate/goods_cate'
       });
     },
-    goToProductDetail(id) {
+    goToProductCate(type) {
       uni.navigateTo({
-        url: `/pages/goods/goods_details/index?id=${id}`
+        url: `/pages/goods/goods_list/index?category=${type}`
       });
     },
-    handleCall() {
+    goToNewsDetail(id) {
+      uni.navigateTo({
+        url: `/pages/news/news_detail/index?id=${id}`
+      });
+    },
+    goToHome() {
+      // Already on home page
+    },
+    goToShop() {
+      uni.switchTab({
+        url: '/pages/goods_cate/goods_cate'
+      });
+    },
+    goToCases() {
+      uni.navigateTo({
+        url: '/pages/cases/index'
+      });
+    },
+    goToProfile() {
+      uni.navigateTo({
+        url: '/pages/user/index'
+      });
+    },
+    handleContact() {
       uni.makePhoneCall({
-        phoneNumber: '400-888-9999',
-        fail: () => {
-          uni.showToast({
-            title: '拨打失败',
-            icon: 'none'
-          });
-        }
+        phoneNumber: '400-888-9999'
       });
     }
   }
@@ -300,792 +255,565 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// ========== 主题色：明亮蓝色系 ==========
-$primary: #0f5de3;          // 品牌主蓝
-$primary-light: #3a7bff;    // 浅蓝
-$primary-deep: #0947b8;     // 深蓝
-$primary-soft: #eaf1ff;     // 极浅蓝（卡片底/背景）
-$primary-fade: #f4f8ff;     // 淡蓝（背景）
-$primary-glow: #6ea3ff;     // 蓝色高光
+// ========== 主题色 ==========
+$primary: #0061a5;
+$primary-light: #0099ff;
+$secondary: #fdd400;
+$tertiary: #00a4b7;
+$error: #ba1a1a;
 
 $on-primary: #ffffff;
-$on-surface: #0e1729;
-$on-surface-muted: #5b6478;
-$outline: #dfe5f2;
-$outline-light: #ecf0fa;
+$on-surface: #1a1c1e;
+$on-surface-variant: #3f4753;
+$on-secondary: #ffffff;
+$on-tertiary: #ffffff;
+$on-error: #ffffff;
 
-$bg-base: #f4f8ff;          // 全局背景（极淡蓝）
-$surface: #ffffff;
-$surface-2: #f7faff;
+$surface: #f9f9fc;
+$surface-container: #eeeef0;
+$surface-container-low: #f3f3f6;
+$outline-variant: #bfc7d5;
 
-$accent-cyan: #36c6ff;      // 点缀青蓝
-$accent-violet: #8a9bff;    // 辅助淡紫蓝
+$secondary-container: #fdd400;
+$primary-container: #0099ff;
+$tertiary-container: #00a4b7;
+$error-container: #ffdad6;
+
+$on-secondary-container: #6f5c00;
+$on-primary-container: #002f54;
+$on-tertiary-container: #004f58;
+$on-error-container: #93000a;
 
 // ========== 页面容器 ==========
 .liaolan-home {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(180deg, #eaf2ff 0%, #f4f8ff 40%, #ffffff 100%);
-  overflow: hidden;
+  background: $surface;
+  overflow-x: hidden;
 }
 
-// 背景网格 Mesh 渐变
-.bg-mesh {
+// ========== Top Navigation ==========
+.top-nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 600rpx;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(58, 123, 255, 0.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 90% 20%, rgba(54, 198, 255, 0.15) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(138, 155, 255, 0.12) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
+  z-index: 50;
+  height: 128rpx;
+  padding: 20rpx 32rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba($surface, 0.85);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
 
-.bg-blob {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80rpx);
-  pointer-events: none;
-  z-index: 0;
-}
-.bg-blob-1 {
-  width: 360rpx;
-  height: 360rpx;
-  top: -120rpx;
-  right: -100rpx;
-  background: radial-gradient(circle, rgba(58, 123, 255, 0.35) 0%, transparent 70%);
-}
-.bg-blob-2 {
-  width: 320rpx;
-  height: 320rpx;
-  top: 300rpx;
-  left: -120rpx;
-  background: radial-gradient(circle, rgba(54, 198, 255, 0.25) 0%, transparent 70%);
+  .nav-left,
+  .nav-right {
+    width: 80rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+
+    &:active {
+      transform: scale(0.92);
+      background: rgba($primary, 0.08);
+    }
+
+    .iconfont {
+      font-size: 40rpx;
+      color: $primary;
+    }
+  }
+
+  .nav-title {
+    font-size: 32rpx;
+    font-weight: 700;
+    color: $primary;
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .page-container {
-  position: relative;
-  z-index: 1;
-  max-width: 750rpx;
-  margin: 0 auto;
-  padding-bottom: 140rpx;
-}
-
-// ========== Search Bar ==========
-.search-bar {
-  padding: 24rpx 32rpx 8rpx;
-  margin-top: 148rpx;
-}
-
-.search-input-wrapper {
-  position: relative;
-  width: 100%;
-  height: 88rpx;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20rpx);
-  border-radius: 44rpx;
-  display: flex;
-  align-items: center;
-  padding: 0 12rpx 0 32rpx;
-  box-shadow:
-    0 8rpx 24rpx rgba(15, 93, 227, 0.08),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.05),
-    inset 0 0 0 1rpx rgba(255, 255, 255, 0.6);
-  border: 1rpx solid rgba(255, 255, 255, 0.8);
-}
-
-.search-icon {
-  font-size: 36rpx;
-  color: $primary;
-  margin-right: 16rpx;
-}
-
-.search-input {
-  flex: 1;
-  height: 88rpx;
-  font-size: 28rpx;
-  color: $on-surface;
-}
-
-.search-placeholder {
-  color: #98a2b8;
-  font-size: 28rpx;
-}
-
-.search-action {
-  height: 64rpx;
-  padding: 0 28rpx;
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  border-radius: 32rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 6rpx 16rpx rgba(15, 93, 227, 0.28);
-
-  text {
-    font-size: 26rpx;
-    color: #ffffff;
-    font-weight: 600;
-    letter-spacing: 2rpx;
-  }
+  padding-top: 148rpx;
+  padding-bottom: 200rpx;
 }
 
 // ========== Hero Section ==========
 .hero-section {
-  padding: 16rpx 32rpx 0;
-  margin-bottom: 40rpx;
-}
-
-.hero-swiper {
-  width: 100%;
-  height: 440rpx;
+  position: relative;
+  height: 560rpx;
+  overflow: hidden;
+  margin: 0 32rpx;
   border-radius: 32rpx;
-  overflow: hidden;
-  box-shadow:
-    0 24rpx 48rpx rgba(15, 93, 227, 0.18),
-    0 8rpx 16rpx rgba(15, 93, 227, 0.08);
-}
 
-.hero-slide {
-  position: relative;
-  width: 100%;
-  height: 440rpx;
-}
-
-.hero-image {
-  width: 100%;
-  height: 100%;
-}
-
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    linear-gradient(135deg, rgba(15, 71, 184, 0.55) 0%, rgba(15, 93, 227, 0.25) 50%, transparent 100%),
-    linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
-}
-
-.hero-deco {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(40rpx);
-  pointer-events: none;
-}
-.hero-deco-1 {
-  width: 220rpx;
-  height: 220rpx;
-  top: -60rpx;
-  right: -60rpx;
-  background: radial-gradient(circle, rgba(54, 198, 255, 0.4) 0%, transparent 70%);
-}
-.hero-deco-2 {
-  width: 180rpx;
-  height: 180rpx;
-  bottom: 100rpx;
-  left: -40rpx;
-  background: radial-gradient(circle, rgba(138, 155, 255, 0.3) 0%, transparent 70%);
-}
-
-.hero-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 40rpx 44rpx 48rpx;
-  z-index: 2;
-}
-
-.hero-badge {
-  display: inline-block;
-  padding: 8rpx 20rpx;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1rpx solid rgba(255, 255, 255, 0.35);
-  border-radius: 999rpx;
-  margin-bottom: 20rpx;
-  backdrop-filter: blur(20rpx);
-
-  text {
-    font-size: 22rpx;
-    color: #ffffff;
-    font-weight: 500;
-    letter-spacing: 1rpx;
-  }
-}
-
-.hero-title {
-  font-size: 56rpx;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 16rpx;
-  line-height: 1.2;
-  letter-spacing: 1rpx;
-  text-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
-}
-
-.hero-desc {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.92);
-  line-height: 1.6;
-  max-width: 580rpx;
-  margin-bottom: 28rpx;
-}
-
-.hero-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8rpx;
-  padding: 14rpx 28rpx;
-  background: #ffffff;
-  border-radius: 999rpx;
-  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
-
-  text {
-    font-size: 26rpx;
-    color: $primary;
-    font-weight: 600;
-  }
-
-  .iconfont {
-    font-size: 22rpx;
-    color: $primary;
-  }
-}
-
-// ========== Quick Navigation ==========
-.quick-nav {
-  padding: 0 32rpx;
-  margin-bottom: 40rpx;
-}
-
-.quick-nav-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20rpx;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20rpx);
-  border-radius: 28rpx;
-  padding: 32rpx 16rpx;
-  box-shadow:
-    0 12rpx 32rpx rgba(15, 93, 227, 0.06),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
-  border: 1rpx solid rgba(255, 255, 255, 0.8);
-}
-
-.quick-nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16rpx;
-  transition: transform 0.3s ease;
-
-  &:active {
-    transform: scale(0.94);
-  }
-}
-
-.quick-nav-icon {
-  width: 104rpx;
-  height: 104rpx;
-  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
-  border-radius: 28rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow:
-    0 8rpx 20rpx rgba(15, 93, 227, 0.08),
-    inset 0 0 0 1rpx rgba(255, 255, 255, 0.9);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &::after {
-    content: '';
+  .hero-bg {
     position: absolute;
-    top: -3rpx;
-    left: -3rpx;
-    right: -3rpx;
-    bottom: -3rpx;
-    border-radius: 31rpx;
-    background: linear-gradient(135deg, $primary 0%, $accent-cyan 100%);
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.3s;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  &.active,
-  &:active {
-    background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-    transform: translateY(-2rpx);
-    box-shadow: 0 12rpx 24rpx rgba(15, 93, 227, 0.28);
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba($primary-container, 0.6) 0%, rgba($primary, 0.4) 50%, rgba(0, 0, 0, 0.2) 100%);
+  }
 
-    &::after {
-      opacity: 1;
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 48rpx;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 12rpx 24rpx;
+    background: $secondary-container;
+    border-radius: 999rpx;
+    margin-bottom: 24rpx;
+    width: fit-content;
+
+    text {
+      font-size: 22rpx;
+      font-weight: 500;
+      color: $on-secondary-container;
+      letter-spacing: 2rpx;
+    }
+  }
+
+  .hero-title {
+    font-size: 64rpx;
+    font-weight: 800;
+    color: $on-primary;
+    line-height: 1.2;
+    margin-bottom: 20rpx;
+    letter-spacing: -1rpx;
+  }
+
+  .hero-desc {
+    font-size: 28rpx;
+    color: rgba($on-primary, 0.9);
+    line-height: 1.6;
+    max-width: 600rpx;
+    margin-bottom: 32rpx;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 24rpx;
+
+    .hero-btn-primary {
+      padding: 24rpx 48rpx;
+      background: #ffffff;
+      border-radius: 24rpx;
+      box-shadow: 0 10rpx 40rpx rgba($primary, 0.2);
+
+      text {
+        font-size: 30rpx;
+        font-weight: 600;
+        color: $primary;
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
     }
 
-    .iconfont {
-      color: #ffffff;
-      transform: scale(1.08);
+    .hero-btn-secondary {
+      padding: 24rpx 48rpx;
+      background: transparent;
+      border: 4rpx solid rgba(255, 255, 255, 0.4);
+      border-radius: 24rpx;
+
+      text {
+        font-size: 30rpx;
+        font-weight: 600;
+        color: #ffffff;
+      }
+
+      &:active {
+        transform: scale(0.96);
+      }
     }
-  }
-
-  .iconfont {
-    font-size: 48rpx;
-    color: $primary;
-    transition: all 0.3s;
-  }
-}
-
-.quick-nav-label {
-  font-size: 24rpx;
-  color: $on-surface;
-  font-weight: 500;
-  letter-spacing: 0.5rpx;
-}
-
-// ========== News Section ==========
-.news-section {
-  padding: 0 32rpx;
-  margin-bottom: 48rpx;
-}
-
-.news-wrapper {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
-  border-radius: 20rpx;
-  padding: 22rpx 24rpx;
-  box-shadow:
-    0 8rpx 24rpx rgba(15, 93, 227, 0.06),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
-}
-
-.news-icon {
-  width: 64rpx;
-  height: 64rpx;
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 20rpx;
-  box-shadow: 0 6rpx 14rpx rgba(15, 93, 227, 0.28);
-
-  .iconfont {
-    font-size: 30rpx;
-    color: #ffffff;
-  }
-}
-
-.news-content {
-  flex: 1;
-  height: 40rpx;
-  overflow: hidden;
-}
-
-.news-swiper {
-  height: 100%;
-}
-
-.news-text {
-  font-size: 26rpx;
-  color: $on-surface;
-  line-height: 40rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 500;
-}
-
-.news-tag {
-  padding: 0 18rpx;
-  margin-left: 20rpx;
-  background: linear-gradient(135deg, rgba(15, 93, 227, 0.1) 0%, rgba(54, 198, 255, 0.1) 100%);
-  border-radius: 999rpx;
-  height: 36rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  text {
-    font-size: 20rpx;
-    color: $primary;
-    font-weight: 600;
-    letter-spacing: 1rpx;
   }
 }
 
 // ========== Section Common ==========
+.categories-section,
+.news-section {
+  padding: 0 32rpx;
+  margin-top: 64rpx;
+}
+
 .section-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28rpx;
-  padding: 0 4rpx;
-}
-
-.section-title-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-
-.section-title-bar {
-  width: 6rpx;
-  height: 44rpx;
-  background: linear-gradient(180deg, $primary 0%, $accent-cyan 100%);
-  border-radius: 6rpx;
-  box-shadow: 0 4rpx 8rpx rgba(15, 93, 227, 0.25);
+  align-items: flex-end;
+  margin-bottom: 32rpx;
 }
 
 .section-title-group {
   display: flex;
   flex-direction: column;
-  gap: 4rpx;
+  gap: 8rpx;
 }
 
 .section-title {
   font-size: 40rpx;
   font-weight: 700;
   color: $on-surface;
-  letter-spacing: 0.5rpx;
-  line-height: 1.2;
 }
 
 .section-subtitle {
-  font-size: 22rpx;
-  color: $on-surface-muted;
-  letter-spacing: 0.5rpx;
+  font-size: 24rpx;
+  color: $on-surface-variant;
 }
 
 .section-more {
-  display: flex;
-  align-items: center;
-  gap: 6rpx;
-  padding: 10rpx 20rpx;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 999rpx;
-  border: 1rpx solid $outline-light;
-  box-shadow: 0 4rpx 10rpx rgba(15, 93, 227, 0.04);
-
-  text {
-    font-size: 24rpx;
-    color: $primary;
-    font-weight: 500;
-  }
-
-  .iconfont {
-    font-size: 22rpx;
-    color: $primary;
-  }
+  font-size: 28rpx;
+  font-weight: 600;
+  color: $primary;
 }
 
-// ========== Products Section ==========
-.products-section {
-  padding: 0 32rpx;
-  margin-bottom: 48rpx;
-}
-
-.products-grid {
+// ========== Product Categories: Bento Grid ==========
+.bento-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24rpx;
 }
 
-.product-card {
-  background: #ffffff;
-  border-radius: 24rpx;
+.bento-item {
+  position: relative;
+  height: 352rpx;
+  border-radius: 32rpx;
   overflow: hidden;
-  box-shadow:
-    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background: #ffffff;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  box-shadow: 0 10rpx 40rpx rgba($primary, 0.1);
+
+  .bento-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+
+  .bento-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.1) 100%);
+  }
+
+  .bento-content {
+    position: relative;
+    z-index: 10;
+    height: 100%;
+    padding: 32rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .bento-tag {
+    display: inline-flex;
+    padding: 8rpx 16rpx;
+    background: $primary;
+    border-radius: 12rpx;
+
+    text {
+      font-size: 20rpx;
+      font-weight: 500;
+      color: $on-primary;
+      letter-spacing: 1rpx;
+    }
+  }
+
+  .bento-tag-yellow {
+    background: $secondary-container;
+
+    text {
+      color: $on-secondary-container;
+    }
+  }
+
+  .bento-tag-red {
+    background: $error-container;
+
+    text {
+      color: $on-error-container;
+    }
+  }
+
+  .bento-name {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: $on-surface;
+    margin-top: 16rpx;
+  }
+
+  .bento-arrow {
+    width: 80rpx;
+    height: 80rpx;
+    background: $primary;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-end;
+
+    .iconfont {
+      font-size: 32rpx;
+      color: $on-primary;
+    }
+  }
+
+  .bento-icon {
+    align-self: flex-end;
+
+    .iconfont {
+      font-size: 48rpx;
+      color: $primary;
+    }
+  }
 
   &:active {
-    transform: translateY(-4rpx);
-    box-shadow:
-      0 20rpx 40rpx rgba(15, 93, 227, 0.14),
-      0 4rpx 8rpx rgba(15, 93, 227, 0.06);
+    transform: scale(0.98);
   }
 }
 
-.product-image-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1;
-  background: linear-gradient(135deg, $primary-fade 0%, $primary-soft 100%);
-  overflow: hidden;
+.bento-large {
+  grid-column: span 2;
+  height: 352rpx;
 }
 
-.product-image {
-  width: 100%;
-  height: 100%;
-}
-
-.product-shine {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
-  pointer-events: none;
-}
-
-.product-tag {
-  position: absolute;
-  top: 16rpx;
-  left: 16rpx;
-  padding: 8rpx 18rpx;
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  color: #ffffff;
-  font-size: 20rpx;
-  font-weight: 600;
-  border-radius: 999rpx;
-  box-shadow: 0 6rpx 14rpx rgba(15, 93, 227, 0.3);
-  letter-spacing: 1rpx;
-}
-
-.product-info {
-  padding: 24rpx 24rpx 22rpx;
-}
-
-.product-name {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: $on-surface;
-  margin-bottom: 8rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  letter-spacing: 0.5rpx;
-}
-
-.product-spec {
-  font-size: 22rpx;
-  color: $on-surface-muted;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 18rpx;
-  line-height: 1.4;
-}
-
-.product-bottom {
+// ========== Strength Stats ==========
+.stats-section {
   display: flex;
+  justify-content: space-around;
   align-items: center;
-  justify-content: space-between;
-  padding-top: 16rpx;
-  border-top: 1rpx dashed $outline-light;
+  margin: 64rpx 32rpx;
+  padding: 48rpx 32rpx;
+  background: $surface-container-low;
+  border-radius: 48rpx;
 }
 
-.product-price {
+.stats-item {
   display: flex;
-  align-items: baseline;
-  gap: 2rpx;
-  color: $primary;
-}
-
-.price-symbol {
-  font-size: 24rpx;
-  font-weight: 600;
-}
-
-.price-value {
-  font-size: 32rpx;
-  font-weight: 700;
-  letter-spacing: 0.5rpx;
-}
-
-.product-arrow {
-  width: 44rpx;
-  height: 44rpx;
-  border-radius: 50%;
-  background: $primary-soft;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .iconfont {
-    font-size: 22rpx;
-    color: $primary;
-  }
-}
-
-// ========== Contact Section ==========
-.contact-section {
-  padding: 0 32rpx;
-  margin-bottom: 48rpx;
-}
-
-.contact-content {
-  background: linear-gradient(135deg, #ffffff 0%, $primary-soft 100%);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  box-shadow:
-    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
-}
-
-.contact-item {
-  display: flex;
-  align-items: center;
-  gap: 20rpx;
-}
-
-.contact-divider {
-  height: 1rpx;
-  background: linear-gradient(90deg, transparent 0%, $outline 50%, transparent 100%);
-  margin: 28rpx 0;
-}
-
-.contact-icon {
-  width: 72rpx;
-  height: 72rpx;
-  background: linear-gradient(135deg, $primary-soft 0%, #ffffff 100%);
-  border-radius: 20rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.9);
-
-  .iconfont {
-    font-size: 32rpx;
-    color: $primary;
-  }
-}
-
-.contact-icon-accent {
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  box-shadow: 0 8rpx 18rpx rgba(15, 93, 227, 0.28);
-
-  .iconfont {
-    color: #ffffff;
-  }
-}
-
-.contact-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.contact-label {
-  font-size: 24rpx;
-  font-weight: 500;
-  color: $on-surface-muted;
-  margin-bottom: 8rpx;
-  letter-spacing: 0.5rpx;
-}
-
-.contact-value {
-  font-size: 26rpx;
-  color: $on-surface;
-  font-weight: 500;
-  line-height: 1.4;
-}
-
-.contact-phone {
-  font-size: 36rpx;
-  font-weight: 700;
-  color: $primary;
-  letter-spacing: 1rpx;
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.contact-call-btn {
-  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 8rpx;
-  padding: 18rpx 28rpx;
-  background: linear-gradient(135deg, $primary 0%, $primary-light 100%);
-  color: #ffffff;
-  font-size: 26rpx;
-  font-weight: 600;
-  border-radius: 999rpx;
-  box-shadow: 0 8rpx 20rpx rgba(15, 93, 227, 0.32);
-  transition: all 0.3s;
-  flex-shrink: 0;
 
-  .iconfont {
-    font-size: 24rpx;
-    color: #ffffff;
+  .stats-value {
+    font-size: 48rpx;
+    font-weight: 800;
+    color: $primary;
   }
+
+  .stats-label {
+    font-size: 22rpx;
+    font-weight: 500;
+    color: $on-surface-variant;
+    letter-spacing: 1rpx;
+  }
+}
+
+.stats-divider {
+  width: 2rpx;
+  height: 80rpx;
+  background: $outline-variant;
+}
+
+// ========== Enterprise News ==========
+.news-section {
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .news-filter {
+      font-size: 36rpx;
+      color: $on-surface-variant;
+    }
+  }
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.news-item {
+  display: flex;
+  gap: 24rpx;
+  padding: 24rpx;
+  background: #ffffff;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  border-radius: 32rpx;
+  transition: all 0.3s;
 
   &:active {
-    transform: scale(0.96);
-    box-shadow: 0 4rpx 10rpx rgba(15, 93, 227, 0.24);
+    transform: scale(0.98);
+    box-shadow: 0 10rpx 40rpx rgba($primary, 0.12);
+  }
+
+  .news-image {
+    width: 192rpx;
+    height: 192rpx;
+    border-radius: 24rpx;
+    overflow: hidden;
+    flex-shrink: 0;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .news-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12rpx;
+
+    .news-date {
+      font-size: 22rpx;
+      font-weight: 500;
+      color: $primary;
+      letter-spacing: 1rpx;
+    }
+
+    .news-title {
+      font-size: 30rpx;
+      font-weight: 600;
+      color: $on-surface;
+      line-height: 1.4;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .news-summary {
+      font-size: 24rpx;
+      color: $on-surface-variant;
+      line-height: 1.5;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 
-.map-placeholder {
-  position: relative;
-  width: 100%;
-  height: 280rpx;
-  background: $primary-soft;
-  border-radius: 24rpx;
-  overflow: hidden;
-  box-shadow:
-    0 12rpx 28rpx rgba(15, 93, 227, 0.08),
-    0 2rpx 6rpx rgba(15, 93, 227, 0.04);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
-}
-
-.map-image {
-  width: 100%;
-  height: 100%;
-  opacity: 0.9;
-}
-
-.map-overlay {
-  position: absolute;
-  top: 0;
+// ========== Bottom Navigation Bar ==========
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  z-index: 50;
+  height: 160rpx;
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: rgba($surface, 0.85);
+  backdrop-filter: blur(40rpx);
+  -webkit-backdrop-filter: blur(40rpx);
+  box-shadow: 0 -10rpx 40rpx rgba($primary, 0.1);
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8rpx;
+    padding: 16rpx 32rpx;
+    border-radius: 24rpx;
+    transition: all 0.3s;
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    .iconfont {
+      font-size: 48rpx;
+      color: $on-surface-variant;
+    }
+
+    .nav-label {
+      font-size: 22rpx;
+      font-weight: 500;
+      color: $on-surface-variant;
+      letter-spacing: 1rpx;
+    }
+  }
+
+  .nav-item-active {
+    background: rgba($primary, 0.1);
+
+    .iconfont {
+      color: $primary;
+    }
+
+    .nav-label {
+      color: $primary;
+    }
+  }
+}
+
+// ========== FAB Button ==========
+.fab-button {
+  position: fixed;
+  bottom: 240rpx;
+  right: 48rpx;
+  z-index: 40;
+  width: 112rpx;
+  height: 112rpx;
+  background: $primary;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(15, 93, 227, 0.15) 0%, rgba(54, 198, 255, 0.1) 100%);
-  backdrop-filter: blur(2rpx);
-}
+  box-shadow: 0 10rpx 40rpx rgba($primary, 0.3);
+  transition: all 0.3s;
 
-.map-card {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  padding: 18rpx 32rpx;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1rpx solid rgba(255, 255, 255, 0.9);
-  border-radius: 999rpx;
-  box-shadow: 0 10rpx 24rpx rgba(15, 93, 227, 0.18);
+  &:active {
+    transform: scale(0.9);
+  }
 
   .iconfont {
-    font-size: 26rpx;
-    color: $primary;
+    font-size: 48rpx;
+    color: $on-primary;
   }
-}
-
-.map-label {
-  font-size: 26rpx;
-  color: $primary;
-  font-weight: 600;
-  letter-spacing: 0.5rpx;
 }
 
 // ========== Bottom Padding ==========
 .bottom-padding {
-  height: 140rpx;
+  height: 200rpx;
 }
 </style>
