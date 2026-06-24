@@ -1,0 +1,318 @@
+<!DOCTYPE html><html lang="zh-CN" style=""><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&amp;family=Hanken+Grotesk:wght@700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+            scroll-behavior: smooth;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#00333a",
+                        "primary": "#0061a5",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bfc7d5",
+                        "on-secondary-fixed": "#221b00",
+                        "on-background": "#1a1c1e",
+                        "secondary-container": "#fdd400",
+                        "secondary-fixed-dim": "#e9c400",
+                        "background": "#f9f9fc",
+                        "primary-fixed-dim": "#9fcaff",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeef0",
+                        "on-surface-variant": "#3f4753",
+                        "on-primary-fixed-variant": "#00497e",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#00a4b7",
+                        "surface-container-low": "#f3f3f6",
+                        "primary-container": "#0099ff",
+                        "inverse-surface": "#2f3133",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-tint": "#0061a5",
+                        "on-tertiary-fixed": "#001f24",
+                        "on-primary-container": "#002f54",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9fc",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "on-tertiary-fixed-variant": "#004f58",
+                        "primary-fixed": "#d2e4ff",
+                        "on-secondary-fixed-variant": "#544600",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#00daf3",
+                        "on-primary-fixed": "#001d36",
+                        "tertiary": "#006875",
+                        "on-secondary-container": "#6f5c00",
+                        "surface-dim": "#dadadc",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#9fcaff",
+                        "surface": "#f9f9fc",
+                        "inverse-on-surface": "#f0f0f3",
+                        "tertiary-fixed": "#9cf0ff",
+                        "surface-variant": "#e2e2e5",
+                        "secondary": "#705d00",
+                        "outline": "#707884",
+                        "secondary-fixed": "#ffe170"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-margin": "40px",
+                        "gutter": "12px",
+                        "container-padding": "20px",
+                        "stack-gap": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "title-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-sm selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex items-center justify-between px-container-padding h-16 w-full">
+    <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight"><h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary cursor-text" spellcheck="false" data-stitch-added-classes="cursor-text" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 20px; font-family: Inter; line-height: 28px; --tw-text-opacity: 1; color: rgb(0, 61, 155); letter-spacing: normal; background-color: rgb(249, 249, 255); outline: none !important; box-shadow: none !important;">沈阳辽缆电线电缆有限公司</h1></h1>
+    </div>
+    <div class="flex items-center gap-4">
+        <div class="bg-surface-container-low px-4 py-1.5 rounded-full flex items-center gap-2 max-md:hidden">
+            <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+            <span class="text-on-surface-variant font-body-sm">搜索电缆规格或型号...</span>
+        </div>
+        <span class="material-symbols-outlined text-primary active:scale-95 transition-transform" data-icon="search">search</span>
+    </div>
+</header>
+<main class="pt-16 pb-20 flex min-h-screen">
+    <!-- Sidebar Navigation -->
+    <aside class="w-24 md:w-32 fixed left-0 top-16 bottom-20 bg-surface-container-low overflow-y-auto hide-scrollbar z-40 border-r border-outline-variant/30">
+        <nav class="flex flex-col py-4">
+            <button class="category-btn group flex flex-col items-center py-6 px-2 gap-2 text-primary font-bold transition-all duration-200" onclick="switchCategory('power', this)">
+                <div class="p-3 rounded-2xl bg-primary/10 group-active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                </div>
+                <span class="text-label-caps font-label-caps text-center">电力电缆</span>
+            </button>
+            <button class="category-btn group flex flex-col items-center py-6 px-2 gap-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-200" onclick="switchCategory('control', this)">
+                <div class="p-3 rounded-2xl group-active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="settings_input_component">settings_input_component</span>
+                </div>
+                <span class="text-label-caps font-label-caps text-center">控制电缆</span>
+            </button>
+            <button class="category-btn group flex flex-col items-center py-6 px-2 gap-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-200" onclick="switchCategory('comm', this)">
+                <div class="p-3 rounded-2xl group-active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="router">router</span>
+                </div>
+                <span class="text-label-caps font-label-caps text-center">通信电缆</span>
+            </button>
+            <button class="category-btn group flex flex-col items-center py-6 px-2 gap-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-200" onclick="switchCategory('special', this)">
+                <div class="p-3 rounded-2xl group-active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="stars">stars</span>
+                </div>
+                <span class="text-label-caps font-label-caps text-center">特种电缆</span>
+            </button>
+            <button class="category-btn group flex flex-col items-center py-6 px-2 gap-2 text-on-surface-variant hover:bg-primary/5 transition-all duration-200" onclick="switchCategory('accessories', this)">
+                <div class="p-3 rounded-2xl group-active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="electrical_services">electrical_services</span>
+                </div>
+                <span class="text-label-caps font-label-caps text-center">电缆附件</span>
+            </button>
+        </nav>
+    </aside>
+    <!-- Content Area -->
+    <section class="ml-24 md:ml-32 flex-1 p-gutter">
+        <!-- Hero Banner for Category -->
+        <div class="relative w-full h-32 md:h-44 rounded-2xl overflow-hidden mb-8 shadow-sm">
+            <img class="w-full h-full object-cover" data-alt="A macro close-up of high-quality industrial power cables with vibrant blue and silver metallic sheathing, organized in a sleek minimalist warehouse setting. The lighting is high-key and futuristic, emphasizing the clean lines and industrial strength. The overall mood is technologically advanced and premium, reflecting a modern light-mode interface with subtle sky blue accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdcvN0d5ngi4NyosODLAKc-XBsXfKBpwMo7owMVwj7dlT7rtTPZsv1E0tmMhtC6aIm-eiMfg5qEnl5dT5VDzJc5p7vYWHFKa_30AMGXDRgH6TEkblLyN9dM3zQFDcf8UjU1u4ByrCwDj0NHjmXGIw-nFk6uXZSEiS4JyOnYrZyuQqEox7yyGZzfyt2LiHYXdwWNl22w55JPi6mfgKJY89NX4gZCXiO77OVWSTTqfhyBVLETTEPdktmGTYMhN5A5EwLdmtY5W7AOWk">
+            <div class="absolute inset-0 bg-gradient-to-r from-primary/40 to-transparent flex flex-col justify-center px-6">
+                <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-white drop-shadow-md" id="category-title">电力电缆</h2>
+                <p class="text-white/90 font-body-sm">工业级安全标准 · 纯铜核心</p>
+            </div>
+        </div>
+        <!-- Bento Grid Categories -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="category-grid">
+            <!-- Power Cable Sub-categories -->
+            <div class="group bg-surface-container-lowest border border-outline-variant p-4 rounded-xl hover:border-primary transition-all duration-300 shadow-sm hover:shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)]">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full text-label-caps font-label-caps">High Voltage</span>
+                    <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+                </div>
+                <div class="w-full h-24 flex items-center justify-center mb-4">
+                    <img class="h-full object-contain" data-alt="A single coil of professional grade power cable isolated on a pristine white background. The cable features a smooth black protective coating with visible copper core ends. The lighting is soft and studio-quality, creating a high-end product catalog appearance that fits perfectly with a minimalist industrial UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXyAYDDRHi9G1dd7TIFnfn55YUHkB_-AbSg1owvA8XLM60TnlckvyFAk4nTNAIGJI1IuWVNYAAWB42ewp_xJEgzGFoz8uv6foT6pwnawanK08sIiNHcBUqEDZ6LbLHXF-0dGGLwpw2M58HmhjANjRy3AfrvKVdbArc7asJOVM6aR9xYDr6ooE0Cn5RdhTFunAypIUk-rjyucCOE-orK06yoXjc7DeWtpU6yWqQ4fyEb7dqrRccYHg4rc2ElIgXI-qaPM1-FIbYQ6E">
+                </div>
+                <h3 class="font-title-md text-title-md text-on-surface mb-1">高压电力电缆</h3>
+                <p class="text-on-surface-variant font-body-sm">适用于城市电网及变电站</p>
+            </div>
+            <div class="group bg-surface-container-lowest border border-outline-variant p-4 rounded-xl hover:border-primary transition-all duration-300 shadow-sm hover:shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)]">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full text-label-caps font-label-caps">Fire Resistant</span>
+                    <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+                </div>
+                <div class="w-full h-24 flex items-center justify-center mb-4">
+                    <img class="h-full object-contain" data-alt="Technical close up of orange fire-resistant industrial cables neatly arranged against a neutral grey background. The focus is sharp on the texture of the outer insulation. The lighting is bright and clear, emphasizing the industrial reliability and safety features of the product in a modern tech-minimalist aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6pcwRRCY2lOuVCHtE4pvMtTDjWMcFDPUz8WesPOfYcd9cV89vD3ip-HJgrqaSsZeveBnkGocQtUDlnCZudDVqCeYVEl7Ng5t-nunWyFdafS7XKyV8T8bCHBJu676PbV45STkmJ6-NC8TNG2WTA5aSn9CRA-gkiovdW7PEXWoq4rduO975JJU76ZuG0I0EOnDl8LYVr5lUobc3enLDJwDsfRlQfChnUKNHDpRwYeOsSy8U2B8aa2STcU7nKpvetuTNhUaXsNNfoLM">
+                </div>
+                <h3 class="font-title-md text-title-md text-on-surface mb-1">低烟无卤阻燃电缆</h3>
+                <p class="text-on-surface-variant font-body-sm">高层建筑、医院、商场首选</p>
+            </div>
+            <div class="group bg-surface-container-lowest border border-outline-variant p-4 rounded-xl hover:border-primary transition-all duration-300 shadow-sm hover:shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)]">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full text-label-caps font-label-caps">New Energy</span>
+                    <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+                </div>
+                <div class="w-full h-24 flex items-center justify-center mb-4">
+                    <img class="h-full object-contain" data-alt="A sleek array of modern solar power PV cables with specialized connectors, displayed in a bright, futuristic studio setting. The color palette emphasizes whites and primary blues. The composition is airy and balanced, highlighting the efficiency and eco-friendly technology of modern power distribution systems." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC47IXpPqNp9H55j5ud7IBzUmfsVG46Y9w1n0NPCUtjW_K2lGFbwReZ4ve9GjMtYL-SYt9P5cAAsRvjE8sBedi5Vjm2YrdBh7-AKQBBjve_71-YEo5o9ngZvoSDcSQh4QYYuKf9R-EPNt2TILdxXjY08R58hlT21AKO3yxGuMwmE4NyMbTHcaY-viOZFhnXhvAcIwaQ4JY6qsN5A0j_SIPU75AckT5SzMRaJLeDmIMlTjYP_Kr0g7J7IY_f8j9QKXTedcpBW3eczBM">
+                </div>
+                <h3 class="font-title-md text-title-md text-on-surface mb-1">光伏直流电缆</h3>
+                <p class="text-on-surface-variant font-body-sm">抗紫外线，耐极端天气</p>
+            </div>
+            <!-- More items would go here -->
+        </div>
+    </section>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/80 backdrop-blur-xl shadow-[0px_-10px_20px_-5px_rgba(0,153,255,0.15)] flex justify-around items-center h-20 px-gutter md:hidden">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="home">home</span>
+        <span class="font-label-caps text-label-caps">首页</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary/10 rounded-xl px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+        <span class="font-label-caps text-label-caps">商城</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+        <span class="font-label-caps text-label-caps">案例</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline active:scale-90 transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="font-label-caps text-label-caps">我的</span>
+    </a>
+</nav>
+<script>
+    const categories = {
+        power: {
+            title: '电力电缆',
+            items: [
+                { name: '高压电力电缆', desc: '适用于城市电网及变电站', tag: 'High Voltage' },
+                { name: '中低压电力电缆', desc: '工业建筑配套首选', tag: 'Medium Voltage' },
+                { name: '阻燃耐火电缆', desc: '极端环境下维持电力运行', tag: 'Fire Resistant' }
+            ]
+        },
+        control: {
+            title: '控制电缆',
+            items: [
+                { name: '屏蔽控制电缆', desc: '抗电磁干扰，信号精准', tag: 'Shielded' },
+                { name: '铠装控制电缆', desc: '耐压耐磨，直埋式安装', tag: 'Armored' },
+                { name: '柔性控制电缆', desc: '高频率弯曲作业场景', tag: 'Flexible' }
+            ]
+        },
+        comm: {
+            title: '通信电缆',
+            items: [
+                { name: '光纤光缆', desc: '极速数据传输基石', tag: 'Fiber Optic' },
+                { name: '网络数字电缆', desc: 'Cat6e/Cat7 全系列规格', tag: 'Data' },
+                { name: '同轴电缆', desc: '广播电视监控传输专用', tag: 'Coaxial' }
+            ]
+        },
+        special: {
+            title: '特种电缆',
+            items: [
+                { name: '船用电缆', desc: '耐盐雾，符合国际航运标准', tag: 'Marine' },
+                { name: '矿用电缆', desc: '高强度机械保护及安全性', tag: 'Mining' },
+                { name: '高温导线', desc: '硅橡胶、氟塑料耐温材质', tag: 'High Temp' }
+            ]
+        }
+    };
+
+    function switchCategory(key, btn) {
+        // Update Sidebar UI
+        document.querySelectorAll('.category-btn').forEach(b => {
+            b.classList.remove('text-primary', 'font-bold');
+            b.classList.add('text-on-surface-variant');
+            b.querySelector('div').classList.remove('bg-primary/10');
+        });
+        btn.classList.add('text-primary', 'font-bold');
+        btn.classList.remove('text-on-surface-variant');
+        btn.querySelector('div').classList.add('bg-primary/10');
+
+        // Update Content
+        const data = categories[key];
+        if (!data) return;
+
+        document.getElementById('category-title').textContent = data.title;
+
+        const grid = document.getElementById('category-grid');
+        grid.style.opacity = '0';
+
+        setTimeout(() => {
+            grid.innerHTML = data.items.map(item => `
+                    <div class="group bg-surface-container-lowest border border-outline-variant p-4 rounded-xl hover:border-primary transition-all duration-300 shadow-sm hover:shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)] animate-in fade-in slide-in-from-bottom-2">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded-full text-label-caps font-label-caps">${item.tag}</span>
+                            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="arrow_outward">arrow_outward</span>
+                        </div>
+                        <div class="w-full h-24 flex items-center justify-center mb-4 bg-surface-container-low/30 rounded-lg">
+                             <span class="material-symbols-outlined text-primary/30 text-5xl" data-icon="cable">cable</span>
+                        </div>
+                        <h3 class="font-title-md text-title-md text-on-surface mb-1">${item.name}</h3>
+                        <p class="text-on-surface-variant font-body-sm">${item.desc}</p>
+                    </div>
+                `).join('');
+            grid.style.opacity = '1';
+        }, 150);
+    }
+</script>
+
+
+</body></html>

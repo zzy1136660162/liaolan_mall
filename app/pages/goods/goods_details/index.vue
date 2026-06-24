@@ -49,46 +49,51 @@
 				<scroll-view :scroll-top="scrollTop" scroll-y='true' scroll-with-animation="true"
 					:style='"height:"+height+"px;"' @scroll="scroll">
 					<view id="past0">
-						<productConSwiper class="skeleton-rect" :imgUrls="sliderImage" :videoline="videoLink"
-							@videoPause="videoPause"></productConSwiper>
+						<!-- Hero 产品图 1:1 大图 -->
+						<view class="hero-section skeleton-rect">
+							<swiper class="hero-swiper" indicator-dots="true" indicator-color="rgba(255,255,255,0.5)"
+								indicator-active-color="#0061a5" circular="true" autoplay="true" interval="4000" duration="500">
+								<swiper-item v-for="(img, idx) in sliderImage" :key="idx">
+									<image :src="img" mode="aspectFill" class="hero-image"></image>
+								</swiper-item>
+							</swiper>
+							<view class="hero-tags" v-if="industryTags.length">
+								<view class="hero-tag" v-for="(tag, idx) in industryTags" :key="idx">{{tag}}</view>
+							</view>
+						</view>
 						<!-- 氛围图card -->
 						<activity-style v-if="productInfo.activityStyle" :productInfo="productInfo"></activity-style>
 						<view class="pad30">
-							<view class='wrapper mb30 borRadius14'>
-								<view class='share acea-row row-between row-bottom share-icon-box'>
-									<view class='x-money skeleton-rect flex align-baseline' v-if="!productInfo.activityStyle">￥
-										<text class='num font-44'>{{attr.productSelect.price}}</text>
-										<view class="flex  pl-2"
-											v-if="attr.productSelect.vipPrice && attr.productSelect.vipPrice > 0">
+							<!-- 产品信息卡片 -->
+							<view class='product-info-card mb30 borRadius14'>
+								<view class='info-header acea-row row-between row-bottom'>
+									<view class='info-price-area skeleton-rect' v-if="!productInfo.activityStyle">
+										<text class='price-symbol'>¥</text>
+										<text class='price-value'>{{productInfo.price}}</text>
+										<view class="vip-row" v-if="attr.productSelect.vipPrice && attr.productSelect.vipPrice > 0">
 											<image :src="urlDomain+'crmebimage/perset/staticImg/vip_badge.png'" class="vip_icon"></image>
-											<text
-												class='vip_money skeleton-rect'>￥{{attr.productSelect.vipPrice}}</text>
+											<text class='vip_money skeleton-rect'>¥{{attr.productSelect.vipPrice}}</text>
 										</view>
 									</view>
-									<view class='iconfont icon-fenxiang share-icon'  @click="listenerActionSheet"></view>
+									<view class='iconfont icon-fenxiang share-icon-btn' @click="listenerActionSheet"></view>
 								</view>
-								<view class='introduce skeleton-rect share-introduce'>{{productInfo.storeName}}</view>
-								<view class='label acea-row row-between-wrapper'>
-									<view class="skeleton-rect">原价:￥{{attr.productSelect.otPrice || 0}}</view>
-									<view class="skeleton-rect">
-										库存:{{productInfo.stock || 0}}{{productInfo.unitName || ''}}</view>
-									<view class="skeleton-rect">
-										销量:{{Math.floor(productInfo.sales) + Math.floor(productInfo.ficti) || 0}}{{productInfo.unitName || ''}}
-									</view>
+								<view class='info-title skeleton-rect'>{{productInfo.storeName}}</view>
+								<view class='info-desc skeleton-rect' v-if="productInfo.storeInfo">{{productInfo.storeInfo}}</view>
+								<view class='info-meta acea-row row-between-wrapper'>
+									<view class="skeleton-rect">原价:¥{{attr.productSelect.otPrice || 0}}</view>
+									<view class="skeleton-rect">库存:{{productInfo.stock || 0}}{{productInfo.unitName || ''}}</view>
+									<view class="skeleton-rect">销量:{{Math.floor(productInfo.sales) + Math.floor(productInfo.ficti) || 0}}{{productInfo.unitName || ''}}</view>
 								</view>
-								<view v-if="defaultCoupon.length>0 && type=='normal'"
-									class='coupon acea-row row-between-wrapper' @click='couponTap'>
+								<view v-if="defaultCoupon.length>0 && type=='normal'" class='coupon acea-row row-between-wrapper' @click='couponTap'>
 									<view class='hide line1 acea-row skeleton-rect'>优惠券：
-										<view class='activity'>满{{defaultCoupon[0].minPrice}}减{{defaultCoupon[0].money}}
-										</view>
+										<view class='activity'>满{{defaultCoupon[0].minPrice}}减{{defaultCoupon[0].money}}</view>
 									</view>
 									<view class='iconfont icon-jiantou'></view>
 								</view>
 								<view class="coupon acea-row row-between-wrapper" v-if="activityH5.length">
 									<view class="line1 acea-row">
 										<text class="activityName skeleton-rect">活&nbsp;&nbsp;&nbsp;动：</text>
-										<view v-for='(item,index) in activityH5' :key='index' @click="goActivity(item)"
-											class="activityBox">
+										<view v-for='(item,index) in activityH5' :key='index' @click="goActivity(item)" class="activityBox">
 											<view v-if="item.type === '1'" class="skeleton-rect"
 												:class="index==0?'activity_pin':'' || index==1?'activity_miao':'' || index==2?'activity_kan':''">
 												<text class="iconfonts iconfont icon-miaosha1"></text>
@@ -110,22 +115,32 @@
 									</view>
 								</view>
 							</view>
-							<view class='attribute mb30 borRadius14' @click="selecAttr">
-								<view class="acea-row row-between-wrapper">
-									<view class="line1 skeleton-rect">{{attrTxt}}：
-										<text class='atterTxt'>{{attrValue}}</text>
-									</view>
-									<view class='iconfont icon-jiantou'></view>
+							<!-- 规格选择器 Bento卡片风格 -->
+							<view class='spec-selector mb30 borRadius14 skeleton-rect' @click="selecAttr">
+								<view class="spec-title-row acea-row row-middle">
+									<view class="spec-title-bar"></view>
+									<text class="spec-title-text">规格选择</text>
 								</view>
-								<view class="acea-row row-between-wrapper" style="margin-top:7px;padding-left:55px;"
-									v-if="skuArr.length > 1">
+								<view class="spec-group" v-for="(attrItem, attrIdx) in attr.productAttr" :key="attrIdx">
+									<view class="spec-label">{{attrItem.attrName}}</view>
+									<view class="spec-options" :class="attrItem.attrValues.length > 4 ? 'spec-grid-4' : 'spec-row'">
+										<view
+											class="spec-option"
+											:class="{ active: attrItem.index === value }"
+											v-for="(value, valIdx) in attrItem.attrValues"
+											:key="valIdx">
+											{{value}}
+										</view>
+									</view>
+								</view>
+								<view class="spec-sku-row acea-row row-between-wrapper" v-if="skuArr.length > 1">
 									<view class="flex">
-										<image :src="item.image" v-for="(item,index) in skuArr.slice(0,4)" :key="index"
-											class="attrImg"></image>
+										<image :src="item.image" v-for="(item,index) in skuArr.slice(0,4)" :key="index" class="attrImg"></image>
 									</view>
 									<view class="switchTxt">共{{skuArr.length}}种规格可选</view>
 								</view>
 							</view>
+							<!-- 用户评价 -->
 							<view class='userEvaluation' id="past1">
 								<view class='title acea-row row-between-wrapper'
 									:style="replyCount==0?'border-bottom-left-radius:14rpx;border-bottom-right-radius:14rpx;':''">
@@ -140,57 +155,91 @@
 									<userEvaluation :reply="reply"></userEvaluation>
 								</block>
 							</view>
-							<view class="industry-info borRadius14" v-if="hasIndustryInfo" id="past1_5">
-								<view class="industry-title acea-row row-between-wrapper">
-									<view class="acea-row row-middle">
-										<view class="industry-title-bar"></view>
-										<text class="industry-title-text">技术参数</text>
+							<!-- 技术性能指标表格 -->
+							<view class="tech-table-section borRadius14" v-if="hasIndustryInfo" id="past1_5">
+								<view class="tech-title-row acea-row row-middle">
+									<view class="tech-title-bar"></view>
+									<text class="tech-title-text">技术参数</text>
+								</view>
+								<view class="tech-table">
+									<view class="tech-row" v-if="industryInfo.modelNo">
+										<text class="tech-label">产品型号</text>
+										<text class="tech-value">{{industryInfo.modelNo}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.voltageLevel">
+										<text class="tech-label">电压等级</text>
+										<text class="tech-value">{{industryInfo.voltageLevel}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.conductorMaterial">
+										<text class="tech-label">导体材质</text>
+										<text class="tech-value">{{industryInfo.conductorMaterial}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.coreCount">
+										<text class="tech-label">芯数</text>
+										<text class="tech-value">{{industryInfo.coreCount}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.crossSectionArea">
+										<text class="tech-label">截面积</text>
+										<text class="tech-value">{{industryInfo.crossSectionArea}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.sheathMaterial">
+										<text class="tech-label">护套材质</text>
+										<text class="tech-value">{{industryInfo.sheathMaterial}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.flameRetardantGrade">
+										<text class="tech-label">阻燃等级</text>
+										<text class="tech-value">{{industryInfo.flameRetardantGrade}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.standardCode">
+										<text class="tech-label">执行标准</text>
+										<text class="tech-value">{{industryInfo.standardCode}}</text>
+									</view>
+									<view class="tech-row" v-if="industryInfo.applicationScene">
+										<text class="tech-label">适用场景</text>
+										<text class="tech-value">{{industryInfo.applicationScene}}</text>
 									</view>
 								</view>
-								<view class="industry-table">
-									<view class="industry-row" v-if="industryInfo.modelNo">
-										<text class="industry-label">产品型号</text>
-										<text class="industry-value">{{industryInfo.modelNo}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.voltageLevel">
-										<text class="industry-label">电压等级</text>
-										<text class="industry-value">{{industryInfo.voltageLevel}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.conductorMaterial">
-										<text class="industry-label">导体材质</text>
-										<text class="industry-value">{{industryInfo.conductorMaterial}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.coreCount">
-										<text class="industry-label">芯数</text>
-										<text class="industry-value">{{industryInfo.coreCount}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.crossSectionArea">
-										<text class="industry-label">截面积</text>
-										<text class="industry-value">{{industryInfo.crossSectionArea}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.sheathMaterial">
-										<text class="industry-label">护套材质</text>
-										<text class="industry-value">{{industryInfo.sheathMaterial}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.flameRetardantGrade">
-										<text class="industry-label">阻燃等级</text>
-										<text class="industry-value">{{industryInfo.flameRetardantGrade}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.standardCode">
-										<text class="industry-label">执行标准</text>
-										<text class="industry-value">{{industryInfo.standardCode}}</text>
-									</view>
-									<view class="industry-row" v-if="industryInfo.applicationScene">
-										<text class="industry-label">适用场景</text>
-										<text class="industry-value">{{industryInfo.applicationScene}}</text>
-									</view>
+								<view class="tech-tags acea-row row-middle" v-if="industryTags.length">
+									<view class="tech-tag" v-for="(tag, idx) in industryTags" :key="idx">{{tag}}</view>
 								</view>
-								<view class="industry-tags acea-row row-middle" v-if="industryTags.length">
-									<view class="industry-tag" v-for="(tag, idx) in industryTags" :key="idx">{{tag}}</view>
+							</view>
+							<!-- 产品结构详解 -->
+							<view class="structure-section borRadius14" v-if="hasIndustryInfo" id="past1_6">
+								<view class="tech-title-row acea-row row-middle">
+									<view class="tech-title-bar"></view>
+									<text class="tech-title-text">产品结构详解</text>
+								</view>
+								<view class="structure-body acea-row">
+									<view class="structure-list">
+										<view class="structure-item">
+											<text class="structure-num">01</text>
+											<view class="structure-text">
+												<text class="structure-item-label">导体</text>
+												<text class="structure-item-desc">{{industryInfo.conductorMaterial || '高纯度无氧铜'}}</text>
+											</view>
+										</view>
+										<view class="structure-item">
+											<text class="structure-num">02</text>
+											<view class="structure-text">
+												<text class="structure-item-label">绝缘层</text>
+												<text class="structure-item-desc">交联聚乙烯（XLPE）绝缘</text>
+											</view>
+										</view>
+										<view class="structure-item">
+											<text class="structure-num">03</text>
+											<view class="structure-text">
+												<text class="structure-item-label">护套层</text>
+												<text class="structure-item-desc">{{industryInfo.sheathMaterial || '聚氯乙烯（PVC）'}}</text>
+											</view>
+										</view>
+									</view>
+									<view class="structure-diagram" v-if="sliderImage.length">
+										<image :src="sliderImage[0]" mode="aspectFit" class="structure-img"></image>
+									</view>
 								</view>
 							</view>
 							<!-- 优品推荐 -->
-							<view class="superior borRadius14" if='good_list.length' id="past2">
+							<view class="superior borRadius14" v-if='good_list.length' id="past2">
 								<view class="title acea-row row-center-wrapper">
 									<image :src="urlDomain+'crmebimage/perset/staticImg/xzuo.png'"></image>
 									<view class="titleTxt">优品推荐</view>
@@ -218,7 +267,6 @@
 												</view>
 											</view>
 										</swiper-item>
-										<!-- <view class="swiper-pagination" slot="pagination"></view> -->
 									</swiper>
 								</view>
 							</view>
@@ -237,66 +285,55 @@
 					<view class='bottom-spacer'></view>
 				</scroll-view>
 			</view>
+			<!-- 底部操作栏 -->
 			<view class='footer acea-row row-between-wrapper'>
-				<!-- #ifdef MP -->
-				<button hover-class='none' class='item skeleton-rect' @click="onClickService"
-					v-if="chatConfig.telephone_service_switch === 'open'">
-					<view class='iconfont icon-kefu'></view>
-					<view>客服</view>
-				</button>
-				<template v-else>
-					<button open-type="contact" hover-class='none' class='item skeleton-rect' v-if="chatConfig.wx_chant_independent=='open'">
+				<view class="footer-left acea-row">
+					<!-- #ifdef MP -->
+					<button hover-class='none' class='footer-icon-btn' @click="onClickService"
+						v-if="chatConfig.telephone_service_switch === 'open'">
 						<view class='iconfont icon-kefu'></view>
 						<view>客服</view>
 					</button>
-					<button class="item" hover-class='none' @click="wxChatService"  v-else>
-						<view class='iconfont icon-kefu'></view>
-						<text>联系客服</text>
-					</button>
-				</template>
-				<!-- #endif -->
-				<!-- #ifndef MP -->
-				<view class="item skeleton-rect" @click="onClickService">
-					<view class="iconfont icon-kefu"></view>
-					<view>客服</view>
-				</view>
-				<!-- #endif -->
-				<block v-if="type === 'normal'">
-					<view @click="setCollect" class='item skeleton-rect'>
+					<template v-else>
+						<button open-type="contact" hover-class='none' class='footer-icon-btn' v-if="chatConfig.wx_chant_independent=='open'">
+							<view class='iconfont icon-kefu'></view>
+							<view>客服</view>
+						</button>
+						<button class="footer-icon-btn" hover-class='none' @click="wxChatService" v-else>
+							<view class='iconfont icon-kefu'></view>
+							<text>联系客服</text>
+						</button>
+					</template>
+					<!-- #endif -->
+					<!-- #ifndef MP -->
+					<view class="footer-icon-btn" @click="onClickService">
+						<view class="iconfont icon-kefu"></view>
+						<view>客服</view>
+					</view>
+					<!-- #endif -->
+					<view class="footer-icon-btn" @click="setCollect">
 						<view class='iconfont icon-shoucang1' v-if="userCollect"></view>
 						<view class='iconfont icon-shoucang' v-else></view>
 						<view>收藏</view>
 					</view>
-					<navigator open-type='switchTab' class="animated item skeleton-rect"
-						:class="animated==true?'bounceIn':''" url='/pages/order_addcart/order_addcart'
-						hover-class="none">
-						<view class='iconfont icon-gouwuche1'>
-							<text v-if="Math.floor(CartCount)>0" class='num bg_color'>{{CartCount}}</text>
-						</view>
-						<view>购物车</view>
-					</navigator>
-					<view class="bnt acea-row skeleton-rect" v-if="attr.productSelect.stock <= 0">
-						<form @submit="joinCart" report-submit="true"><button class="joinCart bnts"
-								form-type="submit">加入购物车</button></form>
-						<form report-submit="true"><button class="bnts bg-color-hui" form-type="submit">已售罄</button>
-						</form>
+				</view>
+				<!-- 普通商品底部按钮 -->
+				<block v-if="type === 'normal'">
+					<view class="footer-right acea-row" v-if="attr.productSelect.stock <= 0">
+						<view class="btn-outline" hover-class="none" @click="joinCart">加入采购清单</view>
+						<view class="btn-disabled">已售罄</view>
 					</view>
-					<view class="bnt acea-row skeleton-rect" v-else>
-						<form @submit="joinCart" report-submit="true"><button class="joinCart bnts"
-								form-type="submit">加入购物车</button></form>
-						<form @submit="goBuy" report-submit="true"><button class="buy bnts"
-								form-type="submit">立即购买</button></form>
+					<view class="footer-right acea-row" v-else>
+						<view class="btn-outline" hover-class="none" @click="joinCart">加入采购清单</view>
+						<view class="btn-primary" hover-class="none" @click="goBuy">立即咨询</view>
 					</view>
 				</block>
-				<view class="bnt bntVideo acea-row skeleton-rect"
-					v-if="attr.productSelect.stock <= 0 && type === 'video'">
-					<form report-submit="true"><button class="bnts bg-color-hui" form-type="submit">已售罄</button>
-					</form>
+				<!-- 视频商品底部按钮 -->
+				<view class="footer-right acea-row" v-if="attr.productSelect.stock <= 0 && type === 'video'">
+					<view class="btn-disabled">已售罄</view>
 				</view>
-				<view class="bnt bntVideo acea-row skeleton-rect"
-					v-if="attr.productSelect.stock > 0 && type === 'video'">
-					<form @submit="goBuy" report-submit="true"><button class="buy bnts" form-type="submit">立即购买</button>
-					</form>
+				<view class="footer-right acea-row" v-if="attr.productSelect.stock > 0 && type === 'video'">
+					<view class="btn-primary" hover-class="none" @click="goBuy">立即咨询</view>
 				</view>
 			</view>
 			<shareRedPackets :sharePacket="sharePacket" @listenerActionSheet="listenerActionSheet"
@@ -1592,348 +1629,145 @@
 </script>
 
 <style scoped lang="scss">
-$primary: #003da6;
-$primary-container: #0052d9;
-$tertiary-container: #895000;
-$surface: #f9f9ff;
-$surface-container-lowest: #ffffff;
-$surface-container-low: #f1f3ff;
-$outline-variant: #c3c6d7;
-$surface-variant: #dfe2ed;
-$on-surface: #181c23;
+/* ===== 新配色变量 ===== */
+$primary: #0061a5;
+$primary-light: rgba(0, 97, 165, 0.08);
+$primary-border: rgba(0, 97, 165, 0.18);
+$surface: #f9f9fc;
+$surface-card: #ffffff;
+$on-surface: #1a1c1e;
+$on-surface-variant: #3f4753;
+$outline-variant: #dde0e8;
+$surface-variant: #e8ebf2;
+$surface-container-low: #f3f4f8;
 $secondary: #5c5f60;
-$on-surface-variant: #434654;
+$tertiary: #895000;
 $error: #ba1a1a;
-$white: #ffffff;
+$red-gradient: linear-gradient(90deg, rgba(246, 122, 56, 1) 0%, rgba(241, 27, 9, 1) 100%);
 
 $r-sm: 8rpx;
 $r-md: 14rpx;
 $r-lg: 20rpx;
+$r-xl: 28rpx;
 
 $ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+/* ===== 动画 ===== */
 @keyframes slideUp {
-	from {
-		opacity: 0;
-		transform: translateY(30rpx);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+	from { opacity: 0; transform: translateY(30rpx); }
+	to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes fadeIn {
 	from { opacity: 0; }
 	to { opacity: 1; }
 }
-
 @keyframes dropIn {
-	from {
-		opacity: 0;
-		transform: translateY(-20rpx) scale(0.96);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0) scale(1);
-	}
+	from { opacity: 0; transform: translateY(-20rpx) scale(0.96); }
+	to { opacity: 1; transform: translateY(0) scale(1); }
 }
-
 @keyframes elasticIn {
-	0% {
-		opacity: 0;
-		transform: scale(0.85);
-	}
-	60% {
-		transform: scale(1.03);
-	}
-	100% {
-		opacity: 1;
-		transform: scale(1);
-	}
+	0% { opacity: 0; transform: scale(0.85); }
+	60% { transform: scale(1.03); }
+	100% { opacity: 1; transform: scale(1); }
 }
 
+/* ===== 基础布局 ===== */
 .product-con {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
 	background: $surface;
 }
-
 .detail_container {
 	flex: 1;
 	overflow: hidden;
 }
 
-.product-con .wrapper {
+/* ===== margin/padding 工具类 ===== */
+.mb30 { margin-bottom: 24rpx; }
+.borRadius14 { border-radius: $r-md; }
+.pl-20 { padding-left: 20rpx; }
+.px-20 { padding: 0 20rpx 0; }
+.px-12 { padding-left: 12rpx; padding-right: 12rpx; }
+.pl-2 { padding-left: 20rpx; }
+.font_color { color: $primary; }
+.flex { display: flex; }
+.justify-center { justify-content: center; }
+.align-center { align-items: center; }
+.align-baseline { align-items: baseline; }
+.bg_color { background: $primary; color: #fff; }
+.pad30 { padding: 0 24rpx; }
+
+/* ===== Hero 产品图 ===== */
+.hero-section {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	overflow: hidden;
+}
+.hero-swiper {
+	width: 100%;
+	height: 100%;
+}
+.hero-image {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+.hero-tags {
+	position: absolute;
+	bottom: 28rpx;
+	left: 24rpx;
+	display: flex;
+	gap: 12rpx;
+	z-index: 2;
+}
+.hero-tag {
+	padding: 6rpx 20rpx;
+	font-size: 22rpx;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(8px);
+	border-radius: 200rpx;
+	border: 1rpx solid rgba(255, 255, 255, 0.2);
+	letter-spacing: 1rpx;
+}
+
+/* ===== 产品信息卡片 ===== */
+.product-info-card {
 	animation: slideUp 400ms $ease both;
-	background: $surface-container-lowest;
+	background: $surface-card;
 	border-radius: $r-md;
 	padding: 28rpx 24rpx;
 	border: 1rpx solid $outline-variant;
 }
-
-.x-money {
+.info-header {
+	position: relative;
+}
+.info-price-area {
+	display: flex;
+	align-items: baseline;
+	flex-wrap: wrap;
+}
+.price-symbol {
 	font-size: 28rpx;
 	font-weight: 700;
-	color: $tertiary-container;
-	
-	.num {
-		color: $tertiary-container;
-	}
+	color: $tertiary;
 }
-
-.font-44 {
+.price-value {
 	font-size: 44rpx;
-	color: $tertiary-container;
 	font-weight: 700;
+	color: $tertiary;
 }
-
-.bg-color-hui {
-	background: #bbb !important;
-	border-radius: 0 $r-lg $r-lg 0;
-	color: $white;
-}
-
-.lang{
-	width: 170rpx !important;
-	height: 60rpx !important;
-	border-radius: 33rpx;
-}
-
-.circle{
-	width: 58rpx !important;
-	height: 58rpx !important;
-	border-radius: 50%;
-}
-
-.select_nav {
-	width: 170rpx !important;
-	height: 60rpx !important;
-	border-radius: 33rpx;
-	background: rgba(255, 255, 255, 0.45);
-	backdrop-filter: blur(12px);
-	border: 1px solid rgba(0,0,0,0.06);
-	color: $on-surface;
-	position: fixed;
-	font-size: 18px;
-	line-height: 58rpx;
-	z-index: 1000;
-	left: 14rpx;
-	animation: fadeIn 300ms $ease both;
-}
-
-.px-20 {
-	padding: 0 20rpx 0;
-}
-
-.nav_line {
-	content: '';
-	display: inline-block;
-	width: 1px;
-	height: 34rpx;
-	background: $outline-variant;
-	position: absolute;
-	left: 0;
-	right: 0;
-	margin: auto;
-}
-
-.bgwhite {
-	background: $surface-container-lowest;
-}
-
-.input {
+.vip-row {
 	display: flex;
 	align-items: center;
-	/* #ifdef MP */
-	width: 300rpx;
-	/* #endif */
-	/* #ifndef MP */
-	width: 460rpx;
-	/* #endif */
-	height: 58rpx;
-	padding: 0 0 0 30rpx;
-	border: 1px solid rgba(0, 0, 0, 0.06);
-	border-radius: 33rpx;
-	color: $secondary;
-	font-size: 26rpx;
-	position: fixed;
-	left: 0;
-	right: 0;
-	margin: auto;
-	background: rgba(255, 255, 255, 0.45);
-	backdrop-filter: blur(12px);
-
-	.iconfont {
-		margin-right: 20rpx;
-		font-size: 26rpx;
-		color: $secondary;
-	}
+	margin-left: 8rpx;
 }
-
-.container_detail {
-	/* #ifdef MP */
-	margin-top: 32rpx;
-	/* #endif */
-}
-
-.tab_nav {
-	width: 100%;
-	height: 96rpx;
-	padding: 0 30rpx 0;
-}
-
-.right_select {
-	width: 58rpx;
-	height: 58rpx;
-	background: rgba(255, 255, 255, 0.45);
-	backdrop-filter: blur(12px);
-	border: 1px solid rgba(0, 0, 0, 0.06);
-	border-radius: 50%;
-	position: fixed;
-	right: 20rpx;
-	text-align: center;
-	line-height: 58rpx;
-	animation: fadeIn 300ms $ease both;
-}
-
-.dialog_nav {
-	position: absolute;
-	/* #ifdef MP */
-	left: 14rpx;
-	/* #endif */
-	/* #ifdef H5 || APP-PLUS*/
-	right: 14rpx;
-	/* #endif */
-	width: 240rpx;
-	background: $surface-container-lowest;
-	box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
-	z-index: 310;
-	border-radius: $r-md;
-	animation: dropIn 350ms $ease both;
-	border: 1rpx solid $outline-variant;
-
-	&::before {
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		/* #ifdef MP */
-		left: 0;
-		right: 0;
-		margin: auto;
-		/* #endif */
-		/* #ifdef H5 || APP-PLUS */
-		right: 8px;
-		/* #endif */
-		top: -9px;
-		border-bottom: 10px solid $surface-container-lowest;
-		border-left: 10px solid transparent;
-		border-right: 10px solid transparent;
-	}
-}
-
-.dialog_nav_item {
-	width: 100%;
-	height: 84rpx;
-	line-height: 84rpx;
-	padding: 0 20rpx 0;
-	box-sizing: border-box;
-	border-bottom: 1rpx solid $surface-variant;
-	font-size: 28rpx;
-	color: $on-surface;
-	position: relative;
-	transition: background 0.2s $ease;
-	&:active {
-		background: $surface-container-low;
-	}
-
-	.iconfont {
-		font-size: 32rpx;
-	}
-}
-
-.dialog_after {
-	::after {
-		content: '';
-		position: absolute;
-		width: 172rpx;
-		height: 1px;
-		background-color: $surface-variant;
-		bottom: 0;
-		right: 0;
-	}
-}
-
-.pl-20 {
-	padding-left: 20rpx;
-}
-
-.activity {
-	padding: 0 20rpx;
-	background: rgba($primary-container, 0.1);
-	border: 1rpx solid $primary-container;
-	color: $primary-container;
-	font-size: 24rpx;
-	line-height: 34rpx;
-	position: relative;
-	margin-left: 4rpx;
-	border-radius: $r-sm;
-}
-
-.product-con .wrapper .coupon .activity:before {
-	content: ' ';
-	position: absolute;
-	width: 7rpx;
-	height: 10rpx;
-	border-radius: 0 7rpx 7rpx 0;
-	border-color: $primary-container;
-	background-color: $surface-container-lowest !important;
-	bottom: 50%;
-	left: -3rpx;
-	margin-bottom: -6rpx;
-}
-
-.product-con .wrapper .coupon .activity:after {
-	content: ' ';
-	position: absolute;
-	width: 7rpx;
-	height: 10rpx;
-	border-radius: 7rpx 0 0 7rpx;
-	border-color: $primary-container;
-	background-color: $surface-container-lowest;
-	right: -3rpx;
-	bottom: 50%;
-	margin-bottom: -6rpx;
-}
-
-.justify-center {
-	justify-content: center;
-}
-
-.align-center {
-	align-items: center;
-}
-
-.align-baseline {
-	align-items: baseline;
-}
-
-.bg_color {
-	background: $primary-container;
-	color: $white;
-}
-
 .vip_icon {
 	width: 44rpx;
 	height: 28rpx;
 }
-
-.pl-2 {
-	padding-left: 20rpx;
-}
-
 .vip_money {
 	background: linear-gradient(135deg, #FFE7B9, #FFD98C);
 	border-radius: $r-sm;
@@ -1942,65 +1776,249 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	line-height: 28rpx;
 	text-align: center;
 	padding: 0 6rpx;
-	box-sizing: border-box;
 	margin-left: -4rpx;
 }
-
-.theme_price {
-	color: $tertiary-container;
+.share-icon-btn {
+	position: absolute;
+	right: -8rpx;
+	top: 0;
+	font-size: 36rpx;
+	color: $on-surface-variant;
+}
+.info-title {
+	font-size: 30rpx;
+	font-weight: 600;
+	color: $on-surface;
+	margin-top: 16rpx;
+	line-height: 1.4;
+}
+.info-desc {
+	font-size: 26rpx;
+	color: $on-surface-variant;
+	margin-top: 10rpx;
+	line-height: 1.5;
+}
+.info-meta {
+	margin-top: 16rpx;
+	font-size: 24rpx;
+	color: $on-surface-variant;
+}
+.info-meta > view {
+	flex: 1;
+	&:nth-child(2) { text-align: center; }
+	&:nth-child(3) { text-align: right; }
 }
 
-.activityName {
+/* 优惠券 / 活动 */
+.coupon {
+	margin-top: 16rpx;
+	padding-top: 16rpx;
+	border-top: 1rpx solid $surface-variant;
+	font-size: 26rpx;
+	.iconfont { color: $on-surface-variant; font-size: 24rpx; }
+}
+.activity {
+	padding: 0 20rpx;
+	background: $primary-light;
+	border: 1rpx solid $primary-border;
+	color: $primary;
+	font-size: 24rpx;
+	line-height: 34rpx;
+	margin-left: 4rpx;
+	border-radius: $r-sm;
+	position: relative;
+	&:before {
+		content: ' ';
+		position: absolute;
+		width: 7rpx; height: 10rpx;
+		border-radius: 0 7rpx 7rpx 0;
+		border-color: $primary-border;
+		background-color: $surface-card;
+		bottom: 50%; left: -3rpx;
+		margin-bottom: -5rpx;
+	}
+	&:after {
+		content: ' ';
+		position: absolute;
+		width: 7rpx; height: 10rpx;
+		border-radius: 7rpx 0 0 7rpx;
+		border-color: $primary-border;
+		background-color: $surface-card;
+		right: -3rpx; bottom: 50%;
+		margin-bottom: -5rpx;
+	}
+}
+.activityName { line-height: 44rpx; }
+.activityBox { }
+.line1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== 活动标签 ===== */
+.activity_pin, .activity_miao, .activity_kan {
+	width: auto;
+	height: 44rpx;
 	line-height: 44rpx;
+	padding: 0 15rpx;
+	background: $primary;
+	border-radius: 22rpx;
+	color: #fff;
 }
+.activity_miao, .activity_kan { margin-left: 19rpx; }
+.iconfonts { color: #fff !important; font-size: 28rpx; }
+.activity_title { font-size: 24rpx; color: #fff; }
 
-.industry-info {
-	background: $surface-container-lowest;
-	margin-bottom: 24rpx;
-	padding: 32rpx;
-	border-radius: $r-md;
+/* ===== 规格选择器 Bento Card ===== */
+.spec-selector {
 	animation: slideUp 400ms $ease both;
-	animation-delay: 80ms;
+	animation-delay: 60ms;
+	background: $surface-card;
+	border-radius: $r-md;
+	padding: 28rpx 24rpx;
 	border: 1rpx solid $outline-variant;
 }
-
-.industry-title {
-	margin-bottom: 28rpx;
-	padding-bottom: 24rpx;
+.spec-title-row {
+	margin-bottom: 24rpx;
+	padding-bottom: 20rpx;
 	border-bottom: 1rpx solid $surface-variant;
 }
-
-.industry-title-bar {
+.spec-title-bar {
 	width: 4rpx;
 	height: 32rpx;
 	background: $primary;
 	border-radius: 2rpx;
 	margin-right: 16rpx;
 }
-
-.industry-title-text {
-	font-size: 32rpx;
+.spec-title-text {
+	font-size: 30rpx;
 	font-weight: 600;
 	color: $on-surface;
 }
+.spec-group {
+	margin-bottom: 22rpx;
+	&:last-of-type { margin-bottom: 0; }
+}
+.spec-label {
+	font-size: 26rpx;
+	font-weight: 500;
+	color: $on-surface;
+	margin-bottom: 14rpx;
+}
+.spec-options {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 14rpx;
+}
+.spec-options.spec-grid-4 {
+	.spec-option {
+		width: calc((100% - 42rpx) / 4);
+		text-align: center;
+		justify-content: center;
+		padding: 14rpx 8rpx;
+	}
+}
+.spec-options.spec-row {
+	.spec-option {
+		padding: 14rpx 28rpx;
+	}
+}
+.spec-option {
+	display: flex;
+	align-items: center;
+	font-size: 26rpx;
+	color: $on-surface-variant;
+	background: $surface-container-low;
+	border-radius: $r-sm;
+	border: 1rpx solid transparent;
+	transition: all 0.2s $ease;
+	&.active {
+		color: $primary;
+		background: $primary-light;
+		border-color: $primary-border;
+		font-weight: 500;
+	}
+}
+.spec-sku-row {
+	margin-top: 20rpx;
+	padding-top: 20rpx;
+	border-top: 1rpx solid $surface-variant;
+}
+.attrImg {
+	width: 66rpx;
+	height: 66rpx;
+	border-radius: $r-sm;
+	display: block;
+	margin-right: 14rpx;
+}
+.switchTxt {
+	height: 60rpx;
+	line-height: 60rpx;
+	background: $surface-container-low;
+	padding: 0 24rpx;
+	border-radius: $r-sm;
+	text-align: center;
+	color: $secondary;
+	font-size: 24rpx;
+}
+.theme_price { color: $tertiary; }
 
-.industry-table {
+/* ===== 用户评价 ===== */
+.userEvaluation {
+	animation: slideUp 400ms $ease both;
+	animation-delay: 100ms;
+	background: $surface-card;
+	border-radius: $r-md;
+	padding: 28rpx 24rpx;
+	margin-top: 24rpx;
+	border: 1rpx solid $outline-variant;
+	.title {
+		font-size: 28rpx;
+		font-weight: 500;
+		color: $on-surface;
+		i { font-style: normal; color: $on-surface-variant; font-size: 24rpx; }
+	}
+	i { display: inline-block; }
+}
+.praise { color: $primary; }
+
+/* ===== 技术参数表格 ===== */
+.tech-table-section {
+	animation: slideUp 400ms $ease both;
+	animation-delay: 80ms;
+	background: $surface-card;
+	border-radius: $r-md;
+	padding: 28rpx 24rpx;
+	margin-top: 24rpx;
+	border: 1rpx solid $outline-variant;
+}
+.tech-title-row {
+	margin-bottom: 24rpx;
+	padding-bottom: 20rpx;
+	border-bottom: 1rpx solid $surface-variant;
+}
+.tech-title-bar {
+	width: 4rpx;
+	height: 32rpx;
+	background: $primary;
+	border-radius: 2rpx;
+	margin-right: 16rpx;
+}
+.tech-title-text {
+	font-size: 30rpx;
+	font-weight: 600;
+	color: $on-surface;
+}
+.tech-table {
 	border-radius: $r-md;
 	overflow: hidden;
 	border: 1rpx solid $outline-variant;
 }
-
-.industry-row {
+.tech-row {
 	display: flex;
 	align-items: center;
 	min-height: 76rpx;
 	border-bottom: 1rpx solid $surface-variant;
-	&:last-child {
-		border-bottom: none;
-	}
+	&:last-child { border-bottom: none; }
 }
-
-.industry-label {
+.tech-label {
 	width: 33%;
 	flex-shrink: 0;
 	padding: 18rpx 20rpx;
@@ -2010,23 +2028,20 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	border-right: 1rpx solid $surface-variant;
 	font-weight: 500;
 }
-
-.industry-value {
+.tech-value {
 	width: 67%;
 	flex-shrink: 0;
 	padding: 18rpx 20rpx;
 	font-size: 26rpx;
 	color: $on-surface;
 	font-weight: 500;
-	background: $surface-container-lowest;
+	background: $surface-card;
 }
-
-.industry-tags {
+.tech-tags {
 	margin-top: 24rpx;
 	flex-wrap: wrap;
 }
-
-.industry-tag {
+.tech-tag {
 	display: inline-flex;
 	align-items: center;
 	padding: 8rpx 22rpx;
@@ -2034,121 +2049,102 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	margin-bottom: 12rpx;
 	font-size: 22rpx;
 	color: $primary;
-	background: rgba(180, 197, 255, 0.15);
+	background: $primary-light;
 	border-radius: $r-sm;
-	border: 1rpx solid #b4c5ff;
-	transition: all 0.25s $ease;
-	&:active {
-		background: rgba($primary, 0.2);
-		transform: scale(0.96);
-	}
+	border: 1rpx solid $primary-border;
+	transition: all 0.2s $ease;
 }
 
-.userEvaluation {
+/* ===== 产品结构详解 ===== */
+.structure-section {
 	animation: slideUp 400ms $ease both;
 	animation-delay: 120ms;
-	background: $surface-container-lowest;
+	background: $surface-card;
 	border-radius: $r-md;
 	padding: 28rpx 24rpx;
 	margin-top: 24rpx;
 	border: 1rpx solid $outline-variant;
-	i {
-		display: inline-block;
-	}
 }
-
-.bntVideo {
-	width: auto !important;
-
-	.buy {
-		border-radius: $r-lg !important;
-	}
+.structure-body {
+	display: flex;
+	align-items: flex-start;
+	gap: 24rpx;
 }
-
-.attribute {
-	animation: slideUp 400ms $ease both;
-	animation-delay: 100ms;
-	background: $surface-container-lowest;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
-	margin-top: 24rpx;
-	border: 1rpx solid $outline-variant;
-	.line1 {
-		width: 600rpx;
-	}
+.structure-list {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 20rpx;
 }
-
-.chat-btn {
-	background-color: antiquewhite !important;
+.structure-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 16rpx;
 }
-
-.activity_pin {
-	width: auto;
-	height: 44rpx;
-	line-height: 44rpx;
-	background: $primary-container;
-	opacity: 1;
-	border-radius: 22rpx;
-	padding: 0 15rpx;
-	color: $white;
+.structure-num {
+	flex-shrink: 0;
+	width: 56rpx;
+	height: 56rpx;
+	line-height: 56rpx;
+	text-align: center;
+	font-size: 22rpx;
+	font-weight: 700;
+	color: $primary;
+	background: $primary-light;
+	border-radius: $r-sm;
+	border: 1rpx solid $primary-border;
 }
-
-.activity_miao {
-	width: auto;
-	height: 44rpx;
-	line-height: 44rpx;
-	padding: 0 15rpx;
-	background: $primary-container;
-	opacity: 1;
-	border-radius: 22rpx;
-	margin-left: 19rpx;
-	color: $white;
+.structure-text {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 4rpx;
+	padding-top: 4rpx;
 }
-
-.iconfonts {
-	color: $white !important;
+.structure-item-label {
 	font-size: 28rpx;
+	font-weight: 600;
+	color: $on-surface;
 }
-
-.activity_title {
+.structure-item-desc {
 	font-size: 24rpx;
-	color: $white;
+	color: $on-surface-variant;
+	line-height: 1.5;
+}
+.structure-diagram {
+	flex-shrink: 0;
+	width: 200rpx;
+	height: 260rpx;
+	border-radius: $r-md;
+	overflow: hidden;
+	border: 1rpx solid $outline-variant;
+}
+.structure-img {
+	width: 100%;
+	height: 100%;
+	display: block;
 }
 
-.activity_kan {
-	width: auto;
-	height: 44rpx;
-	line-height: 44rpx;
-	padding: 0 15rpx;
-	background: $primary-container;
-	opacity: 1;
-	border-radius: 22rpx;
-	margin-left: 19rpx;
-	color: $white;
-}
-
+/* ===== 产品详情 ===== */
 .product-intro {
 	animation: slideUp 400ms $ease both;
 	animation-delay: 160ms;
-	background: $surface-container-lowest;
+	background: $surface-card;
 	border-radius: $r-md;
 	padding: 28rpx 24rpx;
-	margin-top: 24rpx;
-	margin-bottom: 24rpx;
+	margin: 24rpx 24rpx 24rpx 24rpx;
 	border: 1rpx solid $outline-variant;
-
-	.title { 
-		display: flex; 
-		align-items: center; 
-		justify-content: center; 
-		gap: 16rpx; 
+	.title {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 16rpx;
 		margin-bottom: 24rpx;
 		image { width: 24rpx; height: 20rpx; }
-		.sp { 
-			font-size: 30rpx; 
-			font-weight: 700; 
-			color: $on-surface; 
-			
+		.sp {
+			font-size: 30rpx;
+			font-weight: 700;
+			color: $on-surface;
 			&::before {
 				content: '';
 				display: inline-block;
@@ -2164,567 +2160,341 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	.conter { line-height: 1.8; }
 }
 
-.mask {
-	z-index: 300 !important;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-color: rgba(0, 0, 0, 0.5);
-	animation: fadeIn 250ms $ease both;
-}
-
-.head-bar {
-	background: $surface-container-lowest;
-}
-
-.generate-posters {
-	width: 100%;
-	height: 318rpx;
-	background-color: $surface-container-lowest;
-	position: fixed;
-	left: 0;
-	bottom: 0;
-	z-index: 388;
-	transform: translate3d(0, 100%, 0);
-	transition: all 0.4s $ease;
-	border-top: 1rpx solid $outline-variant;
-	border-radius: $r-lg $r-lg 0 0;
-	box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.05);
-
-	.generateCon {
-		height: 220rpx;
-	}
-
-	.generateClose {
+/* ===== 优品推荐 ===== */
+.superior {
+	background: $surface-card;
+	margin-top: 24rpx;
+	padding: 0 24rpx 30rpx 24rpx;
+	border-radius: $r-md;
+	animation: slideUp 400ms $ease both;
+	animation-delay: 180ms;
+	border: 1rpx solid $outline-variant;
+	.title {
 		height: 98rpx;
-		font-size: 28rpx;
-		color: $secondary;
-		border-top: 1px solid $surface-variant;
+		image { width: 20rpx; height: 20rpx; }
+		.titleTxt { margin: 0 10rpx; font-size: 30rpx; color: $on-surface; font-weight: 500; }
 	}
-
-	.item {
-		.pictrue {
-			width: 96rpx;
-			height: 96rpx;
-			border-radius: 50%;
-			margin: 0 auto 6rpx auto;
-
-			image {
-				width: 100%;
-				height: 100%;
-				border-radius: 50%;
-			}
-		}
+	.slider-banner { width: 100%; margin: 0 auto; position: relative; }
+	.slider-banner swiper { height: 100%; width: 100%; }
+	.slider-banner swiper-item { height: 100%; }
+	.slider-banner .list { width: 100%; }
+	.slider-banner .list .item {
+		width: 198rpx; margin: 0 22rpx 30rpx 0; font-size: 26rpx;
+		&:nth-of-type(3n) { margin-right: 0; }
+		.pictrue { position: relative; width: 100%; height: 198rpx; }
+		.pictrue image { width: 100%; height: 100%; border-radius: $r-sm; }
+		.name { color: $on-surface; margin-top: 12rpx; }
 	}
 }
 
-.generate-posters.on {
-	transform: translate3d(0, 0, 0);
-}
-
-.generate-posters .item {
-	flex: 1;
-	text-align: center;
-	font-size: 30rpx;
-}
-
-.generate-posters .item .iconfont {
-	font-size: 80rpx;
-	color: #5eae72;
-}
-
-.generate-posters .item .iconfont.icon-haibao {
-	color: $primary-container;
-}
-
-.generate-posters .item .iconfont.icon-haowuquan1 {
-	color: $tertiary-container;
-}
-
-.product-con .footer {
+/* ===== 底部操作栏 ===== */
+.footer {
 	padding: 0 20rpx 0 24rpx;
 	position: fixed;
 	bottom: 0;
 	width: 100%;
 	box-sizing: border-box;
-	background-color: $surface-container-lowest;
+	background: $surface-card;
 	z-index: 277;
 	border-top: 1rpx solid $outline-variant;
-	height: 90rpx;
-	height: calc(90rpx+ constant(safe-area-inset-bottom));
-	height: calc(90rpx + env(safe-area-inset-bottom));
-	box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.04);
+	height: 100rpx;
+	height: calc(100rpx + constant(safe-area-inset-bottom));
+	height: calc(100rpx + env(safe-area-inset-bottom));
+	box-shadow: 0 -2rpx 16rpx rgba(0, 0, 0, 0.04);
 }
-
-.product-con .footer .item {
+.footer-left {
+	gap: 8rpx;
+}
+.footer-icon-btn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 90rpx;
 	font-size: 18rpx;
-	color: $secondary;
-}
-
-.product-con .footer .item .iconfont {
-	text-align: center;
-	font-size: 40rpx;
-}
-
-.product-con .footer .item .iconfont.icon-shoucang1 {
-	color: $primary;
-}
-
-.product-con .footer .item .iconfont.icon-gouwuche1 {
-	font-size: 40rpx;
-	position: relative;
-}
-
-.product-con .footer .item .iconfont.icon-gouwuche1 .num {
-	color: $white;
-	position: absolute;
-	font-size: 18rpx;
-	padding: 2rpx 8rpx 3rpx;
-	border-radius: 200rpx;
-	top: -10rpx;
-	right: -10rpx;
-	background: $primary-container;
-}
-
-.product-con .footer .bnt {
-	width: 444rpx;
-	height: 76rpx;
-}
-
-.product-con .footer .bnt .bnts {
-	width: 222rpx;
-	text-align: center;
-	line-height: 76rpx;
-	color: $white;
-	font-size: 28rpx;
-	font-weight: 500;
-	letter-spacing: 1rpx;
-}
-
-.product-con .footer .bnt .joinCart {
-	border-radius: $r-lg 0 0 $r-lg;
-	background: $primary-container;
-	color: $white;
-}
-
-.product-con .footer .bnt .buy {
-	border-radius: 0 $r-lg $r-lg 0;
-	background: $tertiary-container;
-	color: $white;
-}
-
-.product-con .store-info {
-	margin-top: 24rpx;
-	background-color: $surface-container-lowest;
-	border-radius: $r-md;
-	animation: slideUp 400ms $ease both;
-	animation-delay: 160ms;
-	border: 1rpx solid $outline-variant;
-	overflow: hidden;
-}
-
-.product-con .store-info .title {
-	padding: 0 30rpx;
-	font-size: 28rpx;
-	color: $on-surface;
-	height: 80rpx;
-	line-height: 80rpx;
-	border-bottom: 1px solid $surface-variant;
-}
-
-.product-con .store-info .info {
-	padding: 0 30rpx;
-	height: 126rpx;
-}
-
-.product-con .store-info .info .picTxt {
-	width: 615rpx;
-}
-
-.product-con .store-info .info .picTxt .pictrue {
-	width: 76rpx;
-	height: 76rpx;
-}
-
-.product-con .store-info .info .picTxt .pictrue image {
-	width: 100%;
-	height: 100%;
-	border-radius: $r-sm;
-}
-
-.product-con .store-info .info .picTxt .text {
-	width: 522rpx;
-}
-
-.product-con .store-info .info .picTxt .text .name {
-	font-size: 30rpx;
-	color: $on-surface;
-}
-
-.product-con .store-info .info .picTxt .text .address {
-	font-size: 24rpx;
-	color: $secondary;
-	margin-top: 3rpx;
-}
-
-.product-con .store-info .info .picTxt .text .address .iconfont {
-	color: $secondary;
-	font-size: 18rpx;
-	margin-left: 10rpx;
-}
-
-.product-con .store-info .info .picTxt .text .address .addressTxt {
-	max-width: 480rpx;
-}
-
-.product-con .store-info .info .iconfont {
-	font-size: 40rpx;
-}
-
-.product-con .superior {
-	background-color: $surface-container-lowest;
-	margin-top: 24rpx;
-	padding: 0 24rpx 30rpx 24rpx;
-	border-radius: $r-md;
-	animation: slideUp 400ms $ease both;
-	animation-delay: 200ms;
-	border: 1rpx solid $outline-variant;
-}
-
-.product-con .superior .title {
-	height: 98rpx;
-}
-
-.product-con .superior .title image {
-	width: 20rpx;
-	height: 20rpx;
-}
-
-.product-con .superior .title .titleTxt {
-	margin: 0 10rpx;
-	font-size: 30rpx;
-	color: $on-surface;
-	font-weight: 500;
-}
-
-.product-con .superior .slider-banner {
-	width: 100%;
-	margin: 0 auto;
-	position: relative;
-}
-
-.product-con .superior .slider-banner swiper {
-	height: 100%;
-	width: 100%;
-}
-
-.product-con .superior .slider-banner swiper-item {
-	height: 100%;
-}
-
-.product-con .superior .slider-banner .list {
-	width: 100%;
-}
-
-.product-con .superior .slider-banner .list .item {
-	width: 198rpx;
-	margin: 0 22rpx 30rpx 0;
-	font-size: 26rpx;
-}
-
-.product-con .superior .slider-banner .list .item:nth-of-type(3n) {
-	margin-right: 0;
-}
-
-.product-con .superior .slider-banner .list .item .pictrue {
-	position: relative;
-	width: 100%;
-	height: 198rpx;
-}
-
-.product-con .superior .slider-banner .list .item .pictrue image {
-	width: 100%;
-	height: 100%;
-	border-radius: $r-sm;
-}
-
-.product-con .superior .slider-banner .list .item .name {
-	color: $on-surface;
-	margin-top: 12rpx;
-}
-
-.product-con .superior .slider-banner .swiper-pagination-bullet {
-	background-color: $secondary;
-}
-
-.product-con .superior .slider-banner .swiper-pagination-bullet-active {
-	background-color: $primary;
-}
-
-button {
+	color: $on-surface-variant;
 	padding: 0;
 	margin: 0;
 	line-height: normal;
-	background-color: $surface-container-lowest;
-}
-
-button::after {
-	border: 0;
-}
-
-action-sheet-item {
-	padding: 0;
-	height: 240rpx;
-	align-items: center;
-	display: flex;
-}
-
-.contact {
-	font-size: 16px;
-	width: 50%;
-	background-color: $surface-container-lowest;
-	padding: 8rpx 0;
-	border-radius: 0;
-	margin: 0;
-	line-height: 2;
-}
-
-.contact::after {
+	background: transparent;
 	border: none;
+	&::after { border: none; }
+	.iconfont {
+		font-size: 36rpx;
+		margin-bottom: 2rpx;
+		&.icon-shoucang1 { color: $primary; }
+	}
+}
+.footer-right {
+	gap: 16rpx;
+	align-items: center;
+}
+.btn-outline {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 72rpx;
+	padding: 0 32rpx;
+	font-size: 28rpx;
+	font-weight: 500;
+	color: $primary;
+	background: transparent;
+	border: 2rpx solid $primary;
+	border-radius: $r-lg;
+	letter-spacing: 1rpx;
+	transition: all 0.2s $ease;
+	white-space: nowrap;
+	&:active {
+		background: $primary-light;
+	}
+}
+.btn-primary {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 72rpx;
+	padding: 0 32rpx;
+	font-size: 28rpx;
+	font-weight: 500;
+	color: #fff;
+	background: $primary;
+	border-radius: $r-lg;
+	letter-spacing: 1rpx;
+	transition: all 0.2s $ease;
+	white-space: nowrap;
+	&:active {
+		background: darken($primary, 8%);
+	}
+}
+.btn-disabled {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 72rpx;
+	padding: 0 32rpx;
+	font-size: 28rpx;
+	font-weight: 500;
+	color: #fff;
+	background: #bbb;
+	border-radius: $r-lg;
+	letter-spacing: 1rpx;
+	white-space: nowrap;
 }
 
-.action-sheet {
-	font-size: 17px;
-	line-height: 1.8;
-	width: 50%;
-	position: absolute;
-	top: 0;
-	right: 0;
-	padding: 25rpx 0;
-}
-
-.canvas {
-	position: fixed;
-	z-index: -5;
-	opacity: 0;
-}
-
-.poster-pop {
-	position: fixed;
-	width: 450rpx;
-	height: 714rpx;
-	top: 50%;
-	left: 50%;
-	transform: translateX(-50%);
-	margin-top: -432rpx;
-	z-index: 399;
-	animation: elasticIn 500ms $ease both;
-}
-
-.poster-pop image {
-	width: 100%;
-	height: 100%;
-	display: block;
-	border-radius: $r-md;
-}
-
-.poster-pop .close {
-	width: 46rpx;
-	height: 75rpx;
-	position: fixed;
-	right: 0;
-	top: -73rpx;
-	display: block;
-}
-
-.poster-pop .save-poster {
-	background-color: $error;
-	font-size: 22rpx;
-	color: $white;
-	text-align: center;
-	height: 76rpx;
-	line-height: 76rpx;
-	width: 100%;
-	border-radius: 0 0 $r-md $r-md;
-}
-
-.poster-pop .keep {
-	color: $white;
-	text-align: center;
-	font-size: 25rpx;
-	margin-top: 10rpx;
-}
-
-
-.pro-wrapper .iconn {
-	width: 100rpx;
-	height: 100rpx;
-	background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
-	border-radius: 8rpx;
-}
-
-
-
-.pro-wrapper .iconn.iconn1 {
-	background: linear-gradient(135deg, #003da6 0%, #0052d9 100%);
-}
-
-
-.pictrue_log {
-	width: 80upx;
-	height: 40upx;
-	border-radius: 10upx 0 12upx 0;
-	line-height: 40upx;
-	font-size: 24upx;
-}
-
-.pictrue_log_class {
-	z-index: 3;
-	background: linear-gradient(90deg, rgba(246, 122, 56, 1) 0%, rgba(241, 27, 9, 1) 100%);
-	opacity: 1;
-	position: absolute;
-	top: 0;
-	left: 0;
-	color: $white;
-	text-align: center;
-}
-
-.tab_nav .header {
-	width: 100%;
-	height: 96rpx;
-	padding: 20rpx 80rpx 0;
-	font-size: 30rpx;
-	color: $on-surface;
-	background-color: $surface-container-lowest;
-}
-
-.icon-xiangzuo {
-	/* #ifdef H5 */
-	top: 20rpx !important;
-	/* #endif */
-}
-
-.navbar .header .item {
-	position: relative;
-	margin: 0 25rpx;
-}
-
-.navbar .header .item.on:before {
-	position: absolute;
-	width: 60rpx;
-	height: 5rpx;
-	background-repeat: no-repeat;
-	content: "";
-	background: $primary-container;
-	bottom: -10rpx;
-	left: 50%;
-	margin-left: -28rpx;
-	border-radius: 3rpx;
-}
-
+/* ===== 导航栏 (保留原样) ===== */
 .navbar {
+	position: fixed; top: 0; left: 0; z-index: 99; width: 100%;
+}
+.navbar .navbarH { position: relative; }
+.navbar .navbarH .navbarCon { position: absolute; bottom: 0; height: 100rpx; width: 100%; }
+.bgwhite { background: $surface-card; }
+.select_nav {
+	width: 170rpx !important; height: 60rpx !important;
+	border-radius: 33rpx;
+	background: rgba(255, 255, 255, 0.45);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(0,0,0,0.06);
+	color: $on-surface;
 	position: fixed;
-	top: 0;
-	left: 0;
-	z-index: 99;
-	width: 100%;
+	font-size: 18px;
+	line-height: 58rpx;
+	z-index: 1000;
+	left: 14rpx;
+	animation: fadeIn 300ms $ease both;
 }
-
-.navbar .navbarH {
-	position: relative;
-}
-
-.navbar .navbarH .navbarCon {
+.nav_line {
+	content: '';
+	display: inline-block;
+	width: 1px; height: 34rpx;
+	background: $outline-variant;
 	position: absolute;
-	bottom: 0;
-	height: 100rpx;
-	width: 100%;
+	left: 0; right: 0;
+	margin: auto;
 }
-
 .h5_back {
 	color: $on-surface;
 	position: fixed;
 	left: 20rpx;
 	font-size: 32rpx;
 	text-align: center;
-	width: 58rpx;
-	height: 58rpx;
+	width: 58rpx; height: 58rpx;
 	background: rgba(255, 255, 255, 0.45);
 	backdrop-filter: blur(12px);
 	border: 1px solid rgba(0, 0, 0, 0.06);
 	border-radius: 50%;
 }
-
-.share-box {
-	z-index: 1000;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
+.icon-xiangzuo {
+	/* #ifdef H5 */
+	top: 20rpx !important;
+	/* #endif */
+}
+.right_select {
+	width: 58rpx; height: 58rpx;
+	background: rgba(255, 255, 255, 0.45);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(0, 0, 0, 0.06);
+	border-radius: 50%;
+	position: fixed; right: 20rpx;
+	text-align: center;
+	line-height: 58rpx;
 	animation: fadeIn 300ms $ease both;
+}
+.tab_nav {
+	width: 100%; height: 96rpx; padding: 0 30rpx 0;
+}
+.tab_nav .header {
+	width: 100%; height: 96rpx;
+	padding: 20rpx 80rpx 0;
+	font-size: 30rpx;
+	color: $on-surface;
+	background: $surface-card;
+}
+.navbar .header .item { position: relative; margin: 0 25rpx; }
+.navbar .header .item.on:before {
+	position: absolute;
+	width: 60rpx; height: 5rpx;
+	content: "";
+	background: $primary;
+	bottom: -10rpx;
+	left: 50%;
+	margin-left: -28rpx;
+	border-radius: 3rpx;
+}
 
-	image {
-		width: 100%;
-		height: 100%;
+/* ===== 导航弹出菜单 ===== */
+.dialog_nav {
+	position: absolute;
+	/* #ifdef MP */
+	left: 14rpx;
+	/* #endif */
+	/* #ifdef H5 || APP-PLUS */
+	right: 14rpx;
+	/* #endif */
+	width: 240rpx;
+	background: $surface-card;
+	box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+	z-index: 310;
+	border-radius: $r-md;
+	animation: dropIn 350ms $ease both;
+	border: 1rpx solid $outline-variant;
+	&::before {
+		content: '';
+		width: 0; height: 0;
+		position: absolute;
+		/* #ifdef MP */
+		left: 0; right: 0; margin: auto;
+		/* #endif */
+		/* #ifdef H5 || APP-PLUS */
+		right: 8px;
+		/* #endif */
+		top: -9px;
+		border-bottom: 10px solid $surface-card;
+		border-left: 10px solid transparent;
+		border-right: 10px solid transparent;
+	}
+}
+.dialog_nav_item {
+	width: 100%; height: 84rpx; line-height: 84rpx;
+	padding: 0 20rpx 0;
+	box-sizing: border-box;
+	border-bottom: 1rpx solid $surface-variant;
+	font-size: 28rpx; color: $on-surface;
+	position: relative;
+	transition: background 0.2s $ease;
+	&:active { background: $surface-container-low; }
+	.iconfont { font-size: 32rpx; }
+}
+.dialog_after {
+	::after {
+		content: '';
+		position: absolute; width: 172rpx; height: 1px;
+		background-color: $surface-variant;
+		bottom: 0; right: 0;
 	}
 }
 
+/* ===== 遮罩 ===== */
+.mask {
+	z-index: 300 !important;
+	position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	animation: fadeIn 250ms $ease both;
+}
 .mask_transparent {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	position: fixed; top: 0; left: 0; right: 0; bottom: 0;
 	background: transparent;
 	z-index: 300;
 }
 
-.px-12 {
-	padding-left: 12rpx;
-	padding-right: 12rpx;
-}
-
-.font_color {
-	color: $primary;
-}
-
-.attrImg {
-	width: 66rpx;
-	height: 66rpx;
-	border-radius: $r-sm;
-	display: block;
-	margin-right: 14rpx;
-}
-
-.switchTxt {
-	height: 60rpx;
-	flex: 1;
-	line-height: 60rpx;
-	box-sizing: border-box;
-	background: $surface-container-low;
-	padding-right: 0 24rpx 0;
-	border-radius: $r-sm;
-	text-align: center;
-	color: $secondary;
-	font-size: 24rpx;
-}
-
-.share-icon-box{
-	position: relative;
-	.share-icon{
-		position: absolute;
-		right: -15rpx;
-		top: 20rpx;
+/* ===== 分享面板 ===== */
+.generate-posters {
+	width: 100%; height: 318rpx;
+	background: $surface-card;
+	position: fixed; left: 0; bottom: 0;
+	z-index: 388;
+	transform: translate3d(0, 100%, 0);
+	transition: all 0.4s $ease;
+	border-top: 1rpx solid $outline-variant;
+	border-radius: $r-lg $r-lg 0 0;
+	box-shadow: 0 -4rpx 12rpx rgba(0, 0, 0, 0.05);
+	.generateCon { height: 220rpx; }
+	.generateClose { height: 98rpx; font-size: 28rpx; color: $secondary; border-top: 1px solid $surface-variant; }
+	.item {
+		.pictrue { width: 96rpx; height: 96rpx; border-radius: 50%; margin: 0 auto 6rpx auto;
+			image { width: 100%; height: 100%; border-radius: 50%; }
+		}
 	}
 }
+.generate-posters.on { transform: translate3d(0, 0, 0); }
+.generate-posters .item { flex: 1; text-align: center; font-size: 30rpx; }
+.generate-posters .item .iconfont { font-size: 80rpx; color: #5eae72; }
+.generate-posters .item .iconfont.icon-haibao { color: $primary; }
+.generate-posters .item .iconfont.icon-haowuquan1 { color: $tertiary; }
 
-.share-introduce{
-	padding-right: 16rpx;
+/* ===== 海报 ===== */
+.poster-pop {
+	position: fixed;
+	width: 450rpx; height: 714rpx;
+	top: 50%; left: 50%;
+	transform: translateX(-50%);
+	margin-top: -432rpx;
+	z-index: 399;
+	animation: elasticIn 500ms $ease both;
+	image { width: 100%; height: 100%; display: block; border-radius: $r-md; }
+}
+.canvas { position: fixed; z-index: -5; opacity: 0; }
+
+/* ===== 分享引导 ===== */
+.share-box {
+	z-index: 1000; position: fixed;
+	left: 0; top: 0; width: 100%; height: 100%;
+	animation: fadeIn 300ms $ease both;
+	image { width: 100%; height: 100%; }
 }
 
+/* ===== 按钮重置 ===== */
+button {
+	padding: 0; margin: 0; line-height: normal; background: $surface-card;
+	&::after { border: 0; }
+}
+
+/* ===== 标签角标 ===== */
+.pictrue_log {
+	width: 80upx; height: 40upx;
+	border-radius: 10upx 0 12upx 0;
+	line-height: 40upx;
+	font-size: 24upx;
+}
+.pictrue_log_class {
+	z-index: 3;
+	background: $red-gradient;
+	position: absolute;
+	top: 0; left: 0;
+	color: #fff;
+	text-align: center;
+}
+
+/* ===== 底部留白 ===== */
 .bottom-spacer {
 	height: 300rpx;
 	height: calc(280rpx + env(safe-area-inset-bottom));

@@ -118,7 +118,6 @@
 </script>
 <style lang="scss">
 	.page{
-		background: linear-gradient(180deg, #eaf2ff 0%, #f4f8ff 35%, #ffffff 100%);
 		height: 100% !important;
 	}
 </style>

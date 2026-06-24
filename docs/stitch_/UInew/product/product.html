@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700;800&amp;family=Plus+Jakarta+Sans:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#00333a",
+                        "primary": "#0061a5",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bfc7d5",
+                        "on-secondary-fixed": "#221b00",
+                        "on-background": "#1a1c1e",
+                        "secondary-container": "#fdd400",
+                        "secondary-fixed-dim": "#e9c400",
+                        "background": "#f9f9fc",
+                        "primary-fixed-dim": "#9fcaff",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeef0",
+                        "on-surface-variant": "#3f4753",
+                        "on-primary-fixed-variant": "#00497e",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#00a4b7",
+                        "surface-container-low": "#f3f3f6",
+                        "primary-container": "#0099ff",
+                        "inverse-surface": "#2f3133",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-tint": "#0061a5",
+                        "on-tertiary-fixed": "#001f24",
+                        "on-primary-container": "#002f54",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9fc",
+                        "surface-container-highest": "#e2e2e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "on-tertiary-fixed-variant": "#004f58",
+                        "primary-fixed": "#d2e4ff",
+                        "on-secondary-fixed-variant": "#544600",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#00daf3",
+                        "on-primary-fixed": "#001d36",
+                        "tertiary": "#006875",
+                        "on-secondary-container": "#6f5c00",
+                        "surface-dim": "#dadadc",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#9fcaff",
+                        "surface": "#f9f9fc",
+                        "inverse-on-surface": "#f0f0f3",
+                        "tertiary-fixed": "#9cf0ff",
+                        "surface-variant": "#e2e2e5",
+                        "secondary": "#705d00",
+                        "outline": "#707884",
+                        "secondary-fixed": "#ffe170"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-margin": "40px",
+                        "gutter": "12px",
+                        "container-padding": "20px",
+                        "stack-gap": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "title-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+        .bento-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0px 10px 20px -5px rgba(0, 153, 255, 0.15);
+            border-color: #0061a5;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-lg overflow-x-hidden">
+<!-- Top AppBar (from JSON) -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl flex items-center justify-between px-container-padding h-16 w-full">
+    <div class="flex items-center gap-4">
+        <button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform" data-icon="menu">menu</button>
+        <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight"><h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary cursor-text" spellcheck="false" data-stitch-added-classes="cursor-text" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 20px; font-weight: 700; font-family: Inter; line-height: 28px; --tw-text-opacity: 1; color: rgb(0, 61, 155); letter-spacing: normal; background-color: rgb(249, 249, 255); outline: none !important; box-shadow: none !important;">沈阳辽缆电线电缆有限公司</h1></h1>
+    </div>
+    <div class="flex items-center">
+        <button class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity active:scale-95 transition-transform" data-icon="search">search</button>
+    </div>
+</header>
+<main class="pt-20 pb-24">
+    <!-- Hero Section: Product Image -->
+    <section class="px-container-padding mb-8">
+        <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-white border border-outline-variant group">
+            <img class="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-500" data-alt="A macro studio photograph of a YJV power cable cross-section with high-saturation sky blue accents. The lighting is crisp and bright, highlighting the copper core and multi-layered insulation. The aesthetic is clean, professional, and industrial-modern, set against a pristine white background to evoke a sense of high-quality manufacturing and technical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVsQUsdQ5JjOZidYaMIbgGsr7vW00YfIX9t5-JE_YGQ8GuMhVkwYQ_RpfUAAcD_rc7doHy7FxxUCWDrBXn-7TgCcSUKrL7hWASxfN3XegMxFL2OvhfqDjSn5bWZ9hTT533gRLKEAu4kyKFGYzkRvU8u4gh5KdXjsBX30t5PKNnhI8rqftsxY7Kgzim1hraW4TY8OOtk9yC7AQ7ImJRfRhBTPdDkZqlnxqylmwhTcw8YPLNHSXe4JCwNVEUAU438cJpQVB2obhZ3Dw">
+            <div class="absolute bottom-4 right-4 flex gap-2">
+                <span class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full font-label-caps text-label-caps border border-tertiary/20">高压电力</span>
+                <span class="bg-tertiary-container/10 text-tertiary px-3 py-1 rounded-full font-label-caps text-label-caps border border-tertiary/20">阻燃抗腐</span>
+            </div>
+        </div>
+    </section>
+    <!-- Product Info & Specs Selection -->
+    <section class="px-container-padding mb-section-margin">
+        <div class="mb-6">
+            <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2">YJV 交联聚乙烯绝缘电力电缆</h2>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">适用于工频额定电压0.6/1kV及以下配电线路作配送电能之用。高导电无氧铜芯，稳定传输。</p>
+        </div>
+        <!-- Specs Selector Bento -->
+        <div class="space-y-stack-gap">
+            <!-- Core Count -->
+            <div class="bento-card bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+                <label class="block font-title-md text-title-md text-on-surface mb-3">电缆芯数</label>
+                <div class="flex flex-wrap gap-2">
+                    <button class="px-4 py-2 rounded-lg border-2 border-primary bg-primary/10 text-primary font-body-sm text-body-sm active:scale-95 transition-all">1芯</button>
+                    <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-body-sm text-body-sm hover:border-primary transition-all">2芯</button>
+                    <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-body-sm text-body-sm hover:border-primary transition-all">3芯</button>
+                    <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-body-sm text-body-sm hover:border-primary transition-all">3+1芯</button>
+                    <button class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant font-body-sm text-body-sm hover:border-primary transition-all">4+1芯</button>
+                </div>
+            </div>
+            <!-- Section Area -->
+            <div class="bento-card bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+                <label class="block font-title-md text-title-md text-on-surface mb-3">截面积 (mm²)</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">10</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">16</button>
+                    <button class="py-2 rounded-lg border-2 border-primary bg-primary/10 text-primary font-label-caps text-label-caps">25</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">35</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">50</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">70</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">95</button>
+                    <button class="py-2 rounded-lg border border-outline-variant text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-all">120</button>
+                </div>
+            </div>
+            <!-- Outer Material -->
+            <div class="bento-card bg-surface-container-lowest border border-outline-variant p-4 rounded-xl">
+                <label class="block font-title-md text-title-md text-on-surface mb-3">外护层材质</label>
+                <div class="flex gap-4">
+                    <div class="flex items-center gap-2">
+                        <input checked="" class="w-5 h-5 text-primary focus:ring-primary border-outline-variant" id="pvc" name="material" type="radio">
+                        <label class="font-body-sm text-body-sm text-on-surface" for="pvc">聚氯乙烯 (PVC)</label>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input class="w-5 h-5 text-primary focus:ring-primary border-outline-variant" id="lszh" name="material" type="radio">
+                        <label class="font-body-sm text-body-sm text-on-surface" for="lszh">低烟无卤 (LSZH)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Technical Table Section -->
+    <section class="px-container-padding mb-section-margin">
+        <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-6">技术性能指标</h3>
+        <div class="overflow-hidden border border-outline-variant rounded-xl bg-surface-container-lowest shadow-sm">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-surface-container-high">
+                <tr>
+                    <th class="px-4 py-3 font-title-md text-title-md text-on-surface-variant">性能参数</th>
+                    <th class="px-4 py-3 font-title-md text-title-md text-on-surface-variant">标准数值</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant">
+                <tr>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface-variant">导体长期最高工作温度</td>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface">90℃</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface-variant">短路最高温度(5s)</td>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface">250℃</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface-variant">敷设环境温度</td>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface">≥ 0℃</td>
+                </tr>
+                <tr>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface-variant">弯曲半径(多芯)</td>
+                    <td class="px-4 py-4 font-body-sm text-body-sm text-on-surface">15 × D</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- Structure Diagram Section -->
+    <section class="px-container-padding mb-section-margin">
+        <div class="bg-primary/5 rounded-2xl p-6 border border-primary/10">
+            <h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-6">产品结构详解</h3>
+            <div class="flex flex-col gap-6">
+                <div class="flex items-start gap-4">
+                    <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0 font-label-caps text-label-caps">01</span>
+                    <div>
+                        <h4 class="font-title-md text-title-md text-on-surface">紧压圆形铜导体</h4>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">采用99.99%高纯度无氧铜，电阻率低，导电性能优异。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="w-8 h-8 rounded-full bg-primary/60 text-on-primary flex items-center justify-center shrink-0 font-label-caps text-label-caps">02</span>
+                    <div>
+                        <h4 class="font-title-md text-title-md text-on-surface">交联聚乙烯绝缘 (XLPE)</h4>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">优异的电气绝缘性能，耐热老化，载流量大。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <span class="w-8 h-8 rounded-full bg-primary/30 text-primary flex items-center justify-center shrink-0 font-label-caps text-label-caps">03</span>
+                    <div>
+                        <h4 class="font-title-md text-title-md text-on-surface">聚氯乙烯外护套 (PVC)</h4>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant">耐腐蚀、抗老化、阻燃性能好，适应恶劣施工环境。</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Interactive SVG Placeholder -->
+            <div class="mt-8 relative h-48 bg-white/50 rounded-xl overflow-hidden border border-primary/20 flex items-center justify-center">
+                <img class="w-full h-full object-cover mix-blend-multiply opacity-80" data-alt="A detailed technical 3D isometric diagram of an industrial power cable showing its internal structure. The layers are labeled clearly and shown in a cross-section with high-contrast sky blue and metallic copper colors. The style is modern, technical, and minimalist, utilizing clean lines and soft ambient glows to emphasize the engineering precision of the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGxUGa5uTSHgX01jp1IhPDh0xQp-3sn0bwxewzJZjS4wSwAuWNVYy0MyeQ7Kc-2CcRvgSHPAkfhHG2_5418QVim4dgYq4h04Sf6ORfzGMHD3mu28UmvYwbQC7Jcr6JExdTIhy4im1ELcP5BaVBVxl8vicJtIzY4vVbCRTlaeyYSIcMtd7QCtFd9Wzfv7L8_0FEqGpfXYAatGoKTbtX6IaJOvecIcxzl43FnHYg4KOB4WBPK-PDB6BSn9DwdF7D1DkBgWRRxYtxvqg">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="bg-primary/90 text-on-primary px-4 py-2 rounded-full font-label-caps text-label-caps flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[18px]">biotech</span>
+                        技术结构展示
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 w-full z-50 bg-surface/80 dark:bg-surface-container/80 backdrop-blur-xl h-20 px-container-padding flex items-center gap-4 shadow-[0px_-10px_20px_-5px_rgba(0,153,255,0.15)]">
+    <button class="flex flex-col items-center justify-center min-w-[60px] text-on-surface-variant active:scale-90 transition-all">
+        <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+        <span class="font-label-caps text-[10px]">客服</span>
+    </button>
+    <button class="flex-1 h-12 rounded-xl border-2 border-primary-container text-primary font-title-md text-title-md active:scale-95 transition-transform">
+        加入采购清单
+    </button>
+    <button class="flex-1 h-12 rounded-xl bg-primary-container text-white font-title-md text-title-md shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)] active:scale-95 transition-transform">
+        立即咨询
+    </button>
+</footer>
+<!-- Bottom Navigation Mock (Only if top level, but this is sub-page, so we skip standard nav and use specific detail bar) -->
+<script>
+    // Micro-interactions for spec selection
+    document.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (this.parentElement.classList.contains('flex') || this.parentElement.classList.contains('grid')) {
+                const siblings = this.parentElement.querySelectorAll('button');
+                siblings.forEach(s => {
+                    s.classList.remove('border-2', 'border-primary', 'bg-primary/10', 'text-primary');
+                    s.classList.add('border', 'border-outline-variant', 'text-on-surface-variant');
+                });
+                this.classList.remove('border', 'border-outline-variant', 'text-on-surface-variant');
+                this.classList.add('border-2', 'border-primary', 'bg-primary/10', 'text-primary');
+            }
+        });
+    });
+</script>
+
+
+</body></html>

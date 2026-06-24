@@ -42,46 +42,34 @@
           </view>
           <text class="section-more" @click="goToProducts">查看全部</text>
         </view>
-        <view class="bento-grid">
-          <!-- High Voltage - Full Width -->
-          <view class="bento-item bento-large" @click="goToProductCate('high_voltage')">
-            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175706254_675021430310.png" mode="aspectFill"></image>
+        <!-- 加载骨架屏 -->
+        <view class="bento-grid" v-if="loadingCategories">
+          <view v-for="i in 3" :key="i" class="bento-item skeleton-bento" :class="{'bento-large': i === 1}">
+            <view class="bento-content">
+              <view class="bento-name-skeleton"></view>
+            </view>
+          </view>
+        </view>
+        <!-- 实际数据 -->
+        <view class="bento-grid" v-else>
+          <view
+            class="bento-item"
+            :class="{'bento-large': index === 0}"
+            v-for="(item, index) in bentoCategories"
+            :key="item.id"
+            @click="goToProductCate(item.id)"
+          >
+            <image class="bento-bg" :src="item.image" mode="aspectFill"></image>
             <view class="bento-overlay"></view>
             <view class="bento-content">
-              <view class="bento-tag">
-                <text>HIGH VOLTAGE</text>
+              <view class="bento-name-wrapper">
+                <h4 class="bento-name">{{ item.name }}</h4>
               </view>
-              <h4 class="bento-name">高压电力电缆</h4>
-              <view class="bento-arrow">
+              <view class="bento-arrow" v-if="index === 0">
                 <text class="iconfont icon-xiangyou"></text>
               </view>
-            </view>
-          </view>
-          <!-- Control Cable -->
-          <view class="bento-item" @click="goToProductCate('control')">
-            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175803168_675021487225.png" mode="aspectFill"></image>
-            <view class="bento-overlay"></view>
-            <view class="bento-content">
-              <view class="bento-tag bento-tag-yellow">
-                <text>CONTROL</text>
-              </view>
-              <h4 class="bento-name">精密控制电缆</h4>
-              <view class="bento-icon">
-                <text class="iconfont icon-shezhi"></text>
-              </view>
-            </view>
-          </view>
-          <!-- Fire Resistant -->
-          <view class="bento-item" @click="goToProductCate('fireproof')">
-            <image class="bento-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175829410_675021513468.png" mode="aspectFill"></image>
-            <view class="bento-overlay"></view>
-            <view class="bento-content">
-              <view class="bento-tag bento-tag-red">
-                <text>FIREPROOF</text>
-              </view>
-              <h4 class="bento-name">特种防火电缆</h4>
-              <view class="bento-icon">
-                <text class="iconfont icon-huoyan"></text>
+              <view class="bento-icon" v-else>
+                <text class="iconfont" :class="item.icon"></text>
               </view>
             </view>
           </view>
@@ -112,7 +100,19 @@
           <h3 class="section-title">企业动态</h3>
           <text class="iconfont icon-shezhi news-filter"></text>
         </view>
-        <view class="news-list">
+        <!-- 加载骨架 -->
+        <view class="news-list" v-if="loadingNews">
+          <view v-for="i in 2" :key="i" class="news-item skeleton-news">
+            <view class="news-image-skeleton"></view>
+            <view class="news-info-skeleton">
+              <view class="news-date-skeleton"></view>
+              <view class="news-title-skeleton"></view>
+              <view class="news-summary-skeleton"></view>
+            </view>
+          </view>
+        </view>
+        <!-- 实际数据 -->
+        <view class="news-list" v-else>
           <view class="news-item" v-for="(item, index) in newsList" :key="index" @click="goToNewsDetail(item.id)">
             <view class="news-image">
               <image :src="item.image" mode="aspectFill"></image>
@@ -142,37 +142,110 @@
 
 <script>
 import tabBar from '@/components/tab-bar/index.vue';
+import { getCategoryList } from '@/api/store.js';
+import { getArticleList } from '@/api/api.js';
 
+// Bento 图标配置
+const BENTO_TAG_CONFIG = [
+  { icon: 'icon-xiangyou' },
+  { icon: 'icon-shezhi' },
+  { icon: 'icon-huoyan' }
+];
+
+// 默认兜底数据
+const DEFAULT_CATEGORIES = [
+  {
+    id: 1,
+    name: '高压电力电缆',
+    image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175706254_675021430310.png',
+    icon: 'icon-xiangyou'
+  },
+  {
+    id: 2,
+    name: '精密控制电缆',
+    image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175803168_675021487225.png',
+    icon: 'icon-shezhi'
+  },
+  {
+    id: 3,
+    name: '特种防火电缆',
+    image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260623175829410_675021513468.png',
+    icon: 'icon-huoyan'
+  }
+];
+
+// 默认新闻兜底数据
+const DEFAULT_NEWS = [
+  {
+    id: 1,
+    image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
+    date: '2024.11.20',
+    title: '沈阳辽缆荣获省级"专精特新"企业称号',
+    summary: '公司在高性能特种电缆研发领域取得新突破...'
+  },
+  {
+    id: 2,
+    image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
+    date: '2024.11.15',
+    title: '参与沈阳市轨道交通10号线供电系统建设',
+    summary: '辽缆牌电力电缆成功通过极端工况测试...'
+  }
+];
 export default {
   components: {
     tabBar
   },
   data() {
     return {
-      newsList: [
-        {
-          id: 1,
-          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
-          date: '2024.11.20',
-          title: '沈阳辽缆荣获省级"专精特新"企业称号',
-          summary: '公司在高性能特种电缆研发领域取得新突破...'
-        },
-        {
-          id: 2,
-          image: 'https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg',
-          date: '2024.11.15',
-          title: '参与沈阳市轨道交通10号线供电系统建设',
-          summary: '辽缆牌电力电缆成功通过极端工况测试...'
-        }
-      ]
+      bentoCategories: [],
+      loadingCategories: true,
+      newsList: [],
+      loadingNews: true,
     };
   },
   onLoad() {
+    this.fetchCategories();
     this.fetchNews();
   },
   methods: {
+    fetchCategories() {
+      getCategoryList().then(res => {
+        const list = res.data || [];
+        if (list.length > 0) {
+          this.bentoCategories = list.slice(0, 3).map((item, index) => ({
+            id: item.id,
+            name: item.name,
+            image: DEFAULT_CATEGORIES[index] ? DEFAULT_CATEGORIES[index].image : '',
+            icon: BENTO_TAG_CONFIG[index] ? BENTO_TAG_CONFIG[index].icon : 'icon-xiangyou'
+          }));
+        } else {
+          this.bentoCategories = DEFAULT_CATEGORIES;
+        }
+      }).catch(() => {
+        this.bentoCategories = DEFAULT_CATEGORIES;
+      }).finally(() => {
+        this.loadingCategories = false;
+      });
+    },
     fetchNews() {
-      // 可调用API获取新闻列表
+      getArticleList(900192, { page: 1, limit: 2 }).then(res => {
+        const list = (res.data && res.data.list) ? res.data.list : [];
+        if (list.length > 0) {
+          this.newsList = list.map(item => ({
+            id: item.id,
+            image: item.imageInput || '',
+            date: item.createTime ? item.createTime.substring(0, 10) : '',
+            title: item.title || '',
+            summary: item.synopsis || ''
+          }));
+        } else {
+          this.newsList = DEFAULT_NEWS;
+        }
+      }).catch(() => {
+        this.newsList = DEFAULT_NEWS;
+      }).finally(() => {
+        this.loadingNews = false;
+      });
     },
     handleMenuClick() {
       uni.showToast({
@@ -200,9 +273,9 @@ export default {
         url: '/pages/goods_cate/goods_cate'
       });
     },
-    goToProductCate(type) {
+    goToProductCate(cid) {
       uni.navigateTo({
-        url: `/pages/goods/goods_list/index?category=${type}`
+        url: `/pages/goods/goods_list/index?cid=${cid}`
       });
     },
     goToNewsDetail(id) {
@@ -501,41 +574,15 @@ $on-error-container: #93000a;
     justify-content: space-between;
   }
 
-  .bento-tag {
-    display: inline-flex;
-    padding: 8rpx 16rpx;
-    background: $primary;
-    border-radius: 12rpx;
-
-    text {
-      font-size: 20rpx;
-      font-weight: 500;
-      color: $on-primary;
-      letter-spacing: 1rpx;
-    }
-  }
-
-  .bento-tag-yellow {
-    background: $secondary-container;
-
-    text {
-      color: $on-secondary-container;
-    }
-  }
-
-  .bento-tag-red {
-    background: $error-container;
-
-    text {
-      color: $on-error-container;
-    }
+  .bento-name-wrapper {
+    margin-top: 12rpx;
   }
 
   .bento-name {
-    font-size: 30rpx;
-    font-weight: 600;
+    font-size: 34rpx;
+    font-weight: 700;
     color: $on-surface;
-    margin-top: 16rpx;
+    line-height: 1.3;
   }
 
   .bento-arrow {
@@ -566,6 +613,28 @@ $on-error-container: #93000a;
   &:active {
     transform: scale(0.98);
   }
+}
+
+// ========== Bento Skeleton ==========
+.skeleton-bento {
+  background: $surface-container;
+  border: 1rpx solid rgba($outline-variant, 0.2);
+  box-shadow: none;
+
+  .bento-name-skeleton {
+    width: 280rpx;
+    height: 40rpx;
+    background: linear-gradient(90deg, $surface-container 25%, rgba($outline-variant, 0.4) 50%, $surface-container 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8rpx;
+    margin-top: 16rpx;
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 .bento-large {
@@ -691,6 +760,58 @@ $on-error-container: #93000a;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+}
+
+// ========== News Skeleton ==========
+.skeleton-news {
+  pointer-events: none;
+  border-color: rgba($outline-variant, 0.15);
+  box-shadow: none;
+
+  .news-image-skeleton {
+    width: 192rpx;
+    height: 192rpx;
+    border-radius: 24rpx;
+    flex-shrink: 0;
+    background: linear-gradient(90deg, $surface-container 25%, rgba($outline-variant, 0.4) 50%, $surface-container 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .news-info-skeleton {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16rpx;
+  }
+
+  .news-date-skeleton {
+    width: 140rpx;
+    height: 24rpx;
+    border-radius: 6rpx;
+    background: linear-gradient(90deg, $surface-container 25%, rgba($outline-variant, 0.4) 50%, $surface-container 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .news-title-skeleton {
+    width: 100%;
+    height: 36rpx;
+    border-radius: 6rpx;
+    background: linear-gradient(90deg, $surface-container 25%, rgba($outline-variant, 0.4) 50%, $surface-container 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .news-summary-skeleton {
+    width: 70%;
+    height: 24rpx;
+    border-radius: 6rpx;
+    background: linear-gradient(90deg, $surface-container 25%, rgba($outline-variant, 0.4) 50%, $surface-container 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
   }
 }
 
