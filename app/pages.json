@@ -40,8 +40,7 @@
 		{
 			"path": "pages/case/case_list/index",
 			"style": {
-				"navigationBarTitleText": "客户案例",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "成功案例"
 			}
 		},
 		{
@@ -103,8 +102,7 @@
 			{
 				"path": "index",
 				"style": {
-					"navigationBarTitleText": "案例详情",
-					"navigationStyle": "custom"
+					"navigationBarTitleText": "案例详情"
 				}
 			}
 		]

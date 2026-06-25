@@ -325,7 +325,7 @@
 					</view>
 					<view class="footer-right acea-row" v-else>
 						<view class="btn-outline" hover-class="none" @click="joinCart">加入采购清单</view>
-						<view class="btn-primary" hover-class="none" @click="goBuy">立即咨询</view>
+						<view class="btn-primary" hover-class="none" @click="goBuy">立即购买</view>
 					</view>
 				</block>
 				<!-- 视频商品底部按钮 -->
@@ -333,7 +333,7 @@
 					<view class="btn-disabled">已售罄</view>
 				</view>
 				<view class="footer-right acea-row" v-if="attr.productSelect.stock > 0 && type === 'video'">
-					<view class="btn-primary" hover-class="none" @click="goBuy">立即咨询</view>
+					<view class="btn-primary" hover-class="none" @click="goBuy">立即购买</view>
 				</view>
 			</view>
 			<shareRedPackets :sharePacket="sharePacket" @listenerActionSheet="listenerActionSheet"

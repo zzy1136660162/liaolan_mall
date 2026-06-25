@@ -1,81 +1,74 @@
 <template>
-  <view class="case-list-page">
-    <view class="nav-bar">
-      <view class="nav-left" @click="goBack">
-        <text class="iconfont icon-xiangzuo"></text>
-      </view>
-      <view class="nav-title">客户案例</view>
-      <view class="nav-right"></view>
+  <view class="case-page">
+    <!-- Page Header -->
+    <view class="page-header">
+      <p class="header-desc">沈阳辽缆助力城市建设与工业升级</p>
     </view>
 
-    <view class="category-tabs">
-      <view class="filter-label">行业分类</view>
-      <scroll-view class="tabs-scroll" scroll-x>
-        <view class="tabs-container">
-          <view 
-            v-for="item in industryList" 
-            :key="item.value"
-            :class="['tab-item', { active: selectedIndustry === item.value }]"
-            @click="selectIndustry(item.value)"
-          >
-            {{ item.label }}
-          </view>
-        </view>
-      </scroll-view>
-    </view>
-    
-    <scroll-view class="content-scroll" scroll-y @scrolltolower="loadMore">
-      <view class="section-header">
-        <view class="header-bar"></view>
-        <view class="header-title">工业应用案例</view>
-      </view>
-      <view class="header-desc">
-        深入了解辽缆电缆如何以高可靠性的工业电缆，为各行业的关键基础设施提供动力。
-      </view>
-      
-      <view class="case-list">
-        <view 
-          v-for="item in caseList" 
-          :key="item.id"
-          class="case-card"
-          @click="goToDetail(item.id)"
+    <!-- Category Filter Chips -->
+    <view class="filter-nav">
+      <view class="filter-scroll">
+        <view
+          v-for="item in industryList"
+          :key="item.value"
+          class="filter-chip"
+          :class="{ active: selectedIndustry === item.value }"
+          @click="selectIndustry(item.value)"
         >
-          <view class="case-image">
-            <image :src="item.imageInput" mode="aspectFill" />
-            <view class="case-tags" v-if="item.industryCategory">
-              <text class="tag-primary">{{ item.industryCategory }}</text>
-            </view>
-          </view>
-          
-          <view class="case-content">
-            <view class="case-title">{{ item.projectName || item.title }}</view>
-            
-            <view class="case-tags-row" v-if="item.industryCategory || item.regionCategory || item.projectType">
-              <text class="tag-item" v-if="item.industryCategory">
-                {{ item.industryCategory }}
-              </text>
-              <text class="tag-item" v-if="item.regionCategory">
-                {{ item.regionCategory }}
-              </text>
-              <text class="tag-item" v-if="item.projectType">
-                {{ item.projectType }}
-              </text>
-            </view>
-            
-            <view class="case-desc" v-if="item.supplyProducts">
-              {{ item.supplyProducts }}
-            </view>
-            
-            <view class="case-action">
-              <view class="btn-detail">查看项目详情</view>
-            </view>
-          </view>
+          {{ item.label }}
         </view>
       </view>
-      
-      <view v-if="loading" class="loading-tip">加载中...</view>
-      <view v-if="noMore" class="loading-tip">没有更多了</view>
-    </scroll-view>
+    </view>
+
+    <!-- Bento Grid Cases -->
+    <view class="bento-grid">
+      <view
+        v-for="(item, index) in caseList"
+        :key="item.id"
+        class="case-card"
+        :class="[{ 'card-large': index === 0 }, { 'card-horizontal': index > 0 && index % 4 === 3 }]"
+        @click="goToDetail(item.id)"
+      >
+        <!-- Large horizontal layout -->
+        <template v-if="index > 0 && index % 4 === 3">
+          <view class="card-h-left">
+            <image :src="item.imageInput" mode="aspectFill" />
+          </view>
+          <view class="card-h-right">
+            <text class="card-tag" v-if="item.industryCategory">{{ item.industryCategory }}</text>
+            <h3 class="card-title">{{ item.projectName || item.title }}</h3>
+            <p class="card-desc">{{ item.supplyProducts || item.projectDescription || '' }}</p>
+          </view>
+        </template>
+        <!-- Standard cards (large first, rest square) -->
+        <template v-else>
+          <view class="card-img" :class="{ 'card-img-large': index === 0 }">
+            <image :src="item.imageInput" mode="aspectFill" />
+            <view class="card-tags" v-if="item.industryCategory || item.isFeatured">
+              <text class="card-tag-blue">{{ item.industryCategory }}</text>
+              <text class="card-tag-accent" v-if="item.isFeatured || index === 0">{{ index === 0 ? '重点项目' : '推荐' }}</text>
+            </view>
+          </view>
+          <view class="card-body" :class="{ 'card-body-large': index === 0 }">
+            <h3 class="card-title">{{ item.projectName || item.title }}</h3>
+            <p class="card-desc">{{ item.supplyProducts || item.projectDescription || '' }}</p>
+            <view class="card-link" v-if="index === 0">
+              查看详情 <text class="iconfont icon-xiangyou"></text>
+            </view>
+          </view>
+        </template>
+      </view>
+    </view>
+
+    <!-- Load More -->
+    <view class="load-more" v-if="!noMore">
+      <view class="load-btn" @click="loadMore">
+        加载更多案例
+      </view>
+    </view>
+    <view v-if="loading" class="loading-tip">加载中...</view>
+    <view v-if="noMore && caseList.length > 0" class="loading-tip">— 已加载全部案例 —</view>
+
     <tab-bar></tab-bar>
   </view>
 </template>
@@ -107,15 +100,12 @@ export default {
   methods: {
     loadIndustryCategories() {
       getCaseIndustryCategories().then(res => {
-        const list = [{ value: '', label: '全部分类' }];
+        const list = [{ value: '', label: '全部案例' }];
         (res.data || []).forEach(item => {
           list.push({ value: item, label: item });
         });
         this.industryList = list;
       });
-    },
-    goBack() {
-      uni.navigateBack();
     },
     selectIndustry(value) {
       this.selectedIndustry = value;
@@ -165,197 +155,191 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.case-list-page {
+// ========== 主题色 ==========
+$primary: #0061a5;
+$primary-container: #0099ff;
+$on-primary: #ffffff;
+$on-surface: #1a1c1e;
+$on-surface-variant: #3f4753;
+$surface: #f9f9fc;
+$surface-container-lowest: #ffffff;
+$outline-variant: #bfc7d5;
+$tertiary: #006875;
+
+.case-page {
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  min-height: 100vh;
+  background: $surface;
+  padding: 0 40rpx 200rpx;
   box-sizing: border-box;
-  background-color: #f9f9ff;
 }
 
-.nav-bar {
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  margin-top: 50rpx;
-  padding: 0 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #c3c6d7;
-  position: sticky;
-  top: 0;
-  z-index: 99;
-}
-
-.nav-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #181c23;
-}
-
-.nav-left, .nav-right {
-  width: 60px;
-}
-
-.category-tabs {
-  width: 100%;
-  box-sizing: border-box;
-  background-color: #ffffff;
-  padding: 12px 16px;
-  position: sticky;
-  top: calc(45px + 50rpx);
-  z-index: 98;
-}
-.filter-label {
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 4px;
-  margin-top: 8px;
-}
-
-.filter-label:first-child {
-  margin-top: 0;
-}
-
-.tabs-scroll {
-  width: 100%;
-  white-space: nowrap;
-}
-
-.tabs-container {
-  display: inline-flex;
-  gap: 12px;
-}
-
-.tab-item {
-  display: inline-block;
-  padding: 8px 16px;
-  font-size: 12px;
-  border-radius: 4px;
-  background-color: #f9f9ff;
-  border: 1px solid #c3c6d7;
-  color: #434654;
-  transition: all 0.2s;
-  
-  &.active {
-    background-color: #dbe1ff;
-    border-color: #dbe1ff;
-    color: #0f5de3;
-  }
-}
-
-.content-scroll {
-  width: 100%;
-  flex: 1;
-  box-sizing: border-box;
-  padding: 16px;
-  overflow-y: auto;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.header-bar {
-  width: 4px;
-  height: 24px;
-  background-color: #0f5de3;
-  border-radius: 2px;
-  margin-right: 8px;
+// ========== Page Header ==========
+.page-header {
+  padding: 40rpx 0 24rpx;
 }
 
 .header-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #181c23;
-  line-height: 28px;
+  font-size: 52rpx;
+  font-weight: 700;
+  color: $on-surface;
+  margin-bottom: 8rpx;
 }
 
 .header-desc {
-  font-size: 14px;
-  color: #434654;
-  line-height: 22px;
-  margin-bottom: 24px;
+  font-size: 26rpx;
+  color: $on-surface-variant;
 }
 
-.case-list {
+// ========== Filter Chips ==========
+.filter-nav {
+  margin-bottom: 40rpx;
+}
+
+.filter-scroll {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
+  gap: 16rpx;
+}
+
+.filter-chip {
+  flex-shrink: 0;
+  padding: 16rpx 36rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  border-radius: 999rpx;
+  background: rgba($tertiary, 0.1);
+  color: $tertiary;
+  transition: all 0.2s;
+
+  &.active {
+    background: $primary;
+    color: $on-primary;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ========== Bento Grid ==========
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24rpx;
 }
 
 .case-card {
-  background-color: #ffffff;
-  border: 1px solid #c3c6d7;
-  border-radius: 8px;
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.4);
+  border-radius: 24rpx;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: all 0.3s;
+
+  &:active {
+    border-color: $primary;
+  }
 }
 
-.case-image {
+// ========== Large card (first) ==========
+.card-large {
+  grid-column: span 2;
+}
+
+.card-img-large {
+  height: 380rpx;
+}
+
+// ========== Horizontal card ==========
+.card-horizontal {
+  grid-column: span 2;
+  display: flex;
+  flex-direction: row;
+
+  .card-h-left {
+    width: 33%;
+    overflow: hidden;
+
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .card-h-right {
+    width: 67%;
+    padding: 32rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12rpx;
+  }
+}
+
+// ========== Card Image ==========
+.card-img {
   position: relative;
-  height: 192px;
-  
+  height: 320rpx;
+  overflow: hidden;
+
   image {
     width: 100%;
     height: 100%;
   }
 }
 
-.case-tags {
+.card-tags {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 20rpx;
+  left: 20rpx;
   display: flex;
-  gap: 8px;
+  gap: 12rpx;
 }
 
-.tag-primary {
-  background-color: #dbe1ff;
-  color: #0f5de3;
-  font-size: 10px;
-  padding: 4px 8px;
-  border-radius: 4px;
+.card-tag-blue {
+  background: rgba($primary, 0.85);
+  color: $on-primary;
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
 }
 
-.case-content {
-  padding: 16px;
+.card-tag-accent {
+  background: rgba($tertiary, 0.12);
+  backdrop-filter: blur(10rpx);
+  color: $tertiary;
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
 }
 
-.case-title {
-  font-size: 16px;
+// ========== Card Body ==========
+.card-body {
+  padding: 24rpx 28rpx;
+}
+
+.card-body-large {
+  padding: 32rpx;
+}
+
+.card-tag {
+  display: inline-block;
+  background: rgba($tertiary, 0.1);
+  color: $tertiary;
+  font-size: 20rpx;
+  font-weight: 500;
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+  margin-bottom: 8rpx;
+}
+
+.card-title {
+  font-size: 30rpx;
   font-weight: 600;
-  color: #181c23;
-  line-height: 24px;
-  margin-bottom: 12px;
-}
-
-.case-tags-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.tag-item {
-  background-color: #f9f9ff;
-  color: #434654;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.case-desc {
-  font-size: 14px;
-  color: #434654;
-  line-height: 22px;
-  margin-bottom: 16px;
+  color: $on-surface;
+  line-height: 1.4;
+  margin-bottom: 8rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -363,32 +347,57 @@ export default {
   -webkit-box-orient: vertical;
 }
 
-.case-action {
-  margin-top: 12px;
+.card-desc {
+  font-size: 24rpx;
+  color: $on-surface-variant;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-.btn-detail {
-  width: 100%;
-  height: 44px;
-  background-color: #0f5de3;
-  color: #ffffff;
-  font-size: 16px;
-  border-radius: 8px;
+.card-link {
   display: flex;
   align-items: center;
+  gap: 6rpx;
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: $primary;
+
+  .iconfont {
+    font-size: 24rpx;
+  }
+}
+
+// ========== Load More ==========
+.load-more {
+  display: flex;
   justify-content: center;
+  margin-top: 60rpx;
+}
+
+.load-btn {
+  padding: 24rpx 64rpx;
+  border: 4rpx solid $primary;
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: $primary;
   transition: all 0.2s;
-  
+
   &:active {
-    transform: scale(0.98);
-    background-color: #0c4db8;
+    background: rgba($primary, 0.05);
+    transform: scale(0.95);
   }
 }
 
 .loading-tip {
   text-align: center;
-  padding: 16px;
-  color: #909399;
-  font-size: 14px;
+  padding: 32rpx;
+  color: $on-surface-variant;
+  font-size: 24rpx;
 }
 </style>

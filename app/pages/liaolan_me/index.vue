@@ -105,6 +105,13 @@
               <text class="service-text">我的样品</text>
               <text class="iconfont icon-xiangyou service-arrow"></text>
             </view>
+            <navigator url="/pages/downloads/index" class="service-item">
+              <view class="service-icon">
+                <text class="iconfont icon-wendang"></text>
+              </view>
+              <text class="service-text">资料下载</text>
+              <text class="iconfont icon-xiangyou service-arrow"></text>
+            </navigator>
             <view class="service-item" @click="goKefu">
               <view class="service-icon">
                 <text class="iconfont icon-kefu"></text>

@@ -1,112 +1,136 @@
 <template>
   <view class="case-detail-page">
-    <view class="nav-bar">
-      <view class="nav-left" @click="goBack">
-        <text class="iconfont icon-xiangzuo"></text>
-      </view>
-      <view class="nav-title">案例详情</view>
-      <view class="nav-right"></view>
-    </view>
-    
     <scroll-view class="content-scroll" scroll-y>
-      <view class="cover-section">
-        <swiper
-          v-if="caseData.projectImages && caseData.projectImages.length > 0"
-          class="cover-swiper"
-          :indicator-dots="true" 
-          :autoplay="true" 
-          :interval="3000"
-        >
-          <swiper-item v-for="(img, index) in caseData.projectImages" :key="index">
-            <image :src="img" mode="aspectFill" />
-          </swiper-item>
-        </swiper>
-      </view>
-      
-      <view class="project-header">
-        <view class="project-name">
-          {{ caseData.projectName || caseData.title }}
-        </view>
-        <view class="project-tags">
-          <text class="tag-item" v-if="caseData.industryCategory">
-            {{ caseData.industryCategory }}
-          </text>
-          <text class="tag-item" v-if="caseData.regionCategory">
-            {{ caseData.regionCategory }}
-          </text>
-          <text class="tag-item" v-if="caseData.projectType">
-            {{ caseData.projectType }}
-          </text>
+      <!-- Hero Section -->
+      <view class="hero-section">
+        <view class="hero-image-wrap">
+          <image
+            :src="caseData.projectImages[0] || caseData.imageInput"
+            mode="aspectFill"
+            class="hero-image"
+          />
+          <view class="hero-overlay"></view>
+          <view class="hero-content">
+            <text class="hero-tag" v-if="caseData.industryCategory">
+              {{ caseData.industryCategory }}
+            </text>
+            <text class="hero-title">{{ caseData.projectName || caseData.title }}</text>
+          </view>
         </view>
       </view>
-      
-      <view class="info-card" v-if="caseData.projectAddress || caseData.projectPeriod || caseData.supplyProducts || caseData.implementationResult">
-        <view class="info-item" v-if="caseData.projectAddress">
-          <view class="info-label">项目地点</view>
-          <view class="info-value">{{ caseData.projectAddress }}</view>
+
+      <!-- Project Overview Bento -->
+      <view class="section overview-section">
+        <view class="section-header">
+          <text class="section-title-text">项目概况</text>
+          <text class="section-label" v-if="caseData.projectType">{{ caseData.projectType }}</text>
         </view>
-        <view class="info-item" v-if="caseData.projectPeriod">
-          <view class="info-label">项目周期</view>
-          <view class="info-value">{{ caseData.projectPeriod }}</view>
-        </view>
-        <view class="info-item" v-if="caseData.supplyProducts">
-          <view class="info-label">供货产品</view>
-          <view class="info-value">{{ caseData.supplyProducts }}</view>
-        </view>
-        <view class="info-item" v-if="caseData.implementationResult">
-          <view class="info-label">实施效果</view>
-          <view class="info-value">{{ caseData.implementationResult }}</view>
+        <view class="bento-grid">
+          <view class="bento-desc glass-card">
+            <text class="bento-desc-text">
+              {{ caseData.projectBackground || caseData.content || '' }}
+            </text>
+          </view>
+          <view class="bento-card bento-card-primary">
+            <text class="iconfont icon-dizhi bento-icon"></text>
+            <view class="bento-card-bottom">
+              <text class="bento-label">项目地点</text>
+              <text class="bento-value">{{ caseData.projectAddress || '-' }}</text>
+            </view>
+          </view>
+          <view class="bento-card bento-card-secondary">
+            <text class="iconfont icon-rili bento-icon"></text>
+            <view class="bento-card-bottom">
+              <text class="bento-label">项目周期</text>
+              <text class="bento-value">{{ caseData.projectPeriod || '-' }}</text>
+            </view>
+          </view>
         </view>
       </view>
-      
-      <view class="content-section" v-if="caseData.projectBackground">
-        <view class="section-title">
-          <view class="title-bar"></view>
-          <text>项目背景</text>
+
+      <!-- Supply Products -->
+      <view class="section supply-section" v-if="caseData.supplyProducts">
+        <view class="section-header">
+          <text class="section-title-text">供货产品</text>
         </view>
-        <view class="section-content">
+        <scroll-view class="supply-scroll" scroll-x>
+          <view class="supply-list">
+            <view
+              v-for="(product, idx) in supplyProductList"
+              :key="idx"
+              class="supply-card"
+            >
+              <view class="supply-icon-wrap">
+                <text class="iconfont" :class="supplyIcons[idx % supplyIcons.length]"></text>
+              </view>
+              <text class="supply-card-title">{{ product }}</text>
+              <text class="supply-card-desc">专业级品质保障</text>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+
+      <!-- Implementation Result -->
+      <view class="section result-section" v-if="caseData.implementationResult">
+        <view class="section-header">
+          <text class="section-title-text">实施效果</text>
+        </view>
+        <view class="result-card">
+          <text class="result-text">{{ caseData.implementationResult }}</text>
+        </view>
+      </view>
+
+      <!-- Project Background -->
+      <view class="section bg-section" v-if="caseData.projectBackground">
+        <view class="section-header">
+          <text class="section-title-text">项目背景</text>
+        </view>
+        <view class="content-card">
           <jyf-parser :html="caseData.projectBackground" />
         </view>
       </view>
-      
-      <view class="content-section">
-        <view class="section-title">
-          <view class="title-bar"></view>
-          <text>案例详情</text>
+
+      <!-- Case Detail Content -->
+      <view class="section content-section" v-if="caseData.content">
+        <view class="section-header">
+          <text class="section-title-text">案例详情</text>
         </view>
-        <view class="section-content">
+        <view class="content-card">
           <jyf-parser :html="caseData.content" />
         </view>
       </view>
-      
-      <view class="product-section" v-if="caseData.productList.length > 0">
-        <view class="section-title">
-          <view class="title-bar"></view>
-          <text>关联产品</text>
+
+      <!-- Related Products -->
+      <view class="section product-section" v-if="caseData.productList && caseData.productList.length > 0">
+        <view class="section-header">
+          <text class="section-title-text">关联产品</text>
         </view>
         <scroll-view class="product-scroll" scroll-x>
           <view class="product-list">
-            <view 
-              v-for="product in caseData.productList" 
+            <view
+              v-for="product in caseData.productList"
               :key="product.id"
               class="product-card"
               @click="goToProduct(product.id)"
             >
               <image :src="product.image" mode="aspectFill" class="product-image" />
-              <view class="product-name">{{ product.storeName }}</view>
-              <view class="product-price">¥{{ product.price }}</view>
+              <view class="product-info">
+                <text class="product-name">{{ product.storeName }}</text>
+                <text class="product-price">¥{{ product.price }}</text>
+              </view>
             </view>
           </view>
         </scroll-view>
       </view>
-      
-      <view class="contact-section">
-        <view class="contact-btn" @click="goToContact">
+
+      <!-- CTA Section -->
+      <view class="section cta-section">
+        <view class="cta-btn" @click="goToContact">
           <text class="iconfont icon-dianhua"></text>
           <text>联系我们</text>
         </view>
       </view>
-      
+
       <view class="bottom-gap"></view>
     </scroll-view>
   </view>
@@ -139,12 +163,19 @@ export default {
         projectBackground: '',
         productList: []
       },
+      supplyIcons: ['icon-dianlan', 'icon-dianlan1', 'icon-dianxian', 'icon-dianxian1'],
       tagStyle: {
         img: 'width:100%;display:block;',
         table: 'width:100%',
         video: 'width:100%'
       }
     };
+  },
+  computed: {
+    supplyProductList() {
+      if (!this.caseData.supplyProducts) return [];
+      return this.caseData.supplyProducts.split(/[,，、\n]/).map(s => s.trim()).filter(Boolean);
+    }
   },
   onLoad(options) {
     if (options.id) {
@@ -153,9 +184,6 @@ export default {
     }
   },
   methods: {
-    goBack() {
-      uni.navigateBack();
-    },
     getCaseDetail() {
       uni.showLoading({ title: '加载中...' });
       getCaseDetails(this.id).then(res => {
@@ -191,236 +219,372 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// ========== 主题色 ==========
+$primary: #0061a5;
+$primary-fixed: #d2e4ff;
+$secondary-fixed: #ffe170;
+$tertiary: #006875;
+$on-surface: #1a1c1e;
+$on-surface-variant: #3f4753;
+$background: #f9f9fc;
+$surface-container-lowest: #ffffff;
+$surface-container-low: #f3f3f6;
+$outline-variant: #bfc7d5;
+$on-primary-container: #002f54;
+
 .case-detail-page {
   min-height: 100vh;
-  background-color: #f9f9ff;
-}
-
-.nav-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  margin-top: 50rpx;
-  padding: 0 16px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #c3c6d7;
-  position: sticky;
-  top: 0;
-  z-index: 99;
-}
-
-.nav-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #181c23;
-}
-
-.nav-left, .nav-right {
-  width: 60px;
+  background-color: $background;
 }
 
 .content-scroll {
-  padding-bottom: 20px;
+  padding-bottom: 20rpx;
 }
 
-.cover-section {
-  width: 100%;
+// ========== Section Common ==========
+.section {
+  padding: 0 40rpx;
+  margin-bottom: 80rpx;
 }
 
-.cover-swiper {
-  height: 192px;
-  
-  swiper-item {
-    image {
-      width: 100%;
-      height: 100%;
-    }
-  }
-}
-
-.cover-single {
-  position: relative;
-  height: 192px;
-  
-  image {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.cover-tags {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  display: flex;
-  gap: 8px;
-}
-
-.tag-primary {
-  background-color: #dbe1ff;
-  color: #00174b;
-  font-size: 10px;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.project-header {
-  padding: 16px;
-  background-color: #ffffff;
-}
-
-.project-name {
-  font-size: 20px;
-  font-weight: 600;
-  color: #181c23;
-  line-height: 28px;
-  margin-bottom: 12px;
-}
-
-.project-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.tag-item {
-  background-color: #f9f9ff;
-  color: #434654;
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 4px;
-}
-
-.info-card {
-  margin: 16px;
-  padding: 16px;
-  background-color: #ffffff;
-  border: 1px solid #c3c6d7;
-  border-radius: 8px;
-}
-
-.info-item {
-  margin-bottom: 12px;
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.info-label {
-  font-size: 12px;
-  color: #909399;
-  margin-bottom: 4px;
-}
-
-.info-value {
-  font-size: 14px;
-  color: #181c23;
-  line-height: 22px;
-}
-
-.content-section {
-  margin: 16px;
-  padding: 16px;
-  background-color: #ffffff;
-  border-radius: 8px;
-}
-
-.section-title {
+.section-header {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
 }
 
-.title-bar {
-  width: 4px;
-  height: 20px;
-  background-color: #0f5de3;
-  border-radius: 2px;
-  margin-right: 8px;
-}
-
-.section-title text {
-  font-size: 16px;
+.section-title-text {
+  font-size: 34rpx;
   font-weight: 600;
-  color: #181c23;
+  color: $primary;
 }
 
-.section-content {
-  font-size: 14px;
-  color: #434654;
-  line-height: 22px;
+.section-label {
+  font-size: 22rpx;
+  color: #707884;
+  font-family: "JetBrains Mono", monospace;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
 }
 
-.product-section {
-  margin: 16px;
+// ========== Hero ==========
+.hero-section {
+  padding: 0 40rpx;
+  margin-bottom: 80rpx;
 }
 
+.hero-image-wrap {
+  position: relative;
+  height: 480rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+.hero-image {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(to top, rgba($primary, 0.8), transparent);
+}
+
+.hero-content {
+  position: absolute;
+  bottom: 48rpx;
+  left: 40rpx;
+  right: 40rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.hero-tag {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(0, 164, 183, 0.2);
+  backdrop-filter: blur(16rpx);
+  -webkit-backdrop-filter: blur(16rpx);
+  padding: 8rpx 24rpx;
+  border-radius: 999rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+  color: #9cf0ff;
+  border: 2rpx solid rgba(156, 240, 255, 0.3);
+}
+
+.hero-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+// ========== Bento Grid ==========
+.bento-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24rpx;
+}
+
+.bento-desc {
+  grid-column: span 2;
+  padding: 36rpx;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
+  border: 2rpx solid rgba($outline-variant, 0.4);
+  border-radius: 24rpx;
+}
+
+.bento-desc-text {
+  font-size: 26rpx;
+  color: $on-surface-variant;
+  line-height: 1.7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.bento-card {
+  padding: 36rpx;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.bento-card-primary {
+  background: $primary-fixed;
+}
+
+.bento-card-secondary {
+  background: $secondary-fixed;
+}
+
+.bento-icon {
+  font-size: 48rpx;
+  margin-bottom: 16rpx;
+}
+
+.bento-card-primary .bento-icon {
+  color: $primary;
+}
+
+.bento-card-secondary .bento-icon {
+  color: #705d00;
+}
+
+.bento-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.bento-label {
+  font-size: 18rpx;
+  color: rgba($on-primary-container, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+}
+
+.bento-card-primary .bento-label {
+  color: rgba(#00497e, 0.6);
+}
+
+.bento-card-secondary .bento-label {
+  color: rgba(#544600, 0.6);
+}
+
+.bento-value {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.bento-card-primary .bento-value {
+  color: $primary;
+}
+
+.bento-card-secondary .bento-value {
+  color: #705d00;
+}
+
+// ========== Supply Products ==========
+.supply-section {
+  .section-header {
+    padding: 0;
+  }
+}
+
+.supply-scroll {
+  white-space: nowrap;
+}
+
+.supply-list {
+  display: flex;
+  gap: 24rpx;
+  padding: 8rpx 40rpx 8rpx 0;
+}
+
+.supply-card {
+  min-width: 280rpx;
+  flex-shrink: 0;
+  background: $surface-container-lowest;
+  border: 2rpx solid $outline-variant;
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  transition: border-color 0.2s;
+
+  &:active {
+    border-color: $primary;
+  }
+}
+
+.supply-icon-wrap {
+  width: 96rpx;
+  height: 96rpx;
+  background: rgba($primary, 0.08);
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .iconfont {
+    font-size: 44rpx;
+    color: $primary;
+  }
+}
+
+.supply-card-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: $on-surface;
+}
+
+.supply-card-desc {
+  font-size: 24rpx;
+  color: $on-surface-variant;
+  white-space: normal;
+}
+
+// ========== Result ==========
+.result-card {
+  background: $on-surface;
+  padding: 48rpx 40rpx;
+  border-radius: 32rpx;
+  box-shadow: 0 20rpx 40rpx -10rpx rgba($primary, 0.3);
+}
+
+.result-text {
+  font-size: 28rpx;
+  color: #9fcaff;
+  line-height: 1.8;
+}
+
+// ========== Content Card ==========
+.content-card {
+  background: $surface-container-lowest;
+  border-radius: 24rpx;
+  padding: 40rpx;
+}
+
+// ========== Related Products ==========
 .product-scroll {
   white-space: nowrap;
-  margin-top: 12px;
 }
 
 .product-list {
   display: flex;
-  gap: 12px;
+  gap: 24rpx;
+  margin-top: 8rpx;
 }
 
 .product-card {
-  width: 140px;
+  width: 280rpx;
   flex-shrink: 0;
-  background-color: #ffffff;
-  border: 1px solid #c3c6d7;
-  border-radius: 8px;
+  background: $surface-container-lowest;
+  border: 2rpx solid $outline-variant;
+  border-radius: 24rpx;
   overflow: hidden;
-}
 
-.product-image {
-  width: 140px;
-  height: 140px;
-}
-
-.product-name {
-  padding: 8px;
-  font-size: 12px;
-  color: #181c23;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.product-price {
-  padding: 0 8px 8px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #003da6;
-}
-
-.contact-section {
-  margin: 16px;
-  padding: 16px;
-}
-
-.contact-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  height: 44px;
-  background-color: #0f5de3;
-  color: #ffffff;
-  font-size: 16px;
-  border-radius: 8px;
-  transition: all 0.2s;
-  
   &:active {
-    background-color: #0c4db8;
+    border-color: $primary;
   }
 }
 
+.product-image {
+  width: 280rpx;
+  height: 280rpx;
+}
+
+.product-info {
+  padding: 20rpx 24rpx;
+}
+
+.product-name {
+  font-size: 24rpx;
+  color: $on-surface;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+.product-price {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: $primary;
+  display: block;
+  margin-top: 8rpx;
+}
+
+// ========== CTA ==========
+.cta-section {
+  padding-bottom: 40rpx;
+}
+
+.cta-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  width: 100%;
+  height: 112rpx;
+  background: $primary;
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 24rpx;
+  box-shadow: 0 20rpx 40rpx -10rpx rgba(0, 153, 255, 0.3);
+  transition: all 0.2s;
+
+  &:active {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+
+  .iconfont {
+    font-size: 36rpx;
+  }
+}
+
+// ========== Bottom ==========
 .bottom-gap {
-  height: 40px;
+  height: 80rpx;
 }
 </style>
