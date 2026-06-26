@@ -1,0 +1,289 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700;800&amp;family=Plus+Jakarta+Sans:wght@400;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-container": "#00333a",
+                        "primary": "#0061a5",
+                        "on-error-container": "#93000a",
+                        "outline-variant": "#bfc7d5",
+                        "on-secondary-fixed": "#221b00",
+                        "on-background": "#1a1c1e",
+                        "secondary-container": "#fdd400",
+                        "secondary-fixed-dim": "#e9c400",
+                        "background": "#f9f9fc",
+                        "primary-fixed-dim": "#9fcaff",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#eeeef0",
+                        "on-surface-variant": "#3f4753",
+                        "on-primary-fixed-variant": "#00497e",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#00a4b7",
+                        "surface-container-low": "#f3f3f6",
+                        "primary-container": "#0099ff",
+                        "inverse-surface": "#2f3133",
+                        "surface-container-high": "#e8e8ea",
+                        "surface-tint": "#0061a5",
+                        "on-tertiary-fixed": "#001f24",
+                        "on-primary-container": "#002f54",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f9f9fc",
+                        "surface-container-highest": "#e2e2e5",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#1a1c1e",
+                        "on-tertiary-fixed-variant": "#004f58",
+                        "primary-fixed": "#d2e4ff",
+                        "on-secondary-fixed-variant": "#544600",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#00daf3",
+                        "on-primary-fixed": "#001d36",
+                        "tertiary": "#006875",
+                        "on-secondary-container": "#6f5c00",
+                        "surface-dim": "#dadadc",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#9fcaff",
+                        "surface": "#f9f9fc",
+                        "inverse-on-surface": "#f0f0f3",
+                        "tertiary-fixed": "#9cf0ff",
+                        "surface-variant": "#e2e2e5",
+                        "secondary": "#705d00",
+                        "outline": "#707884",
+                        "secondary-fixed": "#ffe170"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-margin": "40px",
+                        "gutter": "12px",
+                        "container-padding": "20px",
+                        "stack-gap": "16px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-caps": ["JetBrains Mono"],
+                        "title-md": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f9f9fc;
+            -webkit-font-smoothing: antialiased;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="font-body-sm text-on-background">
+<!-- TopAppBar: Small Center Aligned -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl flex items-center justify-between px-container-padding h-16 w-full">
+    <div class="flex items-center">
+        <span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="menu">menu</span>
+    </div>
+    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight"><h1 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary cursor-text" spellcheck="false" data-stitch-added-classes="cursor-text" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-size: 20px; font-weight: 700; font-family: Inter; line-height: 28px; --tw-text-opacity: 1; color: rgb(0, 61, 155); letter-spacing: normal; background-color: rgb(249, 249, 255); outline: none !important; box-shadow: none !important;">沈阳辽缆电线电缆有限公司</h1></h1>
+    <div class="flex items-center">
+        <span class="material-symbols-outlined text-primary cursor-pointer active:scale-95 transition-transform" data-icon="search">search</span>
+    </div>
+</nav>
+<main class="pt-24 pb-32 px-container-padding max-w-md mx-auto space-y-section-margin">
+    <!-- Company Profile Section -->
+    <section class="space-y-4">
+        <div class="inline-block px-3 py-1 rounded-full bg-tertiary-container/10 text-tertiary font-label-caps text-label-caps">关于我们</div>
+        <h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">连接未来的工业纽带</h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+            辽缆电线电缆致力于为现代工业提供高标准、高可靠性的电力传输解决方案。从精密建筑到特种重工，我们的产品承载着城市的能量与梦想。
+        </p>
+        <div class="rounded-xl overflow-hidden shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.15)]">
+            <img alt="辽缆生产车间" class="w-full h-48 object-cover" data-alt="A professional high-tech industrial manufacturing facility for electrical cables. The scene features modern machinery in a clean, brightly lit environment with soft blue accent lighting reflecting off metallic surfaces. The atmosphere is minimalist and efficient, conveying a sense of trusted innovation and industrial excellence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBryorawjVlP3ZeugBZ7XsWXGycfzQvmziuIGQH3RyqrK_zG1-qfHqnzbWh35u-Lol_v829azdO1rpVzRIAeUhy8Z5ZF78CdcDS6GvlT8QTY4zKeO_EYTOzhqF7KodEcHPrTvOVU_ROWmHECqz8__kSb4HR3Mbn6y_b-m_Z1vdnyMo5ulCXHK8Otbw9yiKf7Yz1OQot4Mr1Z233zGslKf0yamgYRCIL4crjKqKJtJHA1_tcaOdh4EvYKiGmFLKiVCM_qXTtH0inSIg">
+        </div>
+    </section>
+    <!-- Core Values: Bento Grid Style -->
+    <section class="space-y-4">
+        <h3 class="font-title-md text-title-md text-on-surface">核心价值观</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+                <span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+                <span class="font-title-md text-title-md">极致质控</span>
+                <span class="text-body-sm text-on-surface-variant">12道严苛检测</span>
+            </div>
+            <div class="p-4 bg-primary-container text-on-primary-container rounded-xl flex flex-col gap-2 shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.2)]">
+                <span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                <span class="font-title-md text-title-md">高效传输</span>
+                <span class="text-body-sm opacity-90">低损耗核心工艺</span>
+            </div>
+            <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+                <span class="material-symbols-outlined text-tertiary" data-icon="eco">eco</span>
+                <span class="font-title-md text-title-md">绿色智造</span>
+                <span class="text-body-sm text-on-surface-variant">环保低烟无卤</span>
+            </div>
+            <div class="p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/30 flex flex-col gap-2">
+                <span class="material-symbols-outlined text-secondary" data-icon="diversity_3">diversity_3</span>
+                <span class="font-title-md text-title-md">伙伴共赢</span>
+                <span class="text-body-sm text-on-surface-variant">专业采购支持</span>
+            </div>
+        </div>
+    </section>
+    <!-- Quality Control Visuals -->
+    <section class="space-y-4">
+        <div class="flex justify-between items-center">
+            <h3 class="font-title-md text-title-md text-on-surface">生产与质控</h3>
+            <span class="font-label-caps text-label-caps text-primary">实时工况 &gt;</span>
+        </div>
+        <div class="flex gap-4 overflow-x-auto pb-4 snap-x">
+            <div class="flex-none w-64 snap-start">
+                <img class="w-full h-40 object-cover rounded-xl mb-2" data-alt="Close-up shot of high-quality copper cable bundles being processed in a modern industrial setting. The lighting is crisp and cool-toned, emphasizing the bright orange of the copper against a clean, light gray background. Minimalist aesthetic with a focus on material purity and precision engineering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpDIZs2odAIBkMACEOH9uikFRhSXHio7rGxHp8jYbre0BTcnuJpKL6eZEVyXVwrAmZH1M4YXh8S-viZu14A2fIjCamHt6EeJb6IZlnGsteqXLavUhNNAYmsvWOYXP2PXwiez8ffzaAhUQDDL1USIyU8lwl1SZYKt_oJD9ifEUgGvpsRDRQ95RkEUhjf6CrIao13odNrulp9lw6bZxeB6bZM_7-oRjiS5g-ViPlf3XVa-4yk2kJrjVzHOz9QaPNBYGWJvgemtFWnDc">
+                <p class="text-body-sm text-on-surface-variant font-medium">无氧铜杆拉丝工位</p>
+            </div>
+            <div class="flex-none w-64 snap-start">
+                <img class="w-full h-40 object-cover rounded-xl mb-2" data-alt="A scientist in a laboratory testing cable durability using advanced digital equipment. The lab is pristine and white with high-key lighting. Data visualizations appear on monitors in the background. The mood is clinical and high-tech, reinforcing the brand's commitment to rigorous quality control." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOhEOyi5OO2iHWbZMcYlwfGICHxzZzXsJIg3QkeS7igyJTsXL3ka3pd1U-OUNZhLatmDvkXn_B_f0N1guQFOtDkL4vIHNUZluZh_FlenRfF4dYjS7kfqoff6uLdY3_xcA_PBuxNR8D4qehPFfv5odfup9ynEa-5QGZRD8cHqCJQHJA5z9g2d8KCRZW9j1gb_0_pLu9zFloLS1Lz_om36oUHbIku75lypoLd4tQ2_jIwcFJfI5VYIFlRcj9LahRN-jXbPb5sQryijw">
+                <p class="text-body-sm text-on-surface-variant font-medium">高压击穿实验室</p>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Information Card -->
+    <section class="p-6 bg-white rounded-2xl border border-outline-variant/20 space-y-6 shadow-sm">
+        <h3 class="font-title-md text-title-md text-on-surface">联系我们</h3>
+        <div class="space-y-4">
+            <div class="flex items-start gap-4">
+                <div class="bg-primary/10 p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+                </div>
+                <div>
+                    <p class="text-body-sm font-semibold text-on-surface">总部地址</p>
+                    <p class="text-body-sm text-on-surface-variant">辽宁省沈阳市铁西区工业制造产业园A座</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="bg-primary/10 p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-primary" data-icon="call">call</span>
+                </div>
+                <div>
+                    <p class="text-body-sm font-semibold text-on-surface">咨询热线</p>
+                    <p class="text-body-sm text-primary font-title-md">400-888-9999</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="bg-primary/10 p-2 rounded-lg">
+                    <span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
+                </div>
+                <div>
+                    <p class="text-body-sm font-semibold text-on-surface">商务邮箱</p>
+                    <p class="text-body-sm text-on-surface-variant">business@liaolan-cable.com</p>
+                </div>
+            </div>
+        </div>
+        <!-- Map Placeholder -->
+        <div class="relative w-full h-40 rounded-xl overflow-hidden group">
+            <img class="w-full h-full object-cover" data-alt="A stylized digital map background showing an industrial park layout with a minimalist pin icon. The map colors are a clean palette of whites, light grays, and primary blue accents. The lighting is soft and ambient, matching a modern enterprise UI dashboard look." data-location="Shenyang, China" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBovaQg-l89omBnes3CgLe5Yq5EuPbxYeP0mMMEIprbnAS234oh_r_Jcoc49qD3waqPWVVdMsP4XdmrYUNiuIq0TFiuJtrg9yBztaHOJ13MU6hIrnc7t7-_LRgUdkLrCznOHTtccS7OV00xeuOWQTtNTeoBNgEdNt-esgmJr6Pb9W3AvFFCGpNNZDjPBS4oyLSDj2a8Fibm05Xo8P8MFPwbr7esgz56_fOOK7CWrIcSJ6a985_dO7KezHjleQp3YSHQb_5fiHIlsCA">
+            <div class="absolute inset-0 bg-black/5 flex items-center justify-center">
+                <button class="bg-white/90 backdrop-blur px-4 py-2 rounded-full text-primary font-title-md flex items-center gap-2 shadow-lg active:scale-95 transition-transform">
+                    <span class="material-symbols-outlined" data-icon="near_me">near_me</span>
+                    地图导航
+                </button>
+            </div>
+        </div>
+    </section>
+    <!-- Inquiry Form -->
+    <section class="space-y-4">
+        <h3 class="font-title-md text-title-md text-on-surface">提交您的需求</h3>
+        <div class="space-y-4">
+            <div class="space-y-1">
+                <label class="font-label-caps text-label-caps text-outline ml-1">姓名 / 称呼</label>
+                <input class="w-full h-12 px-4 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary transition-all text-body-lg" placeholder="请输入您的姓名" type="text">
+            </div>
+            <div class="space-y-1">
+                <label class="font-label-caps text-label-caps text-outline ml-1">联系电话</label>
+                <input class="w-full h-12 px-4 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary transition-all text-body-lg" placeholder="请输入您的联系电话" type="tel">
+            </div>
+            <div class="space-y-1">
+                <label class="font-label-caps text-label-caps text-outline ml-1">需求描述</label>
+                <textarea class="w-full p-4 rounded-xl bg-surface-container-low border-none focus:ring-2 focus:ring-primary transition-all text-body-lg" placeholder="请简述您的产品需求或合作意向..." rows="4"></textarea>
+            </div>
+            <button class="w-full h-14 bg-primary-container text-on-primary text-title-md font-semibold rounded-2xl shadow-[0px_10px_20px_-5px_rgba(0,153,255,0.3)] hover:opacity-90 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                立即提交
+                <span class="material-symbols-outlined" data-icon="send">send</span>
+            </button>
+            <p class="text-center text-label-caps text-outline">我们将在2个工作日内与您联系</p>
+        </div>
+    </section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface/80 backdrop-blur-xl pb-safe shadow-[0px_-10px_20px_-5px_rgba(0,153,255,0.15)] flex justify-around items-center h-20 px-gutter w-full">
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-primary/5 transition-all duration-200 active:scale-90" href="#">
+        <span class="material-symbols-outlined" data-icon="home">home</span>
+        <span class="font-label-caps text-label-caps">首页</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-primary/5 transition-all duration-200 active:scale-90" href="#">
+        <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+        <span class="font-label-caps text-label-caps">商城</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-primary/5 transition-all duration-200 active:scale-90" href="#">
+        <span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+        <span class="font-label-caps text-label-caps">案例</span>
+    </a>
+    <a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary/10 rounded-xl px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+        <span class="material-symbols-outlined" data-icon="person">person</span>
+        <span class="font-label-caps text-label-caps">我的</span>
+    </a>
+</nav>
+<script>
+    // Micro-interaction for the form button
+    const submitBtn = document.querySelector('button.bg-primary-container');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function() {
+            this.innerHTML = '<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> 正在发送...';
+            setTimeout(() => {
+                this.innerHTML = '<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> 提交成功';
+                this.classList.replace('bg-primary-container', 'bg-tertiary-container');
+            }, 1500);
+        });
+    }
+</script>
+
+
+</body></html>

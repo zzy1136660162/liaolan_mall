@@ -1,16 +1,15 @@
 <template>
   <view class="about-page">
-    <!-- 自定义导航栏 -->
+    <!-- Glass NavBar -->
     <view class="nav-bar" :style="{ paddingTop: statusBarHeight + 'px' }">
       <view class="nav-bar__content">
         <view class="nav-bar__back" @click="goBack">
           <text class="iconfont icon-xiangzuo"></text>
         </view>
-        <text class="nav-bar__title">关于辽缆</text>
+        <text class="nav-bar__title">关于我们</text>
         <view class="nav-bar__right"></view>
       </view>
     </view>
-    <view :style="{ height: statusBarHeight + 44 + 'px' }"></view>
 
     <!-- 加载中 -->
     <view v-if="loading" class="loading-wrap">
@@ -18,60 +17,49 @@
       <text class="loading-text">加载中...</text>
     </view>
 
-    <!-- 页面内容 -->
     <view v-else-if="blockList.length > 0" class="page-body">
 
-      <!-- ========== Hero 区 ========== -->
+      <!-- Hero -->
       <view class="hero-section">
-        <image
-            v-if="heroBanner.bgImage"
-            :src="heroBanner.bgImage"
-            class="hero-bg__img"
-            mode="aspectFill"
-        />
+        <image v-if="heroBanner.bgImage" :src="heroBanner.bgImage" class="hero-bg__img" mode="aspectFill" />
         <view v-else class="hero-bg__placeholder"></view>
         <view class="hero-overlay"></view>
         <view class="hero-content">
+          <view class="hero-badge">关于我们</view>
           <text class="hero-title">{{ heroBanner.title }}</text>
-          <text class="hero-subtitle">{{ heroBanner.subtitle }}</text>
+          <text class="hero-subtitle" v-if="heroBanner.subtitle">{{ heroBanner.subtitle }}</text>
         </view>
       </view>
 
-      <!-- ========== 企业简介 + 核心数据 ========== -->
+      <!-- 企业简介 -->
       <view v-if="getBlock('company_intro')" class="section">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">企业简介</text>
-        </view>
+        <text class="section-title">连接未来的工业纽带</text>
         <view class="intro-card">
           <rich-text :nodes="getBlock('company_intro').content || ''"></rich-text>
         </view>
-        <!-- 核心数据展示 - 2x2网格 -->
-        <view v-if="statsData.length > 0" class="bento-grid">
-          <view
-              v-for="(item, index) in statsData"
-              :key="index"
-              class="bento-card"
-          >
-            <view class="bento-icon-wrap">
-              <image src="/static/icons/stitch/material-symbols/outline/factory.svg" class="icon-svg-small" mode="aspectFit" />
+      </view>
+
+      <!-- 核心数据 -->
+      <view v-if="statsData.length > 0" class="section">
+        <text class="section-title">核心实力</text>
+        <view class="values-grid">
+          <view v-for="(item, index) in statsData" :key="index" class="value-card" :class="['value-card--' + (index % 4)]">
+            <view class="value-icon-wrap">
+              <text class="iconfont" :class="item.iconClass"></text>
             </view>
-            <text class="bento-value">{{ item.value }}</text>
-            <text class="bento-label">{{ item.label }}</text>
+            <text class="value-title">{{ item.value }}</text>
+            <text class="value-desc">{{ item.label }}</text>
           </view>
         </view>
       </view>
 
-      <!-- ========== 核心优势 ========== -->
-      <view v-if="advantagesData.length > 0" class="section section--alt">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('core_advantages') || {}).title || '核心优势' }}</text>
-        </view>
+      <!-- 核心优势 -->
+      <view v-if="advantagesData.length > 0" class="section section--dim">
+        <text class="section-title">{{ (getBlock('core_advantages') || {}).title || '核心优势' }}</text>
         <view class="advantage-list">
           <view class="advantage-card" v-for="(item, index) in advantagesData" :key="index">
             <view class="advantage-icon-wrap">
-              <image src="/static/icons/stitch/material-symbols/outline/verified.svg" class="icon-svg-small" mode="aspectFit" />
+              <text class="iconfont" :class="item.iconClass"></text>
             </view>
             <view class="advantage-body">
               <text class="advantage-title">{{ item.title }}</text>
@@ -81,24 +69,21 @@
         </view>
       </view>
 
-      <!-- ========== 领导致辞 ========== -->
-      <view v-if="leaderData" class="section">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('leader_speech') || {}).title || '领导致辞' }}</text>
+      <!-- 生产与质控 -->
+      <view v-if="getBlock('production_strength') && getBlock('production_strength').content" class="section">
+        <view class="section-header-row">
+          <text class="section-title">生产与质控</text>
+          <text class="section-more">实时工况</text>
         </view>
+        <view class="intro-card">
+          <rich-text :nodes="getBlock('production_strength').content"></rich-text>
+        </view>
+      </view>
+
+      <!-- 领导致辞（可选） -->
+      <view v-if="leaderData" class="section section--dim">
+        <text class="section-title">{{ (getBlock('leader_speech') || {}).title || '领导致辞' }}</text>
         <view class="leader-card">
-          <view class="leader-img-wrap">
-            <image
-                v-if="leaderData.avatar"
-                :src="leaderData.avatar"
-                class="leader-img"
-                mode="widthFix"
-            />
-            <view v-else class="leader-img-placeholder">
-              <text class="leader-placeholder-text">"</text>
-            </view>
-          </view>
           <view class="leader-body">
             <text class="leader-quote-icon">"</text>
             <text class="leader-quote">{{ leaderData.quote }}</text>
@@ -111,18 +96,11 @@
         </view>
       </view>
 
-      <!-- ========== 发展历程 ========== -->
-      <view v-if="timelineData.length > 0" class="section section--alt">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('development_history') || {}).title || '发展历程' }}</text>
-        </view>
+      <!-- 发展历程（可选） -->
+      <view v-if="timelineData.length > 0" class="section">
+        <text class="section-title">{{ (getBlock('development_history') || {}).title || '发展历程' }}</text>
         <view class="timeline">
-          <view
-              v-for="(item, index) in timelineData"
-              :key="index"
-              class="timeline-item"
-          >
+          <view v-for="(item, index) in timelineData" :key="index" class="timeline-item">
             <view class="timeline-dot" :class="{ active: index === 0 }"></view>
             <view class="timeline-line" v-if="index < timelineData.length - 1"></view>
             <view class="timeline-content">
@@ -133,110 +111,74 @@
         </view>
       </view>
 
-      <!-- ========== 核心团队 ========== -->
-      <view v-if="teamData.length > 0" class="section">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('core_team') || {}).title || '核心团队' }}</text>
-        </view>
-        <view class="team-grid">
-          <view class="team-card" v-for="(item, index) in teamData" :key="index">
-            <view class="team-avatar-wrap">
-              <image v-if="item.avatar" :src="item.avatar" class="team-avatar" mode="widthFix" />
-              <view v-else class="team-avatar-placeholder">
-                <text class="avatar-text">{{ item.name ? item.name.charAt(0) : '' }}</text>
-              </view>
-            </view>
-            <text class="team-name">{{ item.name }}</text>
-            <text class="team-role">{{ item.title }}</text>
-          </view>
-        </view>
-      </view>
-
-      <!-- ========== 资质荣誉 ========== -->
-      <view v-if="honorData" class="section section--alt">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('qualification_honor') || {}).title || '资质荣誉' }}</text>
-        </view>
-        <view v-if="honorData.text" class="honor-intro">
-          <text class="honor-text">{{ honorData.text }}</text>
-        </view>
-        <view v-if="honorData.tags && honorData.tags.length > 0" class="honor-tags">
-          <view class="honor-tag" v-for="(tag, index) in honorData.tags" :key="index">
+      <!-- 资质荣誉（可选） -->
+      <view v-if="honorData" class="section section--dim">
+        <text class="section-title">{{ (getBlock('qualification_honor') || {}).title || '资质荣誉' }}</text>
+        <view class="honor-tags" v-if="honorData.tags && honorData.tags.length > 0">
+          <view class="honor-tag" v-for="(tag, idx) in honorData.tags" :key="idx">
             <text class="honor-tag__text">{{ tag }}</text>
           </view>
         </view>
         <view v-if="getBlockImages('qualification_honor').length > 0" class="honor-images">
-          <image
-              v-for="(url, index) in getBlockImages('qualification_honor')"
-              :key="index"
-              :src="url"
-              class="honor-img"
-              mode="aspectFill"
-              @click="previewImage(getBlockImages('qualification_honor'), index)"
-          />
+          <image v-for="(url, idx) in getBlockImages('qualification_honor')" :key="idx" :src="url" class="honor-img" mode="aspectFill" @click="previewImage(getBlockImages('qualification_honor'), idx)" />
         </view>
       </view>
 
-      <!-- ========== 生产实力 ========== -->
-      <view v-if="getBlock('production_strength') && getBlock('production_strength').content" class="section">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ getBlock('production_strength').title || '生产实力' }}</text>
-        </view>
-        <view class="intro-card">
-          <rich-text :nodes="getBlock('production_strength').content"></rich-text>
+      <!-- 联系我们 -->
+      <view class="section">
+        <text class="section-title">{{ (getBlock('contact_info') || {}).title || '联系我们' }}</text>
+        <view class="contact-card" v-if="contactData && (contactData.phone || contactData.address)">
+          <view class="contact-row" v-if="contactData.address">
+            <view class="contact-icon-box">
+              <text class="iconfont icon-dizhi"></text>
+            </view>
+            <view class="contact-text">
+              <text class="contact-row-label">总部地址</text>
+              <text class="contact-row-value">{{ contactData.address }}</text>
+            </view>
+          </view>
+          <view class="contact-row" v-if="contactData.phone">
+            <view class="contact-icon-box">
+              <text class="iconfont icon-dianhua"></text>
+            </view>
+            <view class="contact-text">
+              <text class="contact-row-label">咨询热线</text>
+              <text class="contact-row-value contact-phone">{{ contactData.phone }}</text>
+            </view>
+          </view>
+          <view class="contact-row" v-if="contactData.email">
+            <view class="contact-icon-box">
+              <text class="iconfont icon-youxiang"></text>
+            </view>
+            <view class="contact-text">
+              <text class="contact-row-label">商务邮箱</text>
+              <text class="contact-row-value">{{ contactData.email }}</text>
+            </view>
+          </view>
         </view>
       </view>
 
-      <!-- ========== 企业文化 ========== -->
-      <view v-if="getBlock('company_culture') && getBlock('company_culture').content" class="section section--alt">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ getBlock('company_culture').title || '企业文化' }}</text>
-        </view>
-        <view class="intro-card">
-          <rich-text :nodes="getBlock('company_culture').content"></rich-text>
-        </view>
-      </view>
-
-      <!-- ========== 联系方式 ========== -->
-      <view v-if="contactData && (contactData.phone || contactData.address)" class="section">
-        <view class="section-header">
-          <view class="section-accent"></view>
-          <text class="section-title">{{ (getBlock('contact_info') || {}).title || '联系我们' }}</text>
-        </view>
-        <view class="contact-list">
-          <view class="contact-card" @click="callPhone" v-if="contactData.phone">
-            <view class="contact-icon-wrap contact-icon-wrap--blue">
-              <image src="/static/icons/stitch/material-symbols/outline/call.svg" class="icon-svg" mode="aspectFit" />
-            </view>
-            <view class="contact-info">
-              <text class="contact-label">联系电话</text>
-              <text class="contact-value">{{ contactData.phone }}</text>
-            </view>
-            <view class="contact-btn">拨打</view>
+      <!-- 需求表单 -->
+      <view class="section">
+        <text class="section-title">提交您的需求</text>
+        <view class="form-card">
+          <view class="form-group">
+            <text class="form-label">姓名 / 称呼</text>
+            <input v-model="form.name" class="form-input" placeholder="请输入您的姓名" />
           </view>
-          <view class="contact-card" @click="openMap" v-if="contactData.address">
-            <view class="contact-icon-wrap contact-icon-wrap--blue">
-              <image src="/static/icons/stitch/material-symbols/outline/location_on.svg" class="icon-svg" mode="aspectFit" />
-            </view>
-            <view class="contact-info">
-              <text class="contact-label">公司地址</text>
-              <text class="contact-value">{{ contactData.address }}</text>
-            </view>
-            <view class="contact-btn">导航</view>
+          <view class="form-group">
+            <text class="form-label">联系电话</text>
+            <input v-model="form.phone" class="form-input" type="number" maxlength="11" placeholder="请输入您的联系电话" />
           </view>
-          <view class="contact-card" v-if="contactData.email">
-            <view class="contact-icon-wrap contact-icon-wrap--blue">
-              <image src="/static/icons/stitch/material-symbols/filled/mail.svg" class="icon-svg" mode="aspectFit" />
-            </view>
-            <view class="contact-info">
-              <text class="contact-label">电子邮箱</text>
-              <text class="contact-value">{{ contactData.email }}</text>
-            </view>
+          <view class="form-group">
+            <text class="form-label">需求描述</text>
+            <textarea v-model="form.desc" class="form-textarea" placeholder="请简述您的产品需求或合作意向..." />
           </view>
+          <view class="form-submit-btn" @click="submitForm">
+            <text>立即提交</text>
+            <text class="iconfont icon-feiji"></text>
+          </view>
+          <text class="form-hint">我们将在2个工作日内与您联系</text>
         </view>
       </view>
 
@@ -246,7 +188,6 @@
       </view>
     </view>
 
-    <!-- 空状态 -->
     <view v-else class="empty-wrap">
       <text class="empty-text">暂无内容</text>
     </view>
@@ -263,11 +204,22 @@ export default {
       loading: true,
       blockList: [],
       navList: [],
-      blockMap: {},     // 缓存：blockKey → block对象
+      blockMap: {},
+      form: {
+        name: '',
+        phone: '',
+        desc: ''
+      },
+      iconMap: {
+        factory: 'icon-dianpu',
+        engineering: 'icon-tuandui',
+        verified: 'icon-yishoucang2',
+        precision_manufacturing: 'icon-jingyanzhi',
+        handshake: 'icon-tuandui',
+      },
     };
   },
   computed: {
-    /** Hero横幅数据 */
     heroBanner() {
       const block = this.blockMap["hero_banner"];
       if (block) {
@@ -282,44 +234,21 @@ export default {
       }
       return { title: "铸就工业脊梁", subtitle: "", bgImage: "" };
     },
-    /** 企业统计数据（JSON数组） */
-    statsData() {
-      return this._parseBlockContent("company_stats", []);
-    },
-    /** 核心优势数据（JSON数组） */
-    advantagesData() {
-      return this._parseBlockContent("core_advantages", []);
-    },
-    /** 领导致辞数据（JSON对象） */
-    leaderData() {
-      return this._parseBlockContent("leader_speech", null);
-    },
-    /** 发展历程数据（JSON数组） */
-    timelineData() {
-      return this._parseBlockContent("development_history", []);
-    },
-    /** 核心团队数据（JSON数组） */
-    teamData() {
-      return this._parseBlockContent("core_team", []);
-    },
-    /** 资质荣誉数据（JSON对象，含text和tags） */
+    statsData() { return this._parseBlockContent("company_stats", []); },
+    advantagesData() { return this._parseBlockContent("core_advantages", []); },
+    leaderData() { return this._parseBlockContent("leader_speech", null); },
+    timelineData() { return this._parseBlockContent("development_history", []); },
+    teamData() { return this._parseBlockContent("core_team", []); },
     honorData() {
       const block = this.blockMap["qualification_honor"];
       if (!block || !block.content) return null;
       try {
         const parsed = JSON.parse(block.content);
-        if (typeof parsed === "string") {
-          return { text: parsed, tags: [] };
-        }
+        if (typeof parsed === "string") return { text: parsed, tags: [] };
         return parsed;
-      } catch (e) {
-        return { text: block.content, tags: [] };
-      }
+      } catch (e) { return { text: block.content, tags: [] }; }
     },
-    /** 联系方式数据（JSON对象） */
-    contactData() {
-      return this._parseBlockContent("contact_info", {});
-    },
+    contactData() { return this._parseBlockContent("contact_info", {}); },
   },
   onLoad() {
     const sysInfo = uni.getSystemInfoSync();
@@ -327,24 +256,14 @@ export default {
     this.getData();
   },
   methods: {
-    /**
-     * 修复后端返回的双重/错误前缀图片 URL
-     * 后端 ResponseRouter.prefixImage 会自动给 crmebimage/ 加 CDN 前缀，
-     * 如果数据库存了完整 URL 就会出现双重前缀，如：
-     *   http://127.0.0.1:20500/http://127.0.0.1:20500/crmebimage/...
-     *   /http://127.0.0.1:20500/crmebimage/...
-     * 修复后统一为: http://127.0.0.1:20500/crmebimage/...
-     */
     fixImageUrl(url) {
       if (!url) return '';
       let fixed = url;
-      // 循环剥离多余的 http://127.0.0.1:20500/ 前缀（含前面可能带的 /）
       const prefix = 'http://127.0.0.1:20500/';
       while (fixed.includes('/' + prefix) || fixed.includes(prefix + prefix)) {
         fixed = fixed.replace('/' + prefix, prefix);
         fixed = fixed.replace(prefix + prefix, prefix);
       }
-      // 如果是相对路径 crmebimage/...，加上完整前缀
       if (fixed.startsWith('crmebimage/') || fixed.startsWith('uploadf/')) {
         fixed = prefix + fixed;
       }
@@ -352,360 +271,304 @@ export default {
     },
     getData() {
       this.loading = true;
-      getAboutFullInfo()
-          .then((res) => {
-            // 后端返回的是数组，需要适配
-            const data = res.data || [];
-            // 如果返回的是数组，直接使用；如果是对象，取 blockList
-            this.blockList = Array.isArray(data) ? data : (data.blockList || []);
-            this.navList = Array.isArray(data) ? [] : (data.navList || []);
-            // 修复所有板块中的图片 URL
-            this.blockList.forEach((item) => {
-              if (item.imageUrls) {
-                try {
-                  const urls = JSON.parse(item.imageUrls);
-                  item.imageUrls = JSON.stringify(urls.map((u) => this.fixImageUrl(u)));
-                } catch (e) {}
+      getAboutFullInfo().then((res) => {
+        const raw = res.data || {};
+        const data = raw.data || raw.blockList || raw;
+        this.blockList = Array.isArray(data) ? data : (data.blockList || []);
+        this.navList = Array.isArray(data) ? [] : (data.navList || []);
+        this.blockList.forEach((item) => {
+          if (item.imageUrls) {
+            try {
+              const urls = JSON.parse(item.imageUrls);
+              item.imageUrls = JSON.stringify(urls.map((u) => this.fixImageUrl(u)));
+            } catch (e) {}
+          }
+          if (item.content) {
+            try {
+              const parsed = JSON.parse(item.content);
+              if (parsed.avatar) { parsed.avatar = this.fixImageUrl(parsed.avatar); item.content = JSON.stringify(parsed); }
+              else if (Array.isArray(parsed)) {
+                let changed = false;
+                parsed.forEach((p) => { if (p.avatar) { p.avatar = this.fixImageUrl(p.avatar); changed = true; } });
+                if (changed) item.content = JSON.stringify(parsed);
               }
-              // 修复 content 中可能含有的 avatar URL
-              if (item.content) {
-                try {
-                  const parsed = JSON.parse(item.content);
-                  if (parsed.avatar) {
-                    parsed.avatar = this.fixImageUrl(parsed.avatar);
-                    item.content = JSON.stringify(parsed);
-                  } else if (Array.isArray(parsed)) {
-                    let changed = false;
-                    parsed.forEach((p) => {
-                      if (p.avatar) {
-                        p.avatar = this.fixImageUrl(p.avatar);
-                        changed = true;
-                      }
-                    });
-                    if (changed) item.content = JSON.stringify(parsed);
-                  }
-                } catch (e) {}
-              }
-            });
-            // 构建 blockMap 缓存，避免 computed 中反复 find
-            const map = {};
-            this.blockList.forEach((item) => {
-              if (item.blockKey) map[item.blockKey] = item;
-            });
-            this.blockMap = map;
-            this.loading = false;
-          })
-          .catch(() => {
-            this.loading = false;
-          });
+            } catch (e) {}
+          }
+        });
+        const map = {};
+        this.blockList.forEach((item) => { if (item.blockKey) map[item.blockKey] = item; });
+        // 用iconMap给统计数据和优势数据加上iconClass
+        ['company_stats', 'core_advantages'].forEach(key => {
+          const block = map[key];
+          if (block && block.content) {
+            try {
+              const arr = JSON.parse(block.content);
+              block.content = JSON.stringify(arr.map(it => ({
+                ...it,
+                iconClass: this.iconMap[it.icon] || 'icon-dianpu'
+              })));
+            } catch (e) {}
+          }
+        });
+        this.blockMap = map;
+        this.loading = false;
+      }).catch(() => { this.loading = false; });
     },
-    /** 模板中获取板块（仍保留，供模板直接调用） */
-    getBlock(key) {
-      return this.blockMap[key] || null;
-    },
-    /** 解析板块的图片URL列表 */
+    getBlock(key) { return this.blockMap[key] || null; },
     getBlockImages(key) {
       const block = this.blockMap[key];
       return this._parseImageUrls(block ? block.imageUrls : null);
     },
-    /** 内部：安全解析JSON图片URL */
     _parseImageUrls(jsonStr) {
       if (!jsonStr) return [];
       try { return JSON.parse(jsonStr); } catch (e) { return []; }
     },
-    /** 内部：安全解析板块content中的JSON数据 */
     _parseBlockContent(key, defaultVal) {
       const block = this.blockMap[key];
       if (!block || !block.content) return defaultVal;
       try { return JSON.parse(block.content); } catch (e) { return defaultVal; }
     },
-    goBack() {
-      uni.navigateBack({ delta: 1 });
-    },
-    handleNavClick(nav) {
-      switch (nav.linkType) {
-        case 'page':
-          if (nav.linkUrl) {
-            uni.navigateTo({ url: nav.linkUrl, fail: () => { uni.switchTab({ url: nav.linkUrl }); } });
-          }
-          break;
-        case 'web':
-          if (nav.linkUrl) {
-            // #ifdef H5
-            window.open(nav.linkUrl, '_blank');
-            // #endif
-            // #ifdef MP
-            uni.navigateTo({ url: `/pages/webview/index?url=${encodeURIComponent(nav.linkUrl)}` });
-            // #endif
-          }
-          break;
-        case 'phone':
-          if (nav.linkUrl) {
-            // #ifdef MP || APP-PLUS
-            uni.makePhoneCall({ phoneNumber: nav.linkUrl });
-            // #endif
-          }
-          break;
-        case 'map':
-          this.openMap();
-          break;
+    goBack() { uni.navigateBack({ delta: 1 }); },
+    previewImage(urls, index) { uni.previewImage({ urls, current: index }); },
+    submitForm() {
+      if (!this.form.phone) {
+        return uni.showToast({ title: '请输入联系电话', icon: 'none' });
       }
-    },
-    previewImage(urls, index) {
-      uni.previewImage({ urls, current: index });
-    },
-    callPhone() {
-      if (!this.contactData || !this.contactData.phone) return;
-      // #ifdef MP || APP-PLUS
-      uni.makePhoneCall({ phoneNumber: this.contactData.phone });
-      // #endif
-    },
-    openMap() {
-      const data = this.contactData;
-      if (!data) return;
-      // #ifdef MP || APP-PLUS
-      if (data.latitude && data.longitude) {
-        uni.openLocation({
-          latitude: parseFloat(data.latitude),
-          longitude: parseFloat(data.longitude),
-          name: data.address || "辽缆工业",
-          address: data.address || "",
-        });
+      if (!/^1\d{10}$/.test(this.form.phone)) {
+        return uni.showToast({ title: '手机号格式不正确', icon: 'none' });
       }
-      // #endif
+      uni.showToast({ title: '提交成功，我们会尽快联系您', icon: 'success' });
+      this.form = { name: '', phone: '', desc: '' };
     },
   },
 };
 </script>
 
 <style scoped lang="scss">
-/* ===== 蓝白商务风配色变量 ===== */
-$blue-primary: #003da6;
-$blue-container: #0052d9;
-$blue-soft: #dbe1ff;
-$blue-bg: #e8edff;
-$surface-bright: #f9f9ff;
-$surface-container: #ebedf9;
-$surface-low: #f1f3ff;
-$on-surface: #181c23;
-$on-surface-variant: #434654;
-$outline: #737686;
-$outline-variant: #c3c6d7;
-$text-white: #ffffff;
-$border-light: #ebedf9;
-$radius-sm: 8rpx;
-$radius-md: 16rpx;
-$radius-lg: 24rpx;
+// ===== 主题色 =====
+$primary: #0061a5;
+$primary-container: #0099ff;
+$tertiary: #006875;
+$secondary: #705d00;
+$on-surface: #1a1c1e;
+$on-surface-variant: #3f4753;
+$surface: #f9f9fc;
+$surface-container-lowest: #ffffff;
+$surface-container: #eeeef0;
+$outline-variant: #bfc7d5;
 
-.about-page { min-height: 100vh; background-color: $surface-bright; }
+.about-page { min-height: 100vh; background-color: $surface; }
 .page-body { padding-bottom: env(safe-area-inset-bottom); }
 
-/* ===== 导航栏 ===== */
+// ===== 导航栏 Glass =====
 .nav-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-  background-color: $blue-primary;
-  box-shadow: 0 4rpx 16rpx rgba(0,61,166,0.3);
+  background: rgba($surface, 0.85);
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
   &__content { display: flex; align-items: center; height: 44px; padding: 0 16px; }
-  &__back { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: $text-white; font-size: 18px; }
-  &__title { flex: 1; text-align: center; font-size: 17px; font-weight: 600; color: $text-white; }
+  &__back { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: $primary; font-size: 18px; }
+  &__title { flex: 1; text-align: center; font-size: 17px; font-weight: 700; color: $primary; }
   &__right { width: 44px; }
 }
 
-/* ===== Loading ===== */
+// ===== Loading =====
 .loading-wrap { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 60vh; }
-.loading-spinner { width: 60rpx; height: 60rpx; border: 4rpx solid $border-light; border-top-color: $blue-primary; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20rpx; }
+.loading-spinner { width: 60rpx; height: 60rpx; border: 4rpx solid $outline-variant; border-top-color: $primary; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20rpx; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { font-size: 26rpx; color: $outline; }
+.loading-text { font-size: 26rpx; color: #707884; }
 
-/* ===== Section 通用 ===== */
-.section { padding: 44rpx 32rpx; background-color: $surface-bright; &--alt { background-color: $surface-container; } }
-.section-header { display: flex; align-items: center; margin-bottom: 28rpx; }
-.section-accent { width: 6rpx; height: 36rpx; background-color: $blue-primary; border-radius: 3rpx; margin-right: 14rpx; }
-.section-title { font-size: 34rpx; font-weight: 600; color: $on-surface; }
+// ===== Section =====
+.section { padding: 44rpx 40rpx; &--dim { background: $surface-container; } }
+.section-title { display: block; font-size: 36rpx; font-weight: 700; color: $on-surface; margin-bottom: 28rpx; }
+.section-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28rpx;
+  .section-title { margin-bottom: 0; }
+}
+.section-more { font-size: 24rpx; color: $primary; font-weight: 500; }
 
-/* ===== Hero 区 ===== */
+// ===== Hero =====
 .hero-section { position: relative; width: 100%; height: 640rpx; overflow: hidden; }
 .hero-bg__img { width: 100%; height: 100%; }
-.hero-bg__placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, $blue-primary 0%, $blue-container 100%); }
-.hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba(0,61,166,0.2) 0%, rgba(24,28,35,0.88) 100%); }
+.hero-bg__placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, $primary 0%, $primary-container 100%); }
+.hero-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, rgba($primary, 0.1) 0%, rgba(24,28,35,0.85) 100%); }
 .hero-content { position: absolute; bottom: 72rpx; left: 40rpx; right: 40rpx; }
-.hero-title { font-size: 52rpx; font-weight: 600; color: $text-white; line-height: 72rpx; display: block; margin-bottom: 12rpx; }
-.hero-subtitle { font-size: 28rpx; color: rgba(235,237,249,0.9); line-height: 44rpx; display: block; }
-
-/* ===== 企业简介 ===== */
-.intro-card { background-color: #ffffff; border: 1rpx solid $outline-variant; border-radius: $radius-sm; padding: 28rpx; margin-bottom: 20rpx; }
-.bento-grid { display: flex; flex-wrap: wrap; gap: 16rpx; }
-.bento-card {
-  width: calc(50% - 8rpx); background-color: $surface-low; border-radius: $radius-sm; padding: 28rpx;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+.hero-badge {
+  display: inline-block;
+  padding: 8rpx 24rpx;
+  background: rgba($tertiary, 0.15);
+  color: #9cf0ff;
+  font-size: 22rpx;
+  font-weight: 500;
+  border-radius: 999rpx;
+  margin-bottom: 16rpx;
+  border: 1rpx solid rgba(156, 240, 255, 0.25);
 }
-.bento-icon-wrap { width: 56rpx; height: 56rpx; border-radius: 50%; background-color: $blue-soft; display: flex; align-items: center; justify-content: center; margin-bottom: 16rpx; }
-.bento-icon-text { font-size: 28rpx; color: $blue-primary; font-weight: 600; }
-.bento-value { font-size: 36rpx; font-weight: 600; color: $on-surface; margin-bottom: 6rpx; }
-.bento-label { font-size: 22rpx; color: $outline; }
+.hero-title { display: block; font-size: 52rpx; font-weight: 700; color: #ffffff; line-height: 1.25; margin-bottom: 12rpx; }
+.hero-subtitle { display: block; font-size: 26rpx; color: rgba(255,255,255,0.8); line-height: 1.5; }
 
-/* ===== 核心优势 ===== */
+// ===== 企业简介 =====
+.intro-card {
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  font-size: 28rpx;
+  color: $on-surface-variant;
+  line-height: 1.8;
+}
+
+// ===== 核心数据 2x2 =====
+.values-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24rpx; }
+.value-card {
+  padding: 36rpx 28rpx;
+  border-radius: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  &--0 { background: $surface-container-lowest; }
+  &--1 { background: $primary-container; color: #fff;
+    .value-title, .value-desc { color: #fff; }
+    .value-icon-wrap { background: rgba(255,255,255,0.2); }
+    .iconfont { color: #fff; }
+  }
+  &--2, &--3 { background: $surface-container-lowest; }
+}
+.value-icon-wrap {
+  width: 72rpx; height: 72rpx;
+  background: rgba($primary, 0.08);
+  border-radius: 16rpx;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4rpx;
+  .iconfont { font-size: 36rpx; color: $primary; }
+}
+.value-title { font-size: 36rpx; font-weight: 700; color: $on-surface; }
+.value-desc { font-size: 24rpx; color: $on-surface-variant; }
+
+// ===== 核心优势 =====
 .advantage-list { display: flex; flex-direction: column; gap: 20rpx; }
 .advantage-card {
-  background-color: #ffffff; border: 1rpx solid $outline-variant; border-radius: $radius-sm; padding: 28rpx;
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  border-radius: 24rpx;
+  padding: 28rpx;
   display: flex; flex-direction: row; align-items: flex-start;
+  &:active { border-color: $primary-container; }
 }
 .advantage-icon-wrap {
-  width: 72rpx; height: 72rpx; border-radius: 50%; background-color: $blue-container;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 20rpx;
+  width: 72rpx; height: 72rpx;
+  background: rgba($primary, 0.08);
+  border-radius: 16rpx;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-right: 20rpx;
+  .iconfont { font-size: 36rpx; color: $primary; }
 }
-.advantage-icon-text { font-size: 32rpx; color: $text-white; font-weight: 600; }
 .advantage-body { flex: 1; }
-.advantage-title { font-size: 28rpx; font-weight: 600; color: $on-surface; display: block; margin-bottom: 8rpx; }
-.advantage-desc { font-size: 24rpx; color: $on-surface-variant; line-height: 40rpx; display: block; }
+.advantage-title { display: block; font-size: 28rpx; font-weight: 600; color: $on-surface; margin-bottom: 8rpx; }
+.advantage-desc { display: block; font-size: 24rpx; color: $on-surface-variant; line-height: 1.6; }
 
-/* ===== 领导致辞 ===== */
-.leader-card { background-color: #ffffff; border: 1rpx solid $outline-variant; border-radius: $radius-sm; overflow: hidden; }
-.leader-img-wrap { height: 400rpx; width: 100%; background-color: $surface-container; overflow: hidden; }
-.leader-img { width: 100%; }
-.leader-img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, $blue-primary 0%, $blue-container 100%); }
-.leader-placeholder-text { font-size: 80rpx; color: rgba(255,255,255,0.6); font-weight: 600; }
-.leader-body { padding: 28rpx; }
-.leader-quote-icon { font-size: 80rpx; color: $blue-soft; font-family: Georgia, serif; line-height: 1; display: block; margin-bottom: -20rpx; }
-.leader-quote { font-size: 26rpx; color: $on-surface-variant; line-height: 44rpx; font-style: italic; display: block; margin-bottom: 24rpx; }
-.leader-divider { height: 1rpx; background-color: $outline-variant; margin-bottom: 20rpx; }
-.leader-meta { display: flex; flex-direction: row; justify-content: space-between; align-items: center; }
+// ===== 领导致辞 =====
+.leader-card {
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+.leader-body { padding: 36rpx; }
+.leader-quote-icon { display: block; font-size: 80rpx; color: rgba($primary, 0.15); line-height: 1; margin-bottom: -24rpx; font-family: Georgia, serif; }
+.leader-quote { display: block; font-size: 26rpx; color: $on-surface-variant; line-height: 1.7; font-style: italic; margin-bottom: 28rpx; }
+.leader-divider { height: 2rpx; background: rgba($outline-variant, 0.4); margin-bottom: 20rpx; }
+.leader-meta { display: flex; justify-content: space-between; align-items: center; }
 .leader-name { font-size: 28rpx; font-weight: 600; color: $on-surface; }
-.leader-role { font-size: 22rpx; color: $blue-primary; }
+.leader-role { font-size: 24rpx; color: $primary; }
 
-/* ===== 发展历程 ===== */
+// ===== 发展历程 =====
 .timeline { position: relative; padding-left: 40rpx; }
-.timeline-item { position: relative; padding-bottom: 40rpx; }
-.timeline-item:last-child { padding-bottom: 0; }
+.timeline-item { position: relative; padding-bottom: 40rpx; &:last-child { padding-bottom: 0; } }
 .timeline-dot {
-  position: absolute; left: -40rpx; top: 8rpx; width: 24rpx; height: 24rpx; border-radius: 50%;
-  background-color: $outline; border: 4rpx solid $surface-container;
-  &.active { background-color: $blue-primary; border-color: $surface-low; }
+  position: absolute; left: -38rpx; top: 6rpx; width: 20rpx; height: 20rpx;
+  border-radius: 50%; background: $outline-variant;
+  &.active { background: $primary; box-shadow: 0 0 12rpx rgba($primary, 0.4); }
 }
-.timeline-line { position: absolute; left: -30rpx; top: 36rpx; bottom: 0; width: 4rpx; background-color: $outline-variant; }
+.timeline-line { position: absolute; left: -30rpx; top: 30rpx; bottom: 0; width: 4rpx; background: rgba($outline-variant, 0.4); }
 .timeline-content { padding-left: 16rpx; }
-.timeline-year { font-size: 28rpx; font-weight: 600; color: $outline; display: block; margin-bottom: 8rpx; &.active { color: $blue-primary; } }
-.timeline-event { font-size: 24rpx; color: $on-surface-variant; line-height: 40rpx; display: block; }
+.timeline-year { display: block; font-size: 28rpx; font-weight: 600; color: $on-surface-variant; margin-bottom: 6rpx; &.active { color: $primary; } }
+.timeline-event { display: block; font-size: 24rpx; color: $on-surface-variant; line-height: 1.6; }
 
-/* ===== 核心团队 ===== */
-.team-grid { display: flex; flex-wrap: wrap; gap: 20rpx; }
-.team-card {
-  width: calc(50% - 10rpx); background-color: #ffffff; border: 1rpx solid $outline-variant;
-  border-radius: $radius-sm; overflow: hidden; display: flex; flex-direction: column; align-items: center;
-}
-.team-avatar-wrap { width: 100%; height: 340rpx; background-color: $surface-container; overflow: hidden; }
-.team-avatar { width: 100%; }
-.team-avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-color: $blue-bg; }
-.avatar-text { font-size: 64rpx; color: $blue-primary; font-weight: 600; }
-.team-name { font-size: 26rpx; font-weight: 600; color: $on-surface; margin-top: 16rpx; }
-.team-role { font-size: 22rpx; color: $blue-primary; margin-top: 6rpx; padding-bottom: 20rpx; }
-
-/* ===== 资质荣誉 ===== */
-.honor-intro { padding: 24rpx; margin-bottom: 20rpx; background-color: #ffffff; border: 1rpx solid $outline-variant; border-radius: $radius-sm; }
-.honor-text { font-size: 26rpx; color: $on-surface-variant; line-height: 44rpx; }
+// ===== 资质荣誉 =====
 .honor-tags { display: flex; flex-wrap: wrap; gap: 16rpx; margin-bottom: 24rpx; }
 .honor-tag {
-  padding: 12rpx 24rpx; background-color: $blue-bg; border-radius: 30rpx; border: 1rpx solid rgba(0,61,166,0.12);
-  &__text { font-size: 22rpx; color: $blue-primary; font-weight: 500; }
+  padding: 12rpx 28rpx;
+  background: rgba($tertiary, 0.06);
+  border: 1rpx solid rgba($tertiary, 0.15);
+  border-radius: 999rpx;
+  &__text { font-size: 24rpx; color: $tertiary; font-weight: 500; }
 }
 .honor-images { display: flex; flex-wrap: wrap; gap: 16rpx; }
-.honor-img { width: 100%; height: 360rpx; border-radius: $radius-sm; }
+.honor-img { width: 100%; height: 400rpx; border-radius: 24rpx; }
 
-/* ===== 联系方式 ===== */
-.contact-list { display: flex; flex-direction: column; gap: 16rpx; }
+// ===== 联系我们 =====
 .contact-card {
-  display: flex; align-items: center; padding: 28rpx 24rpx;
-  background-color: #ffffff; border: 1rpx solid $outline-variant; border-radius: $radius-sm;
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.2);
+  border-radius: 32rpx;
+  padding: 36rpx 32rpx;
+  display: flex; flex-direction: column; gap: 32rpx;
 }
-.contact-icon-wrap {
-  width: 72rpx; height: 72rpx; border-radius: 50%; background-color: $blue-container;
-  display: flex; align-items: center; justify-content: center; margin-right: 24rpx; flex-shrink: 0;
-  .iconfont { font-size: 36rpx; color: $text-white; }
-  &--blue { background: linear-gradient(135deg, $blue-primary, $blue-container); }
+.contact-row { display: flex; align-items: flex-start; gap: 24rpx; }
+.contact-icon-box {
+  width: 72rpx; height: 72rpx;
+  background: rgba($primary, 0.08);
+  border-radius: 16rpx;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  .iconfont { font-size: 36rpx; color: $primary; }
 }
-.contact-info { flex: 1; min-width: 0; }
-.contact-label { display: block; font-size: 22rpx; color: $outline; margin-bottom: 6rpx; }
-.contact-value { display: block; font-size: 28rpx; color: $on-surface; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.contact-btn {
-  padding: 12rpx 32rpx; font-size: 24rpx; font-weight: 600; color: $text-white;
-  background-color: $blue-primary; border-radius: 30rpx; flex-shrink: 0;
-}
+.contact-text { flex: 1; min-width: 0; }
+.contact-row-label { display: block; font-size: 22rpx; color: $on-surface-variant; margin-bottom: 4rpx; }
+.contact-row-value { display: block; font-size: 28rpx; color: $on-surface; font-weight: 500; line-height: 1.5; word-break: break-all; }
+.contact-phone { color: $primary; font-weight: 600; }
 
-/* ===== Footer ===== */
-.page-footer { padding: 48rpx 32rpx 40rpx; text-align: center; background-color: $surface-bright; }
-.page-footer__text { font-size: 22rpx; color: $outline-variant; }
+// ===== 需求表单 =====
+.form-card {
+  background: $surface-container-lowest;
+  border: 1rpx solid rgba($outline-variant, 0.3);
+  border-radius: 24rpx;
+  padding: 36rpx 32rpx;
+}
+.form-group { margin-bottom: 24rpx; }
+.form-label { display: block; font-size: 24rpx; color: #707884; font-weight: 500; margin-bottom: 10rpx; margin-left: 8rpx; }
+.form-input, .form-textarea {
+  width: 100%; box-sizing: border-box;
+  background: rgba($surface-container, 0.5);
+  border: none;
+  border-radius: 24rpx;
+  padding: 0 28rpx;
+  font-size: 28rpx;
+  color: $on-surface;
+}
+.form-input { height: 96rpx; }
+.form-textarea { height: 200rpx; padding-top: 24rpx; }
+.form-submit-btn {
+  display: flex; align-items: center; justify-content: center; gap: 12rpx;
+  width: 100%; height: 104rpx;
+  background: $primary-container;
+  color: #fff;
+  font-size: 32rpx; font-weight: 600;
+  border-radius: 32rpx;
+  box-shadow: 0 20rpx 40rpx -10rpx rgba($primary-container, 0.3);
+  margin-top: 8rpx;
+  &:active { transform: scale(0.97); opacity: 0.9; }
+  .iconfont { font-size: 36rpx; }
+}
+.form-hint { display: block; text-align: center; font-size: 22rpx; color: #707884; margin-top: 20rpx; }
 
-/* ===== Empty ===== */
-.empty-wrap { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 60vh; }
-.empty-text { font-size: 28rpx; color: $outline; }
+// ===== Footer =====
+.page-footer { padding: 48rpx 40rpx 60rpx; text-align: center; }
+.page-footer__text { font-size: 22rpx; color: rgba($on-surface-variant, 0.5); }
 
-/* ===== SVG图标支持 ===== */
-.icon-svg { width: 40rpx; height: 40rpx; filter: brightness(0) invert(1); }
-.icon-svg-small { width: 36rpx; height: 36rpx; filter: brightness(0) invert(1); }
-
-/* ===== 增强的视觉效果 ===== */
-.bento-card, .advantage-card, .contact-card, .team-card {
-  transition: all 0.3s ease;
-  &:active { transform: scale(0.98); }
-}
-.contact-card {
-  &:active { transform: translateX(4rpx); }
-}
-.contact-btn {
-  transition: all 0.3s ease;
-  &:active { transform: scale(0.95); }
-}
-.honor-tag {
-  transition: all 0.3s ease;
-  &:active { transform: scale(0.95); }
-}
-
-/* ===== 渐变增强 ===== */
-.nav-bar {
-  background: linear-gradient(135deg, $blue-primary 0%, $blue-container 100%) !important;
-}
-.section-accent {
-  background: linear-gradient(180deg, $blue-primary, $blue-container) !important;
-}
-.bento-icon-wrap {
-  background: linear-gradient(135deg, $blue-primary, $blue-container) !important;
-  box-shadow: 0 4rpx 12rpx rgba(0,61,166,0.3) !important;
-}
-.advantage-icon-wrap {
-  background: linear-gradient(135deg, $blue-primary, $blue-container) !important;
-  box-shadow: 0 4rpx 12rpx rgba(0,61,166,0.3) !important;
-}
-.contact-icon-wrap {
-  background: linear-gradient(135deg, $blue-primary, $blue-container) !important;
-  box-shadow: 0 4rpx 12rpx rgba(0,61,166,0.3) !important;
-}
-.contact-btn {
-  background: linear-gradient(135deg, $blue-primary, $blue-container) !important;
-  box-shadow: 0 4rpx 12rpx rgba(0,61,166,0.3) !important;
-}
-.timeline-dot.active {
-  background: linear-gradient(135deg, $blue-primary, $blue-container) !important;
-  box-shadow: 0 0 12rpx rgba(0,61,166,0.5) !important;
-}
-.leader-divider {
-  background: linear-gradient(90deg, $blue-primary, $blue-soft) !important;
-}
-
-/* ===== 阴影增强 ===== */
-.intro-card, .leader-card, .honor-intro {
-  box-shadow: 0 4rpx 16rpx rgba(0,61,166,0.08) !important;
-}
-.honor-img {
-  box-shadow: 0 4rpx 12rpx rgba(0,61,166,0.1) !important;
-}
-.bento-card, .team-card {
-  box-shadow: 0 2rpx 8rpx rgba(0,61,166,0.06) !important;
-}
-.bento-value {
-  color: $blue-primary !important;
-  font-weight: 700 !important;
-}
-.hero-title {
-  text-shadow: 0 2rpx 8rpx rgba(0,0,0,0.3) !important;
-}
+// ===== Empty =====
+.empty-wrap { display: flex; justify-content: center; align-items: center; height: 60vh; }
+.empty-text { font-size: 28rpx; color: $on-surface-variant; }
 </style>
