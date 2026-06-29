@@ -16,5 +16,10 @@ crmeb/LOG_HOME_IS_UNDEFINED
 *.rar
 *.7z
 
+# Local payment certificates and private keys
+*.p12
+*.pem
+*.key
+
 # Working directories
 .claude/
