@@ -61,7 +61,7 @@
     </view>
 
     <!-- Load More -->
-    <view class="load-more" v-if="!noMore">
+    <view class="load-more" v-if="!noMore && !loading">
       <view class="load-btn" @click="loadMore">
         加载更多案例
       </view>
@@ -132,9 +132,13 @@ export default {
       
       getCaseList(data).then(res => {
         this.loading = false;
-        if (res.data.list.length > 0) {
-          this.caseList = this.caseList.concat(res.data.list);
+        const list = res.data.list || [];
+        if (list.length > 0) {
+          this.caseList = this.caseList.concat(list);
           this.page++;
+          if (list.length < this.limit) {
+            this.noMore = true;
+          }
         } else {
           this.noMore = true;
         }
