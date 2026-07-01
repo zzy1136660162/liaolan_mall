@@ -662,9 +662,9 @@ public class SmsServiceImpl implements SmsService {
     */
 
     private Boolean optimizedSendCommonCode(String phone) {
-        ValidateFormUtil.isPhone(phone, "\u624b\u673a\u53f7\u7801\u9519\u8bef");
+        ValidateFormUtil.isPhone(phone, "手机号码错误");
         if (redisUtil.exists(SmsConstants.SMS_VALIDATE_PHONE_NUM + phone)) {
-            throw new CrmebException("\u60a8\u7684\u77ed\u4fe1\u53d1\u9001\u8fc7\u4e8e\u9891\u7e41\uff0c\u8bf7\u7a0d\u540e\u518d\u8bd5");
+            throw new CrmebException("您的短信发送过于频繁，请稍后再试");
         }
         String codeExpireStr = getVerificationCodeExpireMinutes();
         Integer code = CrmebUtil.randomCount(111111, 999999);
@@ -680,7 +680,7 @@ public class SmsServiceImpl implements SmsService {
             sendSmsVo.setContent(JSONObject.toJSONString(content));
             Boolean sent = commonSendSms(sendSmsVo);
             if (!sent) {
-                throw new CrmebException("\u53d1\u9001\u77ed\u4fe1\u5931\u8d25\uff0c\u8bf7\u8054\u7cfb\u540e\u53f0\u7ba1\u7406\u5458");
+                throw new CrmebException("发送短信失败，请联系后台管理员");
             }
             saveLoginVerificationCode(phone, code, codeExpireStr);
             saveLoginSmsRecord(phone, code, codeExpireStr, false, "REAL_SEND");
@@ -690,7 +690,7 @@ public class SmsServiceImpl implements SmsService {
                 if (e instanceof CrmebException) {
                     throw (CrmebException) e;
                 }
-                throw new CrmebException("\u53d1\u9001\u77ed\u4fe1\u5931\u8d25\uff0c\u8bf7\u8054\u7cfb\u540e\u53f0\u7ba1\u7406\u5458");
+                throw new CrmebException("发送短信失败，请联系后台管理员");
             }
             saveLoginVerificationCode(phone, code, codeExpireStr);
             logger.info("MOCK_LOGIN_SMS phone={}, code={}, expireMinutes={}, scene={}, reason={}",

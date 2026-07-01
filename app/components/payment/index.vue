@@ -77,7 +77,7 @@
 				],
 			};
 		},
-		computed: mapGetters(['systemPlatform','userInfo','productType']),
+		computed: mapGetters(['systemPlatform','userInfo','productType','uid']),
 		created(){
 			this.payConfig();
 			this.payMode[1].number = this.userInfo.nowMoney;
@@ -95,6 +95,40 @@
 					this.payMode[0].payStatus = res.data.payWeixinOpen === "'1'" ? 1 : 0;
 					// #endif
 				})
+			},
+			getPayDebugAccountInfo() {
+				let miniProgramAppId = '';
+				let envVersion = '';
+				// #ifdef MP-WEIXIN
+				try {
+					const accountInfo = uni.getAccountInfoSync ? uni.getAccountInfoSync() : null;
+					miniProgramAppId = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.appId : '';
+					envVersion = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.envVersion : '';
+				} catch (e) {
+					miniProgramAppId = 'getAccountInfoSync error';
+					envVersion = e && (e.errMsg || e.message) ? (e.errMsg || e.message) : '';
+				}
+				// #endif
+				return {
+					miniProgramAppId,
+					envVersion,
+					storeUid: this.uid,
+					userInfoUid: this.userInfo && this.userInfo.uid,
+					productType: this.productType,
+					systemPlatform: this.systemPlatform
+				};
+			},
+			getPayDebugJsConfig(jsConfig) {
+				if (!jsConfig) return null;
+				return {
+					appId: jsConfig.appId,
+					timeStamp: jsConfig.timeStamp,
+					nonceStr: jsConfig.nonceStr,
+					package: jsConfig.packages,
+					signType: jsConfig.signType,
+					paySignPrefix: jsConfig.paySign ? jsConfig.paySign.substring(0, 8) : '',
+					ticket: jsConfig.ticket
+				};
 			},
 			goPay: function(number, paytype) {
 				let that = this;
@@ -124,6 +158,12 @@
 					that.payChannel = that.systemPlatform === 'ios' ? 'weixinAppIos' : 'weixinAppAndroid';
 				}
 				// #endif
+				console.log('[PAY_DEBUG][before_orderPay]', {
+					orderNo: that.order_id,
+					paytype,
+					totalPrice: that.totalPrice,
+					accountInfo: that.getPayDebugAccountInfo()
+				});
 				orderPay({
 					orderNo: that.order_id,
 					// #ifdef MP
@@ -137,6 +177,13 @@
 				}).then(res => {
 					let jsConfig = res.data.jsConfig;
 					that.order_id = res.data.orderNo;
+					console.log('[PAY_DEBUG][orderPay_response]', {
+						orderNo: that.order_id,
+						payType: res.data.payType,
+						status: res.data.status,
+						jsConfig: that.getPayDebugJsConfig(jsConfig),
+						accountInfo: that.getPayDebugAccountInfo()
+					});
 					switch (res.data.payType) {
 						case 'weixin':
 						that.weixinPay(jsConfig);
@@ -230,6 +277,11 @@
 			},
 			weixinPay(jsConfig){
 				let that = this;
+				console.log('[PAY_DEBUG][before_mp_pay]', {
+					orderNo: that.order_id,
+					jsConfig: that.getPayDebugJsConfig(jsConfig),
+					accountInfo: that.getPayDebugAccountInfo()
+				});
 				// #ifdef MP
                 uni.requestOrderPayment({
                     timeStamp: jsConfig.timeStamp,
@@ -258,6 +310,12 @@
                         })
                     },
                     fail: function(e) {
+						console.error('[PAY_DEBUG][mp_pay_fail]', {
+							orderNo: that.order_id,
+							err: e,
+							jsConfig: that.getPayDebugJsConfig(jsConfig),
+							accountInfo: that.getPayDebugAccountInfo()
+						});
                         uni.hideLoading();
                         return that.$util.Tips({
                             title: '取消支付'
@@ -268,6 +326,12 @@
                         });
                     },
                     complete: function(e) {
+						console.log('[PAY_DEBUG][mp_pay_complete]', {
+							orderNo: that.order_id,
+							result: e,
+							jsConfig: that.getPayDebugJsConfig(jsConfig),
+							accountInfo: that.getPayDebugAccountInfo()
+						});
                         uni.hideLoading();
                         if (e.errMsg == 'requestPayment:cancel') return that.$util
                             .Tips({

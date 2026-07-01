@@ -691,6 +691,14 @@ public class OrderPayServiceImpl implements OrderPayService {
         if (ObjectUtil.isNull(storeOrder)) {
             throw new CrmebException("订单不存在");
         }
+        Integer currentUid = getCurrentUserIdForPayDebug();
+        logger.info("PAY_DEBUG payment request | orderNo={}, currentUid={}, orderUid={}, requestPayType={}, requestPayChannel={}, paid={}, payPrice={}, clientIp={}",
+                orderPayRequest.getOrderNo(), currentUid, storeOrder.getUid(), orderPayRequest.getPayType(),
+                orderPayRequest.getPayChannel(), storeOrder.getPaid(), storeOrder.getPayPrice(), ip);
+        if (ObjectUtil.isNotNull(currentUid) && !currentUid.equals(storeOrder.getUid())) {
+            logger.warn("PAY_DEBUG uid mismatch | orderNo={}, currentUid={}, orderUid={}",
+                    orderPayRequest.getOrderNo(), currentUid, storeOrder.getUid());
+        }
         if (storeOrder.getIsDel()) {
             throw new CrmebException("订单已被删除");
         }
@@ -724,6 +732,9 @@ public class OrderPayServiceImpl implements OrderPayService {
             }
             storeOrder.setPayType(PayConstants.PAY_TYPE_WE_CHAT);
         }
+        logger.info("PAY_DEBUG payment channel resolved | orderNo={}, currentUid={}, orderUid={}, resolvedPayType={}, resolvedIsChannel={}, requestPayChannel={}",
+                storeOrder.getOrderId(), currentUid, storeOrder.getUid(), storeOrder.getPayType(),
+                storeOrder.getIsChannel(), orderPayRequest.getPayChannel());
         storeOrder.setUpdateTime(DateUtil.date());
         boolean changePayType = storeOrderService.updateById(storeOrder);
         if (!changePayType) {
@@ -758,6 +769,9 @@ public class OrderPayServiceImpl implements OrderPayService {
             vo.setSignType(unifiedorder.get("signType"));
             vo.setTimeStamp(unifiedorder.get("timeStamp"));
             vo.setPaySign(unifiedorder.get("paySign"));
+            logger.info("PAY_DEBUG jsconfig response | orderNo={}, appId={}, package={}, signType={}, timeStamp={}, nonceStr={}, paySign={}",
+                    storeOrder.getOrderId(), vo.getAppId(), vo.getPackages(), vo.getSignType(), vo.getTimeStamp(),
+                    maskForPayDebug(vo.getNonceStr()), maskForPayDebug(vo.getPaySign()));
             if (storeOrder.getIsChannel() == 2) {
                 vo.setMwebUrl(unifiedorder.get("mweb_url"));
                 response.setPayType(PayConstants.PAY_CHANNEL_WE_CHAT_H5);
@@ -832,10 +846,17 @@ public class OrderPayServiceImpl implements OrderPayService {
             mchId = systemConfigService.getValueByKeyException(Constants.CONFIG_KEY_PAY_WE_CHAT_MCH_ID);
             signKey = systemConfigService.getValueByKeyException(Constants.CONFIG_KEY_PAY_WE_CHAT_APP_KEY);
         }
+        logger.info("PAY_DEBUG unifiedorder request | orderNo={}, uid={}, isChannel={}, appId={}, mchId={}, openid={}, payPrice={}, clientIp={}",
+                storeOrder.getOrderId(), storeOrder.getUid(), storeOrder.getIsChannel(), appId, mchId,
+                maskForPayDebug(userToken.getToken()), storeOrder.getPayPrice(), ip);
         // 获取微信预下单对象
         CreateOrderRequestVo unifiedorderVo = getUnifiedorderVo(storeOrder, userToken.getToken(), ip, appId, mchId, signKey);
         // 预下单（统一下单）
         CreateOrderResponseVo responseVo = wechatNewService.payUnifiedorder(unifiedorderVo);
+        logger.info("PAY_DEBUG unifiedorder response | orderNo={}, outTradeNo={}, prepayId={}, appId={}, mchId={}, openid={}, totalFee={}, tradeType={}",
+                storeOrder.getOrderId(), unifiedorderVo.getOut_trade_no(), maskForPayDebug(responseVo.getPrepayId()),
+                unifiedorderVo.getAppid(), unifiedorderVo.getMch_id(), maskForPayDebug(unifiedorderVo.getOpenid()),
+                unifiedorderVo.getTotal_fee(), unifiedorderVo.getTrade_type());
         // 组装前端预下单参数
         Map<String, String> map = new HashMap<>();
         map.put("appId", unifiedorderVo.getAppid());
@@ -900,6 +921,25 @@ public class OrderPayServiceImpl implements OrderPayService {
         String sign = WxPayUtil.getSign(vo, signKey);
         vo.setSign(sign);
         return vo;
+    }
+
+    private Integer getCurrentUserIdForPayDebug() {
+        try {
+            return userService.getUserIdException();
+        } catch (Exception e) {
+            logger.warn("PAY_DEBUG current uid unavailable | message={}", e.getMessage());
+            return null;
+        }
+    }
+
+    private String maskForPayDebug(String value) {
+        if (StrUtil.isBlank(value)) {
+            return value;
+        }
+        if (value.length() <= 8) {
+            return value;
+        }
+        return value.substring(0, 4) + "***" + value.substring(value.length() - 4);
     }
 
     private UserIntegralRecord integralRecordSubInit(StoreOrder storeOrder, User user) {
