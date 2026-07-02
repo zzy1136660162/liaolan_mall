@@ -7,7 +7,6 @@
         <text class="placeholder">搜索商品</text>
       </view>
     </view>
-
     <view class="main-body">
       <!-- ========== 左侧栏：一 + 二级 ========== -->
       <scroll-view class="left-panel" scroll-y>
@@ -128,6 +127,7 @@ export default {
       overlayLevel3: null,
       // 已选四级 → 商品
       selectedLevel4: null,
+      selectedLevel3ForBack: null, // 记录四级对应的三级，用于返回
       selectedLevel4Name: '',
       productList: [],
       productLoading: false,
@@ -194,13 +194,19 @@ export default {
     },
     // 选中四级 → 关闭遮罩，拉商品
     selectLevel4(item) {
+      this.selectedLevel3ForBack = this.overlayLevel3;
       this.showOverlay = false;
       this.overlayLevel3 = null;
       this.selectedLevel4 = item.id;
       this.selectedLevel4Name = item.name;
       this.loadProducts(item.id);
     },
+    // 返回 → 回到四级分类展示
     backToLevel3() {
+      if (this.selectedLevel3ForBack) {
+        this.overlayLevel3 = this.selectedLevel3ForBack;
+        this.showOverlay = true;
+      }
       this.selectedLevel4 = null;
       this.productList = [];
       this.productLoaded = false;

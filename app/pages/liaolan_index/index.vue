@@ -2,16 +2,16 @@
   <view class="liaolan-home">
     <!-- Top Navigation -->
     <view class="top-nav">
-      <view class="nav-left" @click="handleMenuClick">
-        <text class="iconfont icon-caidan"></text>
-      </view>
       <view class="nav-title">沈阳辽缆电线电缆有限公司</view>
-      <view class="nav-right" @click="handleSearchClick">
-        <text class="iconfont icon-sousuo"></text>
-      </view>
     </view>
 
     <view class="page-container">
+      <!-- Search Box -->
+      <view class="search-box" @click="handleSearchClick">
+        <text class="iconfont icon-sousuo search-icon"></text>
+        <text class="search-placeholder">搜索产品</text>
+      </view>
+
       <!-- Hero Section -->
       <view class="hero-section">
         <image class="hero-bg" src="https://www.lslnii.com/upload/NFSImgFile/appl/images/2025/12/20260603141410866_673280054735.jpg" mode="aspectFill"></image>
@@ -247,15 +247,9 @@ export default {
         this.loadingNews = false;
       });
     },
-    handleMenuClick() {
-      uni.showToast({
-        title: '菜单功能开发中',
-        icon: 'none'
-      });
-    },
     handleSearchClick() {
-      uni.navigateTo({
-        url: '/pages/goods/goods_search/index'
+      uni.switchTab({
+        url: '/pages/goods_cate/goods_cate'
       });
     },
     goToAbout() {
@@ -337,41 +331,19 @@ $on-error-container: #93000a;
   left: 0;
   right: 0;
   z-index: 50;
-  height: 128rpx;
+  height: 158rpx;
   padding: 40rpx 32rpx 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background: rgba($surface, 0.85);
   backdrop-filter: blur(40rpx);
   -webkit-backdrop-filter: blur(40rpx);
-
-  .nav-left,
-  .nav-right {
-    width: 80rpx;
-    height: 80rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s;
-
-    &:active {
-      transform: scale(0.92);
-      background: rgba($primary, 0.08);
-    }
-
-    .iconfont {
-      font-size: 40rpx;
-      color: $primary;
-    }
-  }
 
   .nav-title {
     font-size: 32rpx;
     font-weight: 700;
     color: $primary;
-    flex: 1;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -379,8 +351,32 @@ $on-error-container: #93000a;
   }
 }
 
+// ========== Search Box ==========
+.search-box {
+  height: 72rpx;
+  margin: 0 32rpx 24rpx;
+  background: #ffffff;
+  border: 1rpx solid rgba($outline-variant, 0.5);
+  border-radius: 36rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 32rpx;
+  gap: 16rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.06);
+
+  .search-icon {
+    font-size: 32rpx;
+    color: $on-surface-variant;
+  }
+
+  .search-placeholder {
+    font-size: 28rpx;
+    color: $on-surface-variant;
+  }
+}
+
 .page-container {
-  padding-top: 188rpx;
+  padding-top: calc(158rpx + 24rpx);
   padding-bottom: 200rpx;
 }
 
