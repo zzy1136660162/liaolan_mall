@@ -45,6 +45,8 @@ public class LoginMobileRequest implements Serializable {
     @JsonProperty(value = "spread_spid")
     private Integer spreadPid;
 
+    @ApiModelProperty(value = "小程序登录code，用于登录后补绑定openid")
+    private String routineCode;
 
 
 }

@@ -45,4 +45,7 @@ public class LoginRequest implements Serializable {
     @ApiModelProperty(value = "推广人id")
     @JsonProperty(value = "spread_spid")
     private Integer spreadPid = 0;
+
+    @ApiModelProperty(value = "小程序登录code，用于登录后补绑定openid")
+    private String routineCode;
 }

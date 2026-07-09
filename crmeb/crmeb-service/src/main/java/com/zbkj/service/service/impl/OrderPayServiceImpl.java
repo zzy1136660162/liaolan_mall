@@ -692,9 +692,13 @@ public class OrderPayServiceImpl implements OrderPayService {
             throw new CrmebException("订单不存在");
         }
         Integer currentUid = getCurrentUserIdForPayDebug();
-        logger.info("PAY_DEBUG payment request | orderNo={}, currentUid={}, orderUid={}, requestPayType={}, requestPayChannel={}, paid={}, payPrice={}, clientIp={}",
+        Integer originalIsChannel = storeOrder.getIsChannel();
+        String originalPayType = storeOrder.getPayType();
+        String originalOutTradeNo = storeOrder.getOutTradeNo();
+        logger.info("PAY_DEBUG payment request | orderNo={}, currentUid={}, orderUid={}, requestPayType={}, requestPayChannel={}, originalPayType={}, originalIsChannel={}, paid={}, payPrice={}, outTradeNoBefore={}, routineCodePresent={}, clientIp={}",
                 orderPayRequest.getOrderNo(), currentUid, storeOrder.getUid(), orderPayRequest.getPayType(),
-                orderPayRequest.getPayChannel(), storeOrder.getPaid(), storeOrder.getPayPrice(), ip);
+                orderPayRequest.getPayChannel(), originalPayType, originalIsChannel, storeOrder.getPaid(),
+                storeOrder.getPayPrice(), originalOutTradeNo, StrUtil.isNotBlank(orderPayRequest.getRoutineCode()), ip);
         if (ObjectUtil.isNotNull(currentUid) && !currentUid.equals(storeOrder.getUid())) {
             logger.warn("PAY_DEBUG uid mismatch | orderNo={}, currentUid={}, orderUid={}",
                     orderPayRequest.getOrderNo(), currentUid, storeOrder.getUid());
@@ -732,9 +736,9 @@ public class OrderPayServiceImpl implements OrderPayService {
             }
             storeOrder.setPayType(PayConstants.PAY_TYPE_WE_CHAT);
         }
-        logger.info("PAY_DEBUG payment channel resolved | orderNo={}, currentUid={}, orderUid={}, resolvedPayType={}, resolvedIsChannel={}, requestPayChannel={}",
-                storeOrder.getOrderId(), currentUid, storeOrder.getUid(), storeOrder.getPayType(),
-                storeOrder.getIsChannel(), orderPayRequest.getPayChannel());
+        logger.info("PAY_DEBUG payment channel resolved | orderNo={}, currentUid={}, orderUid={}, originalPayType={}, originalIsChannel={}, resolvedPayType={}, resolvedIsChannel={}, requestPayChannel={}",
+                storeOrder.getOrderId(), currentUid, storeOrder.getUid(), originalPayType, originalIsChannel,
+                storeOrder.getPayType(), storeOrder.getIsChannel(), orderPayRequest.getPayChannel());
         storeOrder.setUpdateTime(DateUtil.date());
         boolean changePayType = storeOrderService.updateById(storeOrder);
         if (!changePayType) {
@@ -759,7 +763,7 @@ public class OrderPayServiceImpl implements OrderPayService {
         // 微信支付，调用微信预下单，返回拉起微信支付需要的信息
         if (storeOrder.getPayType().equals(PayConstants.PAY_TYPE_WE_CHAT)) {
             // 预下单
-            Map<String, String> unifiedorder = unifiedorder(storeOrder, ip);
+            Map<String, String> unifiedorder = unifiedorder(storeOrder, ip, orderPayRequest.getRoutineCode());
             response.setStatus(true);
 
             WxPayJsResultVo vo = new WxPayJsResultVo();
@@ -807,15 +811,23 @@ public class OrderPayServiceImpl implements OrderPayService {
      * @param ip ip
      * @return 预下单返回对象
      */
-    private Map<String, String> unifiedorder(StoreOrder storeOrder, String ip) {
+    private Map<String, String> unifiedorder(StoreOrder storeOrder, String ip, String routineCode) {
         // 获取用户openId
         // 根据订单支付类型来判断获取公众号openId还是小程序openId
         UserToken userToken = new UserToken();
+        Integer expectedUserTokenType = null;
         if (storeOrder.getIsChannel() == 0) {// 公众号
+            expectedUserTokenType = 1;
             userToken = userTokenService.getTokenByUserId(storeOrder.getUid(), 1);
         }
         if (storeOrder.getIsChannel() == 1) {// 小程序
+            expectedUserTokenType = 2;
             userToken = userTokenService.getTokenByUserId(storeOrder.getUid(), 2);
+            if (ObjectUtil.isNull(userToken) && StrUtil.isNotBlank(routineCode)) {
+                userToken = bindRoutineOpenIdForPayment(storeOrder, routineCode);
+            } else if (ObjectUtil.isNotNull(userToken) && StrUtil.isNotBlank(routineCode)) {
+                checkRoutineOpenIdForPayment(storeOrder, routineCode, userToken);
+            }
         }
         // H5
         if (storeOrder.getIsChannel() == 2) {
@@ -823,8 +835,13 @@ public class OrderPayServiceImpl implements OrderPayService {
         }
 
         if (ObjectUtil.isNull(userToken)) {
-            throw new CrmebException("该用户没有openId");
+            logger.warn("PAY_DEBUG user token missing | orderNo={}, uid={}, isChannel={}, expectedUserTokenType={}",
+                    storeOrder.getOrderId(), storeOrder.getUid(), storeOrder.getIsChannel(), expectedUserTokenType);
+            throw new CrmebException("该用户没有小程序openId，请重新微信授权登录后支付");
         }
+        logger.info("PAY_DEBUG user token resolved | orderNo={}, uid={}, isChannel={}, expectedUserTokenType={}, tokenRecordId={}, tokenRecordUid={}, tokenRecordType={}, openid={}",
+                storeOrder.getOrderId(), storeOrder.getUid(), storeOrder.getIsChannel(), expectedUserTokenType,
+                userToken.getId(), userToken.getUid(), userToken.getType(), maskForPayDebug(userToken.getToken()));
 
         // 获取appid、mch_id
         // 微信签名key
@@ -874,6 +891,53 @@ public class OrderPayServiceImpl implements OrderPayService {
             map.put("mweb_url", responseVo.getMWebUrl());
         }
         return map;
+    }
+
+    private UserToken bindRoutineOpenIdForPayment(StoreOrder storeOrder, String routineCode) {
+        WeChatMiniAuthorizeVo authorizeVo = wechatNewService.miniAuthCode(routineCode);
+        if (ObjectUtil.isNull(authorizeVo) || StrUtil.isBlank(authorizeVo.getOpenId())) {
+            logger.warn("PAY_DEBUG routine openid bind failed | orderNo={}, uid={}, reason=empty_openid",
+                    storeOrder.getOrderId(), storeOrder.getUid());
+            throw new CrmebException("获取小程序openId失败，请重新微信授权登录后支付");
+        }
+        UserToken existsByOpenId = userTokenService.getByOpenidAndType(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+        if (ObjectUtil.isNotNull(existsByOpenId)) {
+            if (!existsByOpenId.getUid().equals(storeOrder.getUid())) {
+                logger.warn("PAY_DEBUG routine openid belongs to another uid | orderNo={}, orderUid={}, tokenRecordId={}, tokenUid={}, openid={}",
+                        storeOrder.getOrderId(), storeOrder.getUid(), existsByOpenId.getId(), existsByOpenId.getUid(),
+                        maskForPayDebug(authorizeVo.getOpenId()));
+                throw new CrmebException("当前微信号已绑定其他账号，请退出后使用该微信号重新登录");
+            }
+            logger.info("PAY_DEBUG routine openid already bound | orderNo={}, uid={}, tokenRecordId={}, openid={}",
+                    storeOrder.getOrderId(), storeOrder.getUid(), existsByOpenId.getId(),
+                    maskForPayDebug(authorizeVo.getOpenId()));
+            return existsByOpenId;
+        }
+        userTokenService.bind(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM, storeOrder.getUid());
+        UserToken userToken = userTokenService.getByOpenidAndType(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+        logger.info("PAY_DEBUG routine openid auto bound | orderNo={}, uid={}, tokenRecordId={}, openid={}",
+                storeOrder.getOrderId(), storeOrder.getUid(), ObjectUtil.isNull(userToken) ? null : userToken.getId(),
+                maskForPayDebug(authorizeVo.getOpenId()));
+        return userToken;
+    }
+
+    private void checkRoutineOpenIdForPayment(StoreOrder storeOrder, String routineCode, UserToken userToken) {
+        WeChatMiniAuthorizeVo authorizeVo = wechatNewService.miniAuthCode(routineCode);
+        if (ObjectUtil.isNull(authorizeVo) || StrUtil.isBlank(authorizeVo.getOpenId())) {
+            logger.warn("PAY_DEBUG routine openid check failed | orderNo={}, uid={}, reason=empty_openid",
+                    storeOrder.getOrderId(), storeOrder.getUid());
+            return;
+        }
+        if (!authorizeVo.getOpenId().equals(userToken.getToken())) {
+            UserToken existsByOpenId = userTokenService.getByOpenidAndType(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+            logger.warn("PAY_DEBUG routine openid mismatch | orderNo={}, uid={}, storedTokenRecordId={}, storedOpenid={}, currentOpenid={}, currentOpenidBoundUid={}",
+                    storeOrder.getOrderId(), storeOrder.getUid(), userToken.getId(), maskForPayDebug(userToken.getToken()),
+                    maskForPayDebug(authorizeVo.getOpenId()), ObjectUtil.isNull(existsByOpenId) ? null : existsByOpenId.getUid());
+            if (ObjectUtil.isNotNull(existsByOpenId) && !existsByOpenId.getUid().equals(storeOrder.getUid())) {
+                throw new CrmebException("当前微信号已绑定其他账号，请退出后使用该微信号重新登录");
+            }
+            throw new CrmebException("当前登录账号绑定的微信号与支付微信号不一致，请退出后重新微信授权登录");
+        }
     }
 
     /**

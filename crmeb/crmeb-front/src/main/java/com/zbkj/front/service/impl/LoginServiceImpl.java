@@ -7,6 +7,7 @@ import com.zbkj.common.constants.Constants;
 import com.zbkj.common.constants.SmsConstants;
 import com.zbkj.common.exception.CrmebException;
 import com.zbkj.common.model.user.User;
+import com.zbkj.common.model.user.UserToken;
 import com.zbkj.common.request.LoginMobileRequest;
 import com.zbkj.common.request.LoginRequest;
 import com.zbkj.common.response.LoginConfigResponse;
@@ -15,9 +16,12 @@ import com.zbkj.common.token.FrontTokenComponent;
 import com.zbkj.common.utils.CrmebUtil;
 import com.zbkj.common.utils.CrmebDateUtil;
 import com.zbkj.common.utils.RedisUtil;
+import com.zbkj.common.vo.WeChatMiniAuthorizeVo;
 import com.zbkj.front.service.LoginService;
 import com.zbkj.service.service.SystemConfigService;
 import com.zbkj.service.service.UserService;
+import com.zbkj.service.service.UserTokenService;
+import com.zbkj.service.service.WechatNewService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +61,10 @@ public class LoginServiceImpl implements LoginService {
     private FrontTokenComponent tokenComponent;
     @Autowired
     private SystemConfigService systemConfigService;
+    @Autowired
+    private UserTokenService userTokenService;
+    @Autowired
+    private WechatNewService wechatNewService;
 
     /**
      * 账号密码登录
@@ -79,20 +87,21 @@ public class LoginServiceImpl implements LoginService {
             throw new CrmebException("密码错误");
         }
 
-        LoginResponse loginResponse = new LoginResponse();
-        String token = tokenComponent.createToken(user);
-        loginResponse.setToken(token);
-
         //绑定推广关系
         if (loginRequest.getSpreadPid() > 0) {
             bindSpread(user, loginRequest.getSpreadPid());
         }
+
+        bindRoutineOpenIdAfterLogin(user, loginRequest.getRoutineCode());
 
         // 记录最后一次登录时间
         user.setLastLoginTime(CrmebDateUtil.nowDateTime());
         user.setUpdateTime(DateUtil.date());
         userService.updateById(user);
 
+        LoginResponse loginResponse = new LoginResponse();
+        String token = tokenComponent.createToken(user);
+        loginResponse.setToken(token);
         loginResponse.setUid(user.getUid());
         loginResponse.setNikeName(user.getNickname());
         loginResponse.setPhone(user.getPhone());
@@ -130,6 +139,7 @@ public class LoginServiceImpl implements LoginService {
                 logger.error("用户登录时，记录最后一次登录时间出错,uid = " + user.getUid());
             }
         }
+        bindRoutineOpenIdAfterLogin(user, loginRequest.getRoutineCode());
 
         //生成token
         LoginResponse loginResponse = new LoginResponse();
@@ -139,6 +149,48 @@ public class LoginServiceImpl implements LoginService {
         loginResponse.setNikeName(user.getNickname());
         loginResponse.setPhone(user.getPhone());
         return loginResponse;
+    }
+
+    private void bindRoutineOpenIdAfterLogin(User user, String routineCode) {
+        if (ObjectUtil.isNull(user) || StrUtil.isBlank(routineCode)) {
+            return;
+        }
+        WeChatMiniAuthorizeVo authorizeVo = wechatNewService.miniAuthCode(routineCode);
+        if (ObjectUtil.isNull(authorizeVo) || StrUtil.isBlank(authorizeVo.getOpenId())) {
+            logger.warn("LOGIN_DEBUG routine openid bind failed | uid={}, reason=empty_openid", user.getUid());
+            throw new CrmebException("获取小程序openId失败，请重新微信授权登录");
+        }
+        UserToken existsByOpenId = userTokenService.getByOpenidAndType(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+        if (ObjectUtil.isNotNull(existsByOpenId) && !existsByOpenId.getUid().equals(user.getUid())) {
+            logger.warn("LOGIN_DEBUG routine openid belongs to another uid | loginUid={}, tokenRecordId={}, tokenUid={}, openid={}",
+                    user.getUid(), existsByOpenId.getId(), existsByOpenId.getUid(), maskForLoginDebug(authorizeVo.getOpenId()));
+            throw new CrmebException("当前微信号已绑定其他账号，请使用该微信号重新登录");
+        }
+        UserToken existsByUid = userTokenService.getTokenByUserId(user.getUid(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+        if (ObjectUtil.isNotNull(existsByUid)) {
+            if (!authorizeVo.getOpenId().equals(existsByUid.getToken())) {
+                logger.warn("LOGIN_DEBUG routine openid mismatch | uid={}, tokenRecordId={}, storedOpenid={}, currentOpenid={}",
+                        user.getUid(), existsByUid.getId(), maskForLoginDebug(existsByUid.getToken()), maskForLoginDebug(authorizeVo.getOpenId()));
+                throw new CrmebException("当前登录账号绑定的微信号与当前微信号不一致，请重新微信授权登录");
+            }
+            logger.info("LOGIN_DEBUG routine openid already exists | uid={}, tokenRecordId={}, openid={}",
+                    user.getUid(), existsByUid.getId(), maskForLoginDebug(authorizeVo.getOpenId()));
+            return;
+        }
+        userTokenService.bind(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM, user.getUid());
+        UserToken userToken = userTokenService.getByOpenidAndType(authorizeVo.getOpenId(), Constants.THIRD_LOGIN_TOKEN_TYPE_PROGRAM);
+        logger.info("LOGIN_DEBUG routine openid auto bound | uid={}, tokenRecordId={}, openid={}",
+                user.getUid(), ObjectUtil.isNull(userToken) ? null : userToken.getId(), maskForLoginDebug(authorizeVo.getOpenId()));
+    }
+
+    private String maskForLoginDebug(String value) {
+        if (StrUtil.isBlank(value)) {
+            return value;
+        }
+        if (value.length() <= 8) {
+            return value;
+        }
+        return value.substring(0, 4) + "***" + value.substring(value.length() - 4);
     }
 
     /**

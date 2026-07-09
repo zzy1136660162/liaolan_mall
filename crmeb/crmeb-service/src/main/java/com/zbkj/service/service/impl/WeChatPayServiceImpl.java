@@ -132,6 +132,10 @@ public class WeChatPayServiceImpl implements WeChatPayService {
             if (ObjectUtil.isNull(wechatPayInfo)) {
                 throw new CrmebException("未找到对应微信订单");
             }
+            logger.info("PAY_DEBUG queryPayResult order loaded | orderNo={}, uid={}, paid={}, payType={}, isChannel={}, payPrice={}, outTradeNo={}, payInfoAppId={}, payInfoMchId={}, payInfoOpenId={}, prepayId={}",
+                    orderNo, storeOrder.getUid(), storeOrder.getPaid(), storeOrder.getPayType(), storeOrder.getIsChannel(),
+                    storeOrder.getPayPrice(), storeOrder.getOutTradeNo(), wechatPayInfo.getAppId(), wechatPayInfo.getMchId(),
+                    maskForPayDebug(wechatPayInfo.getOpenId()), maskForPayDebug(wechatPayInfo.getPrepayId()));
 
             User user = userService.getById(storeOrder.getUid());
             if (ObjectUtil.isNull(user)) throw new CrmebException("用户不存在");
@@ -160,8 +164,20 @@ public class WeChatPayServiceImpl implements WeChatPayService {
 
             // 生成查询订单对象
             Map<String, String> payVo = getWxChantQueryPayVo(wechatPayInfo.getOutTradeNo(), appId, mchId, signKey);
+            logger.info("PAY_DEBUG queryPayResult request | orderNo={}, outTradeNo={}, configAppId={}, configMchId={}, isChannel={}, paidBeforeQuery={}",
+                    orderNo, wechatPayInfo.getOutTradeNo(), appId, mchId, storeOrder.getIsChannel(), storeOrder.getPaid());
             // 查询订单信息
-            MyRecord record = wechatNewService.payOrderQuery(payVo);
+            MyRecord record;
+            try {
+                record = wechatNewService.payOrderQuery(payVo);
+            } catch (Exception e) {
+                logger.warn("PAY_DEBUG queryPayResult failed | orderNo={}, outTradeNo={}, configAppId={}, configMchId={}, isChannel={}, message={}",
+                        orderNo, wechatPayInfo.getOutTradeNo(), appId, mchId, storeOrder.getIsChannel(), e.getMessage());
+                throw e;
+            }
+            logger.info("PAY_DEBUG queryPayResult success | orderNo={}, outTradeNo={}, tradeState={}, transactionId={}, timeEnd={}",
+                    orderNo, wechatPayInfo.getOutTradeNo(), record.getStr("trade_state"),
+                    record.getStr("transaction_id"), record.getStr("time_end"));
 
             wechatPayInfo.setIsSubscribe(record.getStr("is_subscribe"));
             wechatPayInfo.setTradeState(record.getStr("trade_state"));
@@ -450,6 +466,16 @@ public class WeChatPayServiceImpl implements WeChatPayService {
             e.printStackTrace();
             throw new CrmebException(e.getMessage());
         }
+    }
+
+    private String maskForPayDebug(String value) {
+        if (StrUtil.isBlank(value)) {
+            return value;
+        }
+        if (value.length() <= 8) {
+            return value;
+        }
+        return value.substring(0, 4) + "***" + value.substring(value.length() - 4);
     }
 
 }

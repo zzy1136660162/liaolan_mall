@@ -1631,24 +1631,28 @@
 <style scoped lang="scss">
 /* ===== 新配色变量 ===== */
 $primary: #0061a5;
+$primary-deep: #004f87;
+$primary-soft: #e8f3fb;
 $primary-light: rgba(0, 97, 165, 0.08);
 $primary-border: rgba(0, 97, 165, 0.18);
-$surface: #f9f9fc;
+$surface: #f3f6fa;
 $surface-card: #ffffff;
 $on-surface: #1a1c1e;
 $on-surface-variant: #3f4753;
-$outline-variant: #dde0e8;
-$surface-variant: #e8ebf2;
-$surface-container-low: #f3f4f8;
+$outline-variant: #e0e5ee;
+$surface-variant: #edf1f6;
+$surface-container-low: #f6f8fb;
 $secondary: #5c5f60;
-$tertiary: #895000;
+$tertiary: #b44b18;
 $error: #ba1a1a;
 $red-gradient: linear-gradient(90deg, rgba(246, 122, 56, 1) 0%, rgba(241, 27, 9, 1) 100%);
+$card-shadow: 0 14rpx 42rpx rgba(20, 46, 80, 0.08);
+$card-shadow-soft: 0 8rpx 24rpx rgba(20, 46, 80, 0.055);
 
 $r-sm: 8rpx;
 $r-md: 14rpx;
-$r-lg: 20rpx;
-$r-xl: 28rpx;
+$r-lg: 22rpx;
+$r-xl: 30rpx;
 
 $ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -1676,7 +1680,9 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	background: $surface;
+	background:
+		linear-gradient(180deg, #edf6fc 0, $surface 360rpx, $surface 100%);
+	color: $on-surface;
 }
 .detail_container {
 	flex: 1;
@@ -1684,8 +1690,8 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ===== margin/padding 工具类 ===== */
-.mb30 { margin-bottom: 24rpx; }
-.borRadius14 { border-radius: $r-md; }
+.mb30 { margin-bottom: 26rpx; }
+.borRadius14 { border-radius: $r-lg; }
 .pl-20 { padding-left: 20rpx; }
 .px-20 { padding: 0 20rpx 0; }
 .px-12 { padding-left: 12rpx; padding-right: 12rpx; }
@@ -1696,7 +1702,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 .align-center { align-items: center; }
 .align-baseline { align-items: baseline; }
 .bg_color { background: $primary; color: #fff; }
-.pad30 { padding: 0 24rpx; }
+.pad30 {
+	padding: 0 24rpx;
+	position: relative;
+	z-index: 2;
+}
 
 /* ===== Hero 产品图 ===== */
 .hero-section {
@@ -1704,6 +1714,20 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	width: 100%;
 	aspect-ratio: 1 / 1;
 	overflow: hidden;
+	background: linear-gradient(135deg, #dbe8f2, #f7fbff);
+	border-bottom-left-radius: 34rpx;
+	border-bottom-right-radius: 34rpx;
+	box-shadow: 0 18rpx 44rpx rgba(19, 49, 80, 0.12);
+	&::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 190rpx;
+		background: linear-gradient(180deg, rgba(6, 22, 38, 0) 0%, rgba(6, 22, 38, 0.42) 100%);
+		pointer-events: none;
+	}
 }
 .hero-swiper {
 	width: 100%;
@@ -1719,27 +1743,32 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	bottom: 28rpx;
 	left: 24rpx;
 	display: flex;
+	flex-wrap: wrap;
 	gap: 12rpx;
 	z-index: 2;
+	max-width: 660rpx;
 }
 .hero-tag {
-	padding: 6rpx 20rpx;
+	padding: 8rpx 20rpx;
 	font-size: 22rpx;
 	color: #fff;
-	background: rgba(0, 0, 0, 0.45);
-	backdrop-filter: blur(8px);
+	background: rgba(9, 25, 42, 0.58);
+	backdrop-filter: blur(10px);
 	border-radius: 200rpx;
-	border: 1rpx solid rgba(255, 255, 255, 0.2);
+	border: 1rpx solid rgba(255, 255, 255, 0.28);
 	letter-spacing: 1rpx;
+	box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.16);
 }
 
 /* ===== 产品信息卡片 ===== */
 .product-info-card {
 	animation: slideUp 400ms $ease both;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
-	border: 1rpx solid $outline-variant;
+	border-radius: $r-xl;
+	padding: 32rpx 28rpx 28rpx;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow;
+	margin-top: 22rpx;
 }
 .info-header {
 	position: relative;
@@ -1750,14 +1779,16 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	flex-wrap: wrap;
 }
 .price-symbol {
-	font-size: 28rpx;
+	font-size: 30rpx;
 	font-weight: 700;
 	color: $tertiary;
 }
 .price-value {
-	font-size: 44rpx;
-	font-weight: 700;
+	font-size: 56rpx;
+	font-weight: 800;
 	color: $tertiary;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
 }
 .vip-row {
 	display: flex;
@@ -1782,44 +1813,59 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	position: absolute;
 	right: -8rpx;
 	top: 0;
-	font-size: 36rpx;
-	color: $on-surface-variant;
+	width: 64rpx;
+	height: 64rpx;
+	line-height: 64rpx;
+	text-align: center;
+	font-size: 34rpx;
+	color: $primary;
+	background: $primary-soft;
+	border-radius: 50%;
+	box-shadow: 0 6rpx 18rpx rgba(0, 97, 165, 0.12);
 }
 .info-title {
-	font-size: 30rpx;
-	font-weight: 600;
+	font-size: 34rpx;
+	font-weight: 700;
 	color: $on-surface;
-	margin-top: 16rpx;
-	line-height: 1.4;
+	margin-top: 20rpx;
+	line-height: 1.35;
 }
 .info-desc {
 	font-size: 26rpx;
 	color: $on-surface-variant;
-	margin-top: 10rpx;
-	line-height: 1.5;
+	margin-top: 12rpx;
+	line-height: 1.62;
 }
 .info-meta {
-	margin-top: 16rpx;
+	margin-top: 22rpx;
 	font-size: 24rpx;
 	color: $on-surface-variant;
+	gap: 10rpx;
 }
 .info-meta > view {
 	flex: 1;
+	min-width: 0;
+	padding: 12rpx 8rpx;
+	background: $surface-container-low;
+	border-radius: $r-sm;
+	border: 1rpx solid $surface-variant;
 	&:nth-child(2) { text-align: center; }
 	&:nth-child(3) { text-align: right; }
 }
 
 /* 优惠券 / 活动 */
 .coupon {
-	margin-top: 16rpx;
-	padding-top: 16rpx;
-	border-top: 1rpx solid $surface-variant;
+	margin-top: 20rpx;
+	padding: 18rpx 18rpx;
+	border: 1rpx solid $surface-variant;
+	background: linear-gradient(180deg, #fbfdff 0%, $surface-container-low 100%);
+	border-radius: $r-md;
 	font-size: 26rpx;
 	.iconfont { color: $on-surface-variant; font-size: 24rpx; }
 }
 .activity {
 	padding: 0 20rpx;
-	background: $primary-light;
+	background: $primary-soft;
 	border: 1rpx solid $primary-border;
 	color: $primary;
 	font-size: 24rpx;
@@ -1858,9 +1904,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	height: 44rpx;
 	line-height: 44rpx;
 	padding: 0 15rpx;
-	background: $primary;
+	background: linear-gradient(135deg, $primary 0%, $primary-deep 100%);
 	border-radius: 22rpx;
 	color: #fff;
+	box-shadow: 0 8rpx 18rpx rgba(0, 97, 165, 0.16);
 }
 .activity_miao, .activity_kan { margin-left: 19rpx; }
 .iconfonts { color: #fff !important; font-size: 28rpx; }
@@ -1871,9 +1918,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	animation: slideUp 400ms $ease both;
 	animation-delay: 60ms;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
-	border: 1rpx solid $outline-variant;
+	border-radius: $r-xl;
+	padding: 30rpx 28rpx;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 }
 .spec-title-row {
 	margin-bottom: 24rpx;
@@ -1881,10 +1929,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	border-bottom: 1rpx solid $surface-variant;
 }
 .spec-title-bar {
-	width: 4rpx;
+	width: 8rpx;
 	height: 32rpx;
-	background: $primary;
-	border-radius: 2rpx;
+	background: linear-gradient(180deg, $primary 0%, #4ea3d8 100%);
+	border-radius: 999rpx;
 	margin-right: 16rpx;
 }
 .spec-title-text {
@@ -1901,6 +1949,8 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	font-weight: 500;
 	color: $on-surface;
 	margin-bottom: 14rpx;
+	display: inline-flex;
+	align-items: center;
 }
 .spec-options {
 	display: flex;
@@ -1925,16 +1975,18 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	align-items: center;
 	font-size: 26rpx;
 	color: $on-surface-variant;
-	background: $surface-container-low;
-	border-radius: $r-sm;
-	border: 1rpx solid transparent;
+	background: #f8fafc;
+	border-radius: 16rpx;
+	border: 1rpx solid $surface-variant;
 	transition: all 0.2s $ease;
 	&.active {
-		color: $primary;
-		background: $primary-light;
-		border-color: $primary-border;
-		font-weight: 500;
+		color: $primary-deep;
+		background: linear-gradient(180deg, #f5fbff 0%, $primary-soft 100%);
+		border-color: rgba(0, 97, 165, 0.28);
+		font-weight: 600;
+		box-shadow: 0 8rpx 18rpx rgba(0, 97, 165, 0.12);
 	}
+	&:active { transform: scale(0.98); }
 }
 .spec-sku-row {
 	margin-top: 20rpx;
@@ -1947,16 +1999,19 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	border-radius: $r-sm;
 	display: block;
 	margin-right: 14rpx;
+	border: 2rpx solid #fff;
+	box-shadow: 0 4rpx 12rpx rgba(20, 46, 80, 0.1);
 }
 .switchTxt {
 	height: 60rpx;
 	line-height: 60rpx;
-	background: $surface-container-low;
-	padding: 0 24rpx;
-	border-radius: $r-sm;
+	background: $primary-soft;
+	padding: 0 26rpx;
+	border-radius: 999rpx;
 	text-align: center;
-	color: $secondary;
+	color: $primary-deep;
 	font-size: 24rpx;
+	font-weight: 500;
 }
 .theme_price { color: $tertiary; }
 
@@ -1965,10 +2020,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	animation: slideUp 400ms $ease both;
 	animation-delay: 100ms;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
+	border-radius: $r-xl;
+	padding: 30rpx 28rpx;
 	margin-top: 24rpx;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 	.title {
 		font-size: 28rpx;
 		font-weight: 500;
@@ -1984,10 +2040,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	animation: slideUp 400ms $ease both;
 	animation-delay: 80ms;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
+	border-radius: $r-xl;
+	padding: 30rpx 28rpx;
 	margin-top: 24rpx;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 }
 .tech-title-row {
 	margin-bottom: 24rpx;
@@ -1995,10 +2052,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	border-bottom: 1rpx solid $surface-variant;
 }
 .tech-title-bar {
-	width: 4rpx;
+	width: 8rpx;
 	height: 32rpx;
-	background: $primary;
-	border-radius: 2rpx;
+	background: linear-gradient(180deg, $primary 0%, #4ea3d8 100%);
+	border-radius: 999rpx;
 	margin-right: 16rpx;
 }
 .tech-title-text {
@@ -2007,9 +2064,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	color: $on-surface;
 }
 .tech-table {
-	border-radius: $r-md;
+	border-radius: $r-lg;
 	overflow: hidden;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid $surface-variant;
+	background: $surface-container-low;
 }
 .tech-row {
 	display: flex;
@@ -2017,6 +2075,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	min-height: 76rpx;
 	border-bottom: 1rpx solid $surface-variant;
 	&:last-child { border-bottom: none; }
+	&:nth-child(even) {
+		.tech-label { background: #f2f6fb; }
+		.tech-value { background: #fbfdff; }
+	}
 }
 .tech-label {
 	width: 33%;
@@ -2024,9 +2086,10 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	padding: 18rpx 20rpx;
 	font-size: 26rpx;
 	color: $on-surface-variant;
-	background: $surface-container-low;
+	background: #f7f9fc;
 	border-right: 1rpx solid $surface-variant;
 	font-weight: 500;
+	line-height: 1.45;
 }
 .tech-value {
 	width: 67%;
@@ -2036,6 +2099,8 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	color: $on-surface;
 	font-weight: 500;
 	background: $surface-card;
+	line-height: 1.5;
+	word-break: break-all;
 }
 .tech-tags {
 	margin-top: 24rpx;
@@ -2048,11 +2113,12 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	margin-right: 16rpx;
 	margin-bottom: 12rpx;
 	font-size: 22rpx;
-	color: $primary;
-	background: $primary-light;
-	border-radius: $r-sm;
+	color: $primary-deep;
+	background: $primary-soft;
+	border-radius: 999rpx;
 	border: 1rpx solid $primary-border;
 	transition: all 0.2s $ease;
+	font-weight: 500;
 }
 
 /* ===== 产品结构详解 ===== */
@@ -2060,10 +2126,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	animation: slideUp 400ms $ease both;
 	animation-delay: 120ms;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
+	border-radius: $r-xl;
+	padding: 30rpx 28rpx;
 	margin-top: 24rpx;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 }
 .structure-body {
 	display: flex;
@@ -2089,10 +2156,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	text-align: center;
 	font-size: 22rpx;
 	font-weight: 700;
-	color: $primary;
-	background: $primary-light;
+	color: $primary-deep;
+	background: $primary-soft;
 	border-radius: $r-sm;
 	border: 1rpx solid $primary-border;
+	font-variant-numeric: tabular-nums;
 }
 .structure-text {
 	flex: 1;
@@ -2115,9 +2183,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	flex-shrink: 0;
 	width: 200rpx;
 	height: 260rpx;
-	border-radius: $r-md;
+	border-radius: $r-lg;
 	overflow: hidden;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid $surface-variant;
+	background: linear-gradient(180deg, #f9fbff 0%, #edf4fa 100%);
+	box-shadow: inset 0 0 0 1rpx rgba(255, 255, 255, 0.7);
 }
 .structure-img {
 	width: 100%;
@@ -2130,10 +2200,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	animation: slideUp 400ms $ease both;
 	animation-delay: 160ms;
 	background: $surface-card;
-	border-radius: $r-md;
-	padding: 28rpx 24rpx;
+	border-radius: $r-xl;
+	padding: 30rpx 28rpx;
 	margin: 24rpx 24rpx 24rpx 24rpx;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 	.title {
 		display: flex;
 		align-items: center;
@@ -2142,18 +2213,24 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 		margin-bottom: 24rpx;
 		image { width: 24rpx; height: 20rpx; }
 		.sp {
+			position: relative;
+			display: inline-flex;
+			align-items: center;
 			font-size: 30rpx;
 			font-weight: 700;
 			color: $on-surface;
+			line-height: 1;
 			&::before {
 				content: '';
-				display: inline-block;
-				width: 4rpx;
+				position: absolute;
+				left: -20rpx;
+				top: 50%;
+				transform: translateY(-50%);
+				display: block;
+				width: 8rpx;
 				height: 32rpx;
-				background: $primary;
-				border-radius: 2rpx;
-				margin-right: 12rpx;
-				vertical-align: middle;
+				background: linear-gradient(180deg, $primary 0%, #4ea3d8 100%);
+				border-radius: 999rpx;
 			}
 		}
 	}
@@ -2165,10 +2242,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	background: $surface-card;
 	margin-top: 24rpx;
 	padding: 0 24rpx 30rpx 24rpx;
-	border-radius: $r-md;
+	border-radius: $r-xl;
 	animation: slideUp 400ms $ease both;
 	animation-delay: 180ms;
-	border: 1rpx solid $outline-variant;
+	border: 1rpx solid rgba(255, 255, 255, 0.72);
+	box-shadow: $card-shadow-soft;
 	.title {
 		height: 98rpx;
 		image { width: 20rpx; height: 20rpx; }
@@ -2181,9 +2259,18 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	.slider-banner .list .item {
 		width: 198rpx; margin: 0 22rpx 30rpx 0; font-size: 26rpx;
 		&:nth-of-type(3n) { margin-right: 0; }
-		.pictrue { position: relative; width: 100%; height: 198rpx; }
-		.pictrue image { width: 100%; height: 100%; border-radius: $r-sm; }
-		.name { color: $on-surface; margin-top: 12rpx; }
+		.pictrue {
+			position: relative;
+			width: 100%;
+			height: 198rpx;
+			border-radius: $r-md;
+			overflow: hidden;
+			background: $surface-container-low;
+			box-shadow: 0 8rpx 18rpx rgba(20, 46, 80, 0.08);
+		}
+		.pictrue image { width: 100%; height: 100%; border-radius: $r-md; }
+		.name { color: $on-surface; margin-top: 14rpx; line-height: 1.4; }
+		.money { font-size: 28rpx; font-weight: 700; margin-top: 6rpx; }
 	}
 }
 
@@ -2194,13 +2281,14 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	bottom: 0;
 	width: 100%;
 	box-sizing: border-box;
-	background: $surface-card;
+	background: rgba(255, 255, 255, 0.94);
+	backdrop-filter: blur(14px);
 	z-index: 277;
-	border-top: 1rpx solid $outline-variant;
-	height: 100rpx;
-	height: calc(100rpx + constant(safe-area-inset-bottom));
-	height: calc(100rpx + env(safe-area-inset-bottom));
-	box-shadow: 0 -2rpx 16rpx rgba(0, 0, 0, 0.04);
+	border-top: 1rpx solid rgba(224, 229, 238, 0.8);
+	height: 108rpx;
+	height: calc(108rpx + constant(safe-area-inset-bottom));
+	height: calc(108rpx + env(safe-area-inset-bottom));
+	box-shadow: 0 -10rpx 34rpx rgba(20, 46, 80, 0.1);
 }
 .footer-left {
 	gap: 8rpx;
@@ -2210,7 +2298,7 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	width: 90rpx;
+	width: 92rpx;
 	font-size: 18rpx;
 	color: $on-surface-variant;
 	padding: 0;
@@ -2220,10 +2308,11 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	border: none;
 	&::after { border: none; }
 	.iconfont {
-		font-size: 36rpx;
+		font-size: 38rpx;
 		margin-bottom: 2rpx;
 		&.icon-shoucang1 { color: $primary; }
 	}
+	&:active { transform: scale(0.96); }
 }
 .footer-right {
 	gap: 16rpx;
@@ -2233,37 +2322,40 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 72rpx;
-	padding: 0 32rpx;
+	height: 76rpx;
+	padding: 0 34rpx;
 	font-size: 28rpx;
-	font-weight: 500;
+	font-weight: 600;
 	color: $primary;
-	background: transparent;
+	background: #fff;
 	border: 2rpx solid $primary;
-	border-radius: $r-lg;
+	border-radius: 999rpx;
 	letter-spacing: 1rpx;
 	transition: all 0.2s $ease;
 	white-space: nowrap;
 	&:active {
 		background: $primary-light;
+		transform: scale(0.98);
 	}
 }
 .btn-primary {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 72rpx;
-	padding: 0 32rpx;
+	height: 76rpx;
+	padding: 0 36rpx;
 	font-size: 28rpx;
-	font-weight: 500;
+	font-weight: 700;
 	color: #fff;
-	background: $primary;
-	border-radius: $r-lg;
+	background: linear-gradient(135deg, $primary 0%, $primary-deep 100%);
+	border-radius: 999rpx;
 	letter-spacing: 1rpx;
 	transition: all 0.2s $ease;
 	white-space: nowrap;
+	box-shadow: 0 10rpx 24rpx rgba(0, 97, 165, 0.24);
 	&:active {
 		background: darken($primary, 8%);
+		transform: scale(0.98);
 	}
 }
 .btn-disabled {
@@ -2275,8 +2367,8 @@ $ease: cubic-bezier(0.22, 1, 0.36, 1);
 	font-size: 28rpx;
 	font-weight: 500;
 	color: #fff;
-	background: #bbb;
-	border-radius: $r-lg;
+	background: #b8c0cc;
+	border-radius: 999rpx;
 	letter-spacing: 1rpx;
 	white-space: nowrap;
 }

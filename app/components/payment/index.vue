@@ -130,7 +130,29 @@
 					ticket: jsConfig.ticket
 				};
 			},
-			goPay: function(number, paytype) {
+			getRoutinePayCode() {
+				return new Promise(resolve => {
+					// #ifdef MP-WEIXIN
+					uni.login({
+						provider: 'weixin',
+						success: res => {
+							resolve(res && res.code ? res.code : '');
+						},
+						fail: err => {
+							console.error('[PAY_DEBUG][getRoutinePayCode_fail]', {
+								err,
+								accountInfo: this.getPayDebugAccountInfo()
+							});
+							resolve('');
+						}
+					});
+					// #endif
+					// #ifndef MP-WEIXIN
+					resolve('');
+					// #endif
+				});
+			},
+			goPay: async function(number, paytype) {
 				let that = this;
 				let goPages = '/pages/order/order_pay_status/index?order_id=' + that.order_id;
 				if (!that.order_id) return that.$util.Tips({
@@ -158,22 +180,25 @@
 					that.payChannel = that.systemPlatform === 'ios' ? 'weixinAppIos' : 'weixinAppAndroid';
 				}
 				// #endif
+				let requestPayChannel = that.payChannel;
+				// #ifdef MP
+				requestPayChannel = 'routine';
+				// #endif
+				const routineCode = paytype === 'weixin' && requestPayChannel === 'routine' ? await that.getRoutinePayCode() : '';
 				console.log('[PAY_DEBUG][before_orderPay]', {
 					orderNo: that.order_id,
 					paytype,
+					payChannel: requestPayChannel,
 					totalPrice: that.totalPrice,
+					routineCodePresent: !!routineCode,
 					accountInfo: that.getPayDebugAccountInfo()
 				});
 				orderPay({
 					orderNo: that.order_id,
-					// #ifdef MP
-					payChannel: 'routine',
-					// #endif
-					// #ifndef MP
-					payChannel:that.payChannel,
-					// #endif
+					payChannel: requestPayChannel,
 					payType: paytype,
-					scene: that.productType === 'normal' ? 0 : 1177 //下单时小程序的场景值
+					scene: that.productType === 'normal' ? 0 : 1177, //下单时小程序的场景值
+					routineCode
 				}).then(res => {
 					let jsConfig = res.data.jsConfig;
 					that.order_id = res.data.orderNo;

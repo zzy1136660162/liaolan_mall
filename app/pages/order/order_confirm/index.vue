@@ -294,7 +294,7 @@
 			};
 		},
 		computed: {
-			...mapGetters(['isLogin', 'systemPlatform', 'productType']),
+			...mapGetters(['isLogin', 'systemPlatform', 'productType', 'uid']),
 			markNum() {
 				if (this.mark) {
 					return this.mark.length
@@ -575,18 +575,59 @@
 			phone: function(e) {
 				this.contactsTel = e.detail.value;
 			},
+			getPayDebugAccountInfo() {
+				let miniProgramAppId = '';
+				let envVersion = '';
+				let version = '';
+				// #ifdef MP-WEIXIN
+				try {
+					const accountInfo = uni.getAccountInfoSync ? uni.getAccountInfoSync() : null;
+					miniProgramAppId = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.appId : '';
+					envVersion = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.envVersion : '';
+					version = accountInfo && accountInfo.miniProgram ? accountInfo.miniProgram.version : '';
+				} catch (e) {
+					miniProgramAppId = 'getAccountInfoSync error';
+					envVersion = e && (e.errMsg || e.message) ? (e.errMsg || e.message) : '';
+				}
+				// #endif
+				return {
+					miniProgramAppId,
+					envVersion,
+					version,
+					storeUid: this.uid,
+					productType: this.productType,
+					systemPlatform: this.systemPlatform
+				};
+			},
 			payment: function(data) {
 				let that = this;
+				console.log('[PAY_DEBUG][confirm_before_checkBeforeAddOrder]', {
+					preOrderNo: that.preOrderNo,
+					payChannel: that.payChannel,
+					payType: that.payType,
+					orderPayFee: that.orderInfoVo && that.orderInfoVo.payFee,
+					requestData: data,
+					accountInfo: that.getPayDebugAccountInfo()
+				});
 				// #ifdef MP
 				uni.checkBeforeAddOrder({
 					success(res) {
-						console.log("下单前置检查 成功：", JSON.stringify(res));
+						console.log('[PAY_DEBUG][confirm_checkBeforeAddOrder_success]', {
+							result: res,
+							preOrderNo: that.preOrderNo,
+							accountInfo: that.getPayDebugAccountInfo()
+						});
 						const traceId = res.data.traceId;
 						data.traceId = traceId;
 						that.onCreate(data);
 					},
 					fail(res) {
-						console.log("下单前置检查 失败：", JSON.stringify(res));
+						console.error('[PAY_DEBUG][confirm_checkBeforeAddOrder_fail]', {
+							err: res,
+							preOrderNo: that.preOrderNo,
+							requestData: data,
+							accountInfo: that.getPayDebugAccountInfo()
+						});
 					}
 				});
 				// #endif
@@ -596,13 +637,34 @@
 			},
 			onCreate(data) {
 				let that = this
+				console.log('[PAY_DEBUG][confirm_before_orderCreate]', {
+					preOrderNo: that.preOrderNo,
+					payChannel: that.payChannel,
+					payType: that.payType,
+					orderPayFee: that.orderInfoVo && that.orderInfoVo.payFee,
+					requestData: data,
+					accountInfo: that.getPayDebugAccountInfo()
+				});
 				orderCreate(data).then(res => {
 					this.orderNo = res.data.orderNo;
-					console.log(res.data.orderNo);
+					const payUrl = `/pages/order/order_payment/index?orderNo=${this.orderNo}&payPrice=${this.orderInfoVo.payFee}`;
+					console.log('[PAY_DEBUG][confirm_orderCreate_success]', {
+						orderNo: this.orderNo,
+						payPrice: this.orderInfoVo && this.orderInfoVo.payFee,
+						navigateUrl: payUrl,
+						response: res.data,
+						accountInfo: that.getPayDebugAccountInfo()
+					});
 					uni.navigateTo({
-						url:`/pages/order/order_payment/index?orderNo=${this.orderNo}&payPrice=${this.orderInfoVo.payFee}`
+						url: payUrl
 					})
 				}).catch(err => {
+					console.error('[PAY_DEBUG][confirm_orderCreate_error]', {
+						preOrderNo: that.preOrderNo,
+						err,
+						requestData: data,
+						accountInfo: that.getPayDebugAccountInfo()
+					});
 					uni.hideLoading();
 					return that.$util.Tips({
 						title: err
@@ -646,9 +708,29 @@
 					storeId: that.system_store.id || 0,
 					shippingType: that.$util.$h.Add(that.shippingType, 1),
 				};
+				console.log('[PAY_DEBUG][confirm_subOrder]', {
+					preOrderNo: that.preOrderNo,
+					payChannel: that.payChannel,
+					payType: that.payType,
+					shippingType: that.shippingType,
+					addressId: that.addressId,
+					orderPayFee: that.orderInfoVo && that.orderInfoVo.payFee,
+					requestData: data,
+					accountInfo: that.getPayDebugAccountInfo()
+				});
 				// #ifdef MP
 				openPaySubscribe().then(() => {
+					console.log('[PAY_DEBUG][confirm_openPaySubscribe_success]', {
+						preOrderNo: that.preOrderNo,
+						accountInfo: that.getPayDebugAccountInfo()
+					});
 					that.payment(data);
+				}).catch(err => {
+					console.error('[PAY_DEBUG][confirm_openPaySubscribe_error]', {
+						preOrderNo: that.preOrderNo,
+						err,
+						accountInfo: that.getPayDebugAccountInfo()
+					});
 				});
 				// #endif
 				// #ifndef MP

@@ -47,4 +47,7 @@ public class OrderPayRequest {
 
     @ApiModelProperty(value = "下单时小程序的场景值")
     private Integer scene;
+
+    @ApiModelProperty(value = "小程序登录code，用于支付前补绑定openid")
+    private String routineCode;
 }

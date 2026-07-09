@@ -321,8 +321,31 @@
 					this.keyCode +
 					Date.parse(new Date());
 			},
+			getRoutineLoginCode() {
+				return new Promise((resolve, reject) => {
+					// #ifdef MP-WEIXIN
+					uni.login({
+						provider: 'weixin',
+						success: res => {
+							if (res && res.code) {
+								resolve(res.code);
+							} else {
+								reject(res);
+							}
+						},
+						fail: err => {
+							console.error('[LOGIN_DEBUG][getRoutineLoginCode_fail]', err);
+							reject(err);
+						}
+					});
+					// #endif
+					// #ifndef MP-WEIXIN
+					resolve('');
+					// #endif
+				});
+			},
 			//手机号验证码登录
-			loginMobile:Debounce(function() {
+			loginMobile:Debounce(async function() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
 					title: '请填写手机号码'
@@ -339,10 +362,24 @@
 				uni.showLoading({
 					title: '登录中'
 				})
+				let routineCode = '';
+				try {
+					routineCode = await that.getRoutineLoginCode();
+				} catch (err) {
+					uni.hideLoading();
+					return that.$util.Tips({
+						title: '获取微信登录凭证失败，请重试'
+					});
+				}
+				console.log('[LOGIN_DEBUG][before_loginMobile]', {
+					account: that.account,
+					routineCodePresent: !!routineCode
+				});
 				loginMobile({
 						phone: that.account,
 						captcha: that.captcha,
-						spread_spid: that.$Cache.get("spread")
+						spread_spid: that.$Cache.get("spread"),
+						routineCode
 						// spread_spid: uni.getStorageSync('spid')
 					})
 					.then(res => {
@@ -415,7 +452,7 @@
 				this.current = index;
 			},
 			//账号密码登录
-			submit:Debounce(function() {
+			submit:Debounce(async function() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
 					title: '请填写账号'
@@ -429,10 +466,24 @@
 				uni.showLoading({
 					title: '登录中'
 				})
+				let routineCode = '';
+				try {
+					routineCode = await that.getRoutineLoginCode();
+				} catch (err) {
+					uni.hideLoading();
+					return that.$util.Tips({
+						title: '获取微信登录凭证失败，请重试'
+					});
+				}
+				console.log('[LOGIN_DEBUG][before_password_login]', {
+					account: that.account,
+					routineCodePresent: !!routineCode
+				});
 				loginH5({
 						account: that.account,
 						password: that.password,
-						spread_spid: that.$Cache.get("spread")
+						spread_spid: that.$Cache.get("spread"),
+						routineCode
 					}).then(({data}) => {
 						this.$store.commit("LOGIN", {
 							'token': data.token
